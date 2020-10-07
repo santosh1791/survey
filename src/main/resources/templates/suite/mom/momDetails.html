@@ -1,0 +1,219 @@
+<html layout:decorator="layouts/main">
+<head>
+<title th:text="#{view.index.title}">Minutes of Meeting</title>
+</head>
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+<div layout:fragment="content">
+	<div class="col-md-12">
+		<div class="card mt-4">
+			<div class="card-header py-2">
+<!-- 				<h5 class="card-title mb-0">Minutes of Meeting</h5> -->
+				<div class="container" align="right">
+					<input type="button" class="btn btn-primary" value="Back" onclick="goBack()">
+				</div>
+			</div>
+			<div class="container-fluid">
+				<div class="card-block p-0 ">
+					<form id="momMasterForm" method="post" name="momMasterForm"
+						th:action="@{'/updateMomDetails/{id}/'(id=${id})}" 	th:object="${momMasterForm}" autocomplete="off" >
+						<div id="momContent">
+						<div class="row">
+							<div class="form-group col-md-12" align="left">
+								<h2 align="center">Minutes of Meeting Details</h2>
+							</div>
+						</div>
+						
+						<table id="momtable" class=" compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+						<tr>
+							<th>Venue</th>
+							<td><span th:text="${momMasterForm.meetingVenue}"></span></td>
+							<th>Purpose</th>
+							<td><span th:text="${momMasterForm.purpose}"></span></td>
+							<th>Conducted By</th>
+							<td><span th:text="${momMasterForm.conductedBy}"></span></td>
+						</tr>
+						<tr>
+							<th>start time</th>
+							<td><span th:text="${momMasterForm.startTime}"></span></td>
+							<th>End time</th>
+							<td><span th:text="${momMasterForm.endTime}"></span></td>
+							<th>Attachment</th>
+							<td></td>
+						</tr>
+						</table>
+							
+						</br>
+						<div class="row">
+							<div class="form-group col-md-12" align="center">
+								<h2>List of Participants</h2>
+							</div>
+						</div>
+						<table id="momtable" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+							<thead class="thead-table">
+								<tr>
+									<th>S.No</th>
+									<th>Participant Name</th>
+									<th>Mobile</th>
+									<th>Email</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:object="${momMasterForm.momParticipants}">
+									<tr th:each="anItem , iterStat : ${momMasterForm.momParticipants}">
+										<td><span th:text="${iterStat.count}" ></span></td>
+										<td><span th:text="${anItem.participantName}" ></span></td>
+										<td><span th:text="${anItem.mobileNumber}" ></span></td>
+										<td><span th:text="${anItem.email}" ></span></td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+						
+						<br>
+						<!-- Action Points of Previous Meeting -->
+						
+						<div class="row">
+							<div class="form-group col-md-12" align="center">
+								<h2>Action points of previous meeting (if applicable)</h2>
+							</div>
+						</div>
+						
+						
+						<table id="prevMeetingDetails" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+							<thead class="thead-table">
+								<tr>
+									<th>S.No</th>
+									<th>Action needed</th>
+									<th>Responsibility</th>
+									<th>Target date</th>
+									<th>Status</th>
+									<th>Completion Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:object="${momMasterForm.momActionPointsOfPrevMeetings}">
+									<tr th:each="anItem , iterStat : ${momMasterForm.momActionPointsOfPrevMeetings}">
+										<td><span th:text="${iterStat.count}" ></span></td>
+										<td><span th:text="${anItem.actionNeeded}" ></span></td>
+										<td><span th:text="${anItem.responsibility}" ></span></td>
+										<td><span th:text="${anItem.targetDate}" ></span></td>
+										<td><span th:text="${anItem.momStatusMaster.momStatus}"></span></td>
+										<td><span th:text="${anItem.completionDate}" ></span></td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+						
+						
+						<br>
+						
+							<!-- Discussions Held Meeting -->
+						
+							<div class="row">
+								<div class="form-group col-md-12" align="center">
+									<h2>Discussions Held In the Meeting</h2>
+								</div>
+							</div>
+							
+							
+						
+						<table id="discussions" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+							<thead class="thead-table">
+								<tr>
+									<th>S.No</th>
+									<th>Point discussed</th>
+									<th>CPAR No</th>
+									<th>Action item number</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:object="${momMasterForm.momDiscussions}">
+									<tr th:each="anItem , iterStat : ${momMasterForm.momDiscussions}">
+										<td><span th:text="${iterStat.count}" ></span></td>
+										<td><span th:text="${anItem.pointsDiscussed}" ></span></td>
+										<td><span th:text="${anItem.cparNum}" ></span></td>
+										<td><span th:text="${anItem.actionItemNo}" ></span></td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+						<br>
+						
+							<!-- Action Points of Current Meeting -->
+						<div class="row">
+							<div class="form-group col-md-12" align="center">
+								<h2>Action Points of Current Meeting</h2>
+							</div>
+						</div>
+						
+							<table id="CurrentMmeetingDetails" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+							<thead class="thead-table">
+								<tr>
+									<th>S.No</th>
+									<th>Action needed</th>
+									<th>Responsibility</th>
+									<th>Target date for action</th>
+									<th>Current Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:object="${momMasterForm.currentMeetingPoints}">
+									<tr th:each="anItem , iterStat : ${momMasterForm.currentMeetingPoints}">
+										<td><span th:text="${iterStat.count}" ></span></td>
+										<td><span th:text="${anItem.actionNeeded}" ></span></td>
+										<td><span th:text="${anItem.responsibility}" ></span></td>
+										<td><span th:text="${anItem.targerDate}" ></span></td>
+										<td>
+											<span th:if="${update}==true">
+												<span th:if="${empId}==${anItem.employeeMaster.id}">
+													<input type="hidden" name="empId" id="empId" th:value="${anItem.employeeMaster.id}">
+													<select name="momStatusMaster" id="momStatusMaster" class="form-control">
+														<option value="0">--Select--</option>
+														<option th:each="status : ${momStatusList}"  th:value="${status.id}">
+															<span th:text="${status.momStatus}"></span>
+														</option>
+													</select>
+												</span>
+												<span th:if="${empId}!=${anItem.employeeMaster.id}">
+													<span th:if="${anItem.momStatusMaster}!=null">
+													<span th:text="${anItem.momStatusMaster.momStatus}"/>
+												</span>
+												<span th:if="${anItem.momStatusMaster}==null">
+													Status Not Updated
+												</span>
+												</span>
+											</span>
+											<span th:if="${update}==false">
+												<span th:if="${anItem.momStatusMaster}!=null">
+													<span th:text="${anItem.momStatusMaster.momStatus}"/>
+												</span>
+												<span th:if="${anItem.momStatusMaster}==null">
+													Status Not Updated
+												</span>
+											</span>
+										</td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+						
+						<br><br>
+						<div class="row">
+							<span th:if="${update}==true">
+								<button type="submit" class="btn btn-primary">Update Status</button>
+							</span>
+							
+						</div>
+						</div>
+						
+					</form>
+				</div></div>
+			</div>
+
+		</div>
+	</div>
+	
+</body>
+</html>
+
+	

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Additional Charges</title>
+</th:block>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="col-lg-12 col-xl-10 offset-xl-1">
+					<form class="custom-form" method="post"
+						id="additionalChargesDetailsDTO"
+						th:action="@{/efilesuite/additinalCharges}"
+						th:object="${additionalChargesDetailsDTO}"
+						enctype="multipart/form-data" name="additionalChargesDetailsDTO">
+						<div
+							class="card card-accent-primary bg-transparent mt-4 border-left-0 border-right-0 border-bottom-0 card-shadow">
+							<div
+								class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+								<h5
+									class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">
+									Additional Charges</h5>
+								<a
+									class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1"
+									th:href="@{/efilesuite/additinalChargesRevoke}"> <i
+									class="fa fa-file"></i>&nbsp; Additional Charges Given Report
+								</a>
+							</div>
+							<div class="card-block bg-white pb-0 mt3">
+								<!--<form id="inwardCurrentEntry" class="" method="" action="">-->
+								<div class="form-row">
+									<div class="col-12">
+
+										<!-- <div class="col-sm-12 col-md-10 offset-md-1 d-flex"> -->
+										<div class="card border-primary align-self-stretch">
+											<!-- <h6
+												class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+												style="width: auto;">  Additional Charges </h6> -->
+											<div class="card-block pt-0_" style="border-color: grey;">
+												<div class="form-row">
+													<div class="form-group  col-md-6">
+														<label for="additionalChargePostId"
+															class="col-form-label col-form-label-sm ">Additional Charge From Post</label> <select
+															class="custom-select custom-select-sm"
+															id="additionalChargePostId" name="additionalChargePostId">
+															<option selected disabled value="">Select</option>
+															<option th:each=" postList : ${additionalPostMasters}"
+																th:text="${postList.postname}" th:value="${postList.id}"></option>
+															<!--(${postList.employeeMaster.employeefirstname})  -->
+														</select>
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('additionalChargePostId')}"
+															th:errors="*{additionalChargePostId}">additional
+															charge post error</div>
+													</div>
+
+													<div class="form-group  col-md-6">
+														<div>
+															<label for="additionalChargesTakenPostId"
+																class="col-form-label col-form-label-sm ">Additional
+																Charge To Post</label>
+														</div>
+														<select class="custom-select custom-select-sm"
+															id="additionalChargesTakenPostId"
+															name="additionalChargesTakenPostId">
+															<option selected disabled  value="">Select</option>
+															<option th:each=" postLists : ${postMasterList}"
+																th:text="${postLists.postname}"
+																th:value="${postLists.id}"></option>
+														</select>
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('additionalChargesTakenPostId')}"
+															th:errors="*{additionalChargesTakenPostId}">additional
+															charge from post error</div>
+													</div>
+												</div>
+												<div class="form-row">
+													<div class="form-group  col-md-6">
+														<label for="reasonType"
+															class="col-form-label col-form-label-sm ">Reason
+														</label> <select class="custom-select custom-select-sm"
+															id="reasonType" name="reasonType"
+															onchange="hideLeaveType()">
+															<option selected disabled value="">Select</option>
+															<option value="leave">Leave</option>
+															<option value="transfer">Transfer</option>
+															<option value="relieve">Relieve</option>
+															<option value="notJoined">Not Joined</option>
+															<option value="other">other</option>
+														</select>
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('reasonType')}"
+															th:errors="*{reasonType}">leave type error</div>
+
+
+													</div>
+													<div class="form-group  col-md-6">
+														<label for="additionalChargesFromDate"
+															class="col-form-label col-form-label-sm">Additional
+															Charge Effect From </label> <input type="text"
+															name="additionalChargesFromDate"
+															id="additionalChargesFromDate"
+															class="form-control form-control-sm calendarBg">
+
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('additionalChargesFromDate')}"
+															th:errors="*{additionalChargesFromDate}">additional
+															charges from date error</div>
+													</div>
+												</div>
+												<!-- <div id="LeaveType"> -->
+												<div class="form-row" id="leaveDiv" style="display: none;">
+													<div class="form-group  col-md-6">
+														<label for="leaveType"
+															class="col-form-label col-form-label-sm "> Leave
+															Type </label> <select class="custom-select custom-select-sm"
+															id="leaveType" name="leaveType">
+															<option selected disabled  value="">Select</option>
+															<option th:each=" leaveTypesList : ${leaveTypes}"
+																th:text="${leaveTypesList.leaveName}"
+																th:value="${leaveTypesList.id}"></option>
+														</select>
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('leaveType')}"
+															th:errors="*{leaveType}">leave type error</div>
+													</div>
+													<div class="form-group col-sm-3">
+														<!-- 															<div class="form-group col-md-4"> -->
+														<label for="leaveFromDate"
+															class="col-form-label col-form-label-sm ">From
+															Date </label> <input type="date" name="leaveFromDate"
+															id="leaveFromDate"
+															class="form-control form-control-sm calendarBg">
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('leaveFromDate')}"
+															th:errors="*{leaveFromDate}">from date error</div>
+														<!-- 															</div> -->
+													</div>
+													<div class="form-group col-sm-3">
+														<label for="leaveToDate"
+															class="col-form-label col-form-label-sm ">To Date
+														</label>
+														<div>
+															<input type="date" name="leaveToDate" id="leaveToDate"
+																class="form-control form-control-sm calendarBg">
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('leaveToDate')}"
+																th:errors="*{leaveToDate}">to date error</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group ">
+													<label for="remarks" class="col-form-label col-form-label">Remarks</label>
+
+													<textarea name="remarks" id="remarks" rows="5" cols="6"
+														class="form-control form-control-sm calendarBg"> </textarea>
+
+													<div class="text-danger"
+														th:if="${#fields.hasErrors('remarks')}"
+														th:errors="*{remarks}">remarks error</div>
+												</div>
+												<div class="form-group text-right mb-0  _col-md-12">
+
+													<button type="submit" class="btn btn-primary"
+														onclick="javascript : return formValidation();">
+														Submit</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block layout:fragment="scripts">
+
+
+		<script type="text/javascript">
+			function hideLeaveType() {
+				if ($("#reasonType").val() == "leave") {
+					$("#LeaveType").show();
+				} else {
+					$("#LeaveType").hide();
+				}
+			}
+
+			function formValidation() {
+
+				if ($("#additionalChargePostId").val() == 0) {
+					alert("Please select dditional charge post");
+					$("#additionalChargePostId").focus();
+					return false;
+				} else if ($("#additionalChargesTakenPostId").val() == 0) {
+					alert("Please select additional charge from post");
+					$("#additionalChargesTakenPostId").focus();
+					return false;
+				} else if ($("#reasonType").val() == 0) {
+					alert("Please select reason type");
+					$("#reasonType").focus();
+					return false;
+				} else if ($("#additionalChargesFromDate").val() == "") {
+					alert("additional charges from date");
+					$("#reasonType").focus();
+					return false;
+				} else if ($("#remarks").val() == "") {
+					alert("please enter remarks");
+					$("#remarks").focus();
+					return false;
+				} else {
+					return true;
+				}
+			}
+		</script>
+
+
+		<script type="text/javascript">
+			$("#additionalChargesFromDate").daterangepicker({
+				//parentEl: ".modal .modal-body",
+				singleDatePicker : true,
+				showDropdowns : false,
+				minDate : moment(),
+				locale : {
+					format : 'DD/MM/YYYY'
+				}
+
+			});
+			$("#leaveToDate , #leaveFromDate").daterangepicker({
+				//parentEl: ".modal .modal-body",
+				singleDatePicker : true,
+				showDropdowns : false,
+				//startDate: start,
+// 				minDate : moment(),
+				locale : {
+					format : 'DD/MM/YYYY'
+				}
+
+			});
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var context = "[[@{/}]]";
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$('#additionalChargePostId').change(function() {
+					var postId = $(this).val();
+					$.ajax({
+						type : "POST",
+						url : context+"efilesuite/additinalChargesAjax/" + postId,
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success : function(data) {
+							$("#additionalChargesTakenPostId").html(data);
+						},
+						error : function() {
+							alert("Error");
+						}
+					});
+				})
+
+				//reasonType
+				$('#reasonType').change(function() {
+					if ($("#reasonType").val() == "leave") {
+						$("#leaveDiv").show();
+					} else {
+						$("#leaveDiv").hide();
+					}
+				})
+			});
+			/* $(document).ready(function(){
+			 $('#additionalChargePostId').change(function(){
+			 var postId= $(this).val();
+			 alert(postId)
+			 $.ajax ({
+			 type: "POST",
+			 url: "/efilesuite/additinalChargesAjax/"+postId,
+			 beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+			 success: function(html) {
+			 alert(html)
+			 }
+			 error : function(){
+			 alert("Error")
+			 }
+			 });
+			 })
+			 }) ;  */
+		</script>
+	</th:block>
+</body>
+</html>
+

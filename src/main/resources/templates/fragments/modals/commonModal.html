@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+	<link rel="stylesheet" type="text/css" href="../../../resources/vendors/jkanban/dist/jkanban.css" th:href="@{/resources/vendors/jkanban/dist/jkanban.css}" />
+	<style>
+		body {
+			font-family: 'Roboto'!important;
+			font-weight: 300!important;
+		}
+
+		.ui-state-highlight {
+			height: 300px;
+			width: 33%;
+			background: rgba(8, 8, 8, 0.24);
+		}
+	</style>
+</head>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+
+	<!-- .projectNewTask modal-popups-->
+
+	<div th:fragment="commonModal" class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModal" aria-hidden="true">
+	<!-- <div th:fragment="modalBlank" class="modal fade" id="modalBlank" tabindex="-1" role="dialog" aria-labelledby="modalBlank" aria-hidden="true"> -->
+		<div class="modal-dialog modal-lg _modal-info" role="document">
+			<div class="modal-content">
+			<div class="modal-insert">
+
+			</div>
+				<!-- <div class="modal-footer" style="background: rgba(207, 216, 220, 0.51);">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save2222</button>
+
+				</div> -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+
+	<!-- .projectNewTask modal-popups-->
+
+
+	<div layout:fragment="content">
+
+
+	</div>
+	<!-- main-fragment-->
+
+	<th:block layout:fragment="scripts">
+
+	</th:block>
+</body>
+
+</html>

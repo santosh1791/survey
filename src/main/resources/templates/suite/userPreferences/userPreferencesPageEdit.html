@@ -1,0 +1,184 @@
+<html layout:decorator="layouts/main" xmlns="http://www.w3.org/1999/html">
+
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>User Preferences</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+    <style>
+        .btn {
+
+            border-width: 2px;
+        }
+        h6[role="button"]{
+            cursor: pointer;
+        }
+
+        .custom-inner-checkbox{
+        	margin: 5px 15px 5px 0px !important;
+        }
+        .custom-control-input{
+	        border-radius: 50%  !important;
+        }
+        .card-columns .card {
+            margin-bottom: .75rem;
+            margin-top: 15px;
+        }
+        .custom-control-label:before {
+            background-color: #edf1f891;
+            border: 1px solid #507dba;
+        }
+    </style>
+</th:block>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="container-fluid px-3 role-service-mapping">
+        <div class="animated fadeIn">
+            <div class="row">
+	            <div class="col-md-12">
+	            	 <form class="custom-form" id="userPreferencesForm" method="post" name="userPreferencesForm" th:action="@{/userPreferences}"   th:object="${userPreferencesForm}"  _onsubmit="return validateMe();" autocomplete="off">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <span class="head-top-line">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">User Preferences</h5>
+                            </span>
+                        </div>
+                        <!--<div class=""></div>-->
+
+                            <div class="card-block bg-white pb-4 pt-3 ">
+                                <div class="row">
+                                    <div class="col-12">
+                                            <div class="card card-block p-0 border-0 mb-0" >
+                                            	<th:block th:if="${sMessage != null}">
+										            <div th:replace="fragments/components :: alert (type='success', message=${sMessage})">Alert</div>
+										        </th:block>
+										        <th:block th:if="${fMessage != null}">
+										            <div  th:replace="fragments/components :: alert (type='danger', message=${fMessage})">Alert</div>
+										        </th:block>
+												
+
+                                            </div>
+                                      </div>
+                                      <div class="col-12">
+                                      		<table>
+                                      			<thead>
+                                      				<tr>
+                                      					<th>Preference Name</th>
+                                      					<th>Value</th>
+                                      				</tr>
+                                      			</thead>
+                                      			<tbody>
+                                      			<th:block th:each="anItem : ${userPreferencesForm.userPreferenceList}">
+                                      				<th:block th:switch="${anItem.key}">
+                                      				<tr>
+                                      					<td>
+                                      						<input type="hidden" id="key0" name="userPreferenceList[0].key" value="theme">
+                                      						Theme                                      						
+                                      					</td>
+                                      					<td>
+                                      						<select id="value0" name="userPreferenceList[0].value">
+                                      							<option value="0">Select</option>
+                                      							<option value="Blue">Blue</option>
+                                      							<option value="Red">Red</option>
+                                      							<option value="Green">Green</option>
+                                      						</select>
+                                      					</td>
+                                      				</tr>
+                                      				<tr>
+                                      					<td>
+                                      						<input type="hidden" id="key1" name="userPreferenceList[1].key" value="fontsize">
+                                      						Font Size                                      						
+                                      					</td>
+                                      					<td>
+                                      						<select id="value1" name="userPreferenceList[1].value">
+                                      							<option value="0">Select</option>
+                                      							<option value="10px">10px</option>
+                                      							<option value="12px">12px</option>
+                                      							<option value="14px">14px</option>
+                                      						</select>
+                                      					</td>
+                                      				</tr>
+                                      			
+                                      			</tbody>
+                                      		</table>
+                                      
+                                      </div>
+                                      
+                                   
+
+                                      <div class="card-footer bg-white py-2 w-100">
+                                          <div class="row">
+                                              <div class="col-md-12 text-right">
+                                                  <button _style="width: 130px;" type="submit" class="btn btn-primary text-uppercase" >Submit</button>
+                                              </div>
+                                          </div>
+                                      </div>
+
+
+                                    </div>
+                                </div><!-- .card-block .form-row -->
+
+                            </div><!-- .card-block .bg-white .py-4-->
+						</form>
+
+                    </div><!-- .card -->
+		        </div><!-- .col-md-12 -->
+            </div><!-- /.row -->
+        </div><!-- /.animated.fadeIn -->
+    </div><!--/.main .container-fluid -->
+
+</div>
+<!-- END FRAGMENT: "content" -->
+
+
+<th:block layout:fragment="scripts">
+	<script>
+	var context = "[[@{/}]]";
+	$("#rolesMasterID" ).on('change' ,function() {
+
+		 if(this.value!=null && this.value !="" && this.value!=0){
+
+			$("#roleServiceForm").attr("action",  context + "roleService/roleServiceMapping/"+this.value+"/");
+			$("#roleServiceForm").submit();
+
+		}
+
+
+
+	});
+
+	//$('.custom-control-input').prop('indeterminate', true);
+	function checkForTheChildService(obj, index){
+		if(! $("#p_"+index).is(':checked') ){
+			//$('*[id^="p_'+id+'"]').prop('checked', false);
+			$("input[id^='p_"+index+"']" ).prop('checked', false);
+		}
+	}
+
+	function checkForTheParentService(obj, parentIndex, childIndex){
+		///ele.prop('checked', false);
+		$("#p_"+parentIndex).prop('checked', true);
+
+	}
+	function validateMe(){
+		if($("#rolesMasterID" ).val()==null || $("#rolesMasterID" ).val()=="" || $("#rolesMasterID" ).val()=="0"){
+			$("#rolesMasterID" ).focus();
+			alert("Please select role");
+			return false
+		}
+
+		return true;
+
+	}
+
+	</script>
+</th:block>
+
+</body>
+</html>

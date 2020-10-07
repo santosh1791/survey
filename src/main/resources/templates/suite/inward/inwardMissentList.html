@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head></head>
+	<th:block layout:fragment="metas">
+	    <meta charset="ISO-8859-1">
+	    <title>Inward Mis - Sent Report</title>
+	</th:block>
+<th:block layout:fragment="styles">
+
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+    z-index: 999;
+    border-top: 2px solid #3d70b2 !important;
+    color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+
+
+
+</style>
+</th:block>
+
+
+<body>
+
+	<div layout:fragment="content">
+        <ol class="breadcrumb pr-0 py-0 mb-2">
+            <!--<li class="breadcrumb-item"><i class="icon-home"></i><i class="fa fa-home"></i> </li>-->
+            <li class="breadcrumb-item"><i class="mdi mdi-folder-move"></i>&nbsp;Inward </li>
+            <li class="breadcrumb-item active text-primary">Save</li>
+            <li class="breadcrumb-menu">
+            </li>
+            <li class="breadcrumb-menu pr-3">
+                <div class="btn-group btn-group-primary" role="group" aria-label="Basic example">
+
+                    <a style="height: 34px; line-height: 34px;" role="button"
+                       class="btn btn-primary text-white bg-primary mr-2"
+                       data-toggle="modal" data-target="#commonModal"
+                       data-placement="top"
+                       th:attr="data-url=@{/efilesuite/inward}" title="Inward Entry" >
+                        <i class="fa fa-file-o "></i><span class="icon-btn-text">&nbsp; Inward Entry </span>
+                        <!--File-->
+                    </a>
+
+                    <a style="height: 34px;  line-height: 34px;" role="button" class="btn btn-primary  text-white  bg-primary"
+                       th:href="@{/efilesuite/bulkInwards}" >
+                        <i class="fa fa-lg_ fa-files-o "></i><span class="icon-btn-text">&nbsp; Inward Bulk Entry</span>
+                        <!--File-->
+                    </a>
+
+                </div>
+            </li>
+        </ol>
+		<div>
+			<input type="hidden" name="org.apache.struts.taglib.html.TOKEN"
+				value="f04ae4fa6d250990ad506e6349f0f48c">
+		</div>
+		<input type="hidden" name="method" value="" id="method">
+
+        <div class="container-fluid">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="w-100">
+
+                    <th:block th:replace="fragments/layout :: inwardEntryTabs" >
+
+					</th:block>
+                        <!-- OLD <div class="card card-block " style="padding: 0.5rem 1rem 1.2rem"> OLD -->
+                       <!--  <div class="card card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+                            <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                                <h5 class="d-inline-block mb-0 mt-1 font-weight-bold">Inward Report</h5>
+                                <a class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1" th:href="@{/efilesuite/inward}"> <i class="fa fa-chevron-left"></i>   Register New Current </a>
+                            </div> -->
+                            <!-- .card-header -->
+                           <!-- <div class="card  bg-transparent mb-0 card-shadow "> -->
+
+
+
+
+							<div class="card-body py-0 bg-white"
+								style="_min-height: calc(100vh - 130px);">
+
+
+								<th:block th:if="${statusMessage != null}">
+						            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+						        </th:block>
+						        
+						        <th:block th:if="${statusMessageError != null}">
+						            <div th:replace="fragments/components :: alert (type='danger', message=${statusMessageError})">Alert</div>
+						        </th:block>
+						        
+						        
+
+									<div class="table-responsive " >
+                                    <table id="registeredCurrents" border="1"
+                                           class="table table-bordered table-striped table-sm  mb-0 mt-0" cellspacing="0" width="100%">
+
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th rowspan="2">#</th>
+                                                <th rowspan="2">Inward No.</th>
+                                                <!--/* <th rowspan="2">Current No.</th>
+                                                <th rowspan="2">Subject</th> */-->
+
+                                                <th colspan="4" align="center">Received Details</th>
+                                               <!--/*  <th colspan="2" align="center">Sent to Details</th> */-->
+
+                                                <th rowspan="2">View</th>
+                                                <!-- <th rowspan="2">Action</th> -->
+                                            </tr>
+                                            <tr>
+                                            	<td>subject</td>
+                                                <td>Department</td>
+                                                <td>current Number</td>
+                                                <td>Date</td>
+
+                                               <!--/*  <td>Sent To</td>
+                                                <td> Date </td> */-->
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                           <!--/*  <div th:if="${efileInwardList}==false">
+                                                <font color="green">not register inward</font>
+                                            </div> */-->
+                                            <div th:if="${efileInwardList}!=false">
+                                                <tr th:each="inwardReport , sNo: ${efileInwardList}">
+                                                <td th:text="${sNo.count}"></td>
+                                                <td nowrap="nowrap" th:text="${inwardReport.inwardFileNumber}"></td>
+
+
+
+                                                <!--/* <td th:text="${#dates.format(inwardReport.recievedDate,'dd-MM-yyyy')}"></td> */-->
+                                                <td th:text="${inwardReport.subject}"></td>
+                                                <td>
+                                                	<span th:if="${inwardReport.departmentMaster!=null}" th:text="${inwardReport.departmentMaster.departmentname}"></span>
+                                                	<span th:if="${inwardReport.departmentMaster==null}" th:text="${inwardReport.otherDeptName}"></span>
+                                                </td>
+                                                <td nowrap="nowrap" th:text="${inwardReport.currentNumber}"></td>
+                                                <td th:text="${#temporals.format(inwardReport.recievedDate, 'dd/MM/yyyy')}"></td>
+                                               <!--/*  <td align="center" >
+                                                	<span th:text="${inwardReport.inwardOwnerPostMaster.postname}"></span>
+                                                	<span th:if="${inwardReport.inwardOwnerPostMaster.employeeMaster}!=null">
+                                                		( <span th:text="${inwardReport.inwardOwnerPostMaster.employeeMaster.employeefirstname}"></span>
+                                                		  <span th:text="${inwardReport.inwardOwnerPostMaster.employeeMaster.employeelastname}"></span> )
+                                                	</span>
+                                                	<span th:if="${inwardReport.inwardOwnerPostMaster.employeeMaster}==null">
+                                                		()
+                                                	</span>
+                                                </td>
+                                                <td th:text="${#dates.format(inwardReport.createdDate, 'dd/MM/yyyy')}"></td> */-->
+                                                <td colspan="1"  >
+
+                                                	<div th:if="${inwardReport.uploadFile} == null">
+                                                		<b>N/A</b>
+                                                	</div>
+                                                	<div th:if="${inwardReport.uploadFile} != null" align="center">
+                                                			<a target="_blank" th:href="@{'/efilesuite/inwardPreview/{inwardFileName}'(inwardFileName=${inwardReport.uploadFile})}"  > <i class="mdi mdi-eye"></i></a>
+                                                    </div>
+                                                </td>
+												<!--/*<td>
+													 <button type="button"
+														class="btn btn-primary  mt-1 eFile-float-btn"
+														data-toggle="modal" data-target="#commonModal" _aria-haspopup="true"
+														_aria-expanded="false" data-placement="top"
+														 _th:attr="data-url=@{/efilesuite/inward}" >
+														<i class="fa fa-lg_ fa-file-o "></i>&nbsp;Inward Entry
+														File
+													</button>
+
+													#inwardModalBlank
+													
+
+													<a class="btn btn-outline-default " role="button"
+														aria-pressed="false"
+														data-toggle="modal" data-target="#commonModal"
+														data-placement="top"
+														 th:attr="data-url=@{'/efilesuite/inwardEdit/{inwardId}/'(inwardId=${inwardReport.id})}">Edit</a>
+
+												</td>*/-->
+
+                                            </tr>
+                                            </div>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- main > .w-100 -->
+                </div>
+                <!-- main > .row -->
+            </div>
+            <!-- main > .animated.fadeIn -->
+        </div>
+        <!-- main > .container-fluid -->
+
+	</div>
+    <!-- FRAGMENT: "content" -->
+
+    <th:block layout:fragment="scripts">
+        <script>
+        $(document).ready(function() {
+
+			 var table = $('#registeredCurrents').DataTable({
+
+				 language: {
+				        search: "_INPUT_",
+                     searchPlaceholder: "Search...",
+                     "lengthMenu": "_MENU_",
+                  paginate: {
+                         previous: '<i class="fa fa-chevron-left"></i>',
+                         next:     '<i class="fa fa-chevron-right"></i>'
+                     },
+                     aria: {
+                         paginate: {
+                             previous: 'Previous',
+                             next:     'Next'
+                         }
+                     }
+                  },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                     details: {
+                         type: 'column',
+                         target: 'tr'
+                     }
+                 },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [6,10, 25, 50, -1], [6,10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+						{ width:'1%', targets: 0 },
+	                    { width: '8%', targets: 1 },
+	                   { width:'10%', targets: 2 },
+	                   { _width: '20%', targets: 3 },
+	                     { width: '5%', targets: 4},
+	                     { _width: '6%', targets: 5},
+	                     { width: '1%', targets: 6}/*,
+	                     { _width: '1%', targets: 7} ,
+	                     { _width: '2%', targets: 8, "orderable": false, className: "px-1"},
+	                     { _width: '2%', targets: 9, "orderable": false, className: "px-1"} */
+
+
+
+					],
+					order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy',
+                            orientation: 'landscape',
+                            
+                            exportOptions: {
+                                columns: [ 0, 1, 2, 3, 4, 5 ]
+                            }
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel',
+                            orientation: 'landscape',
+                            
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5 ]
+                            }
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV',
+                            orientation: 'landscape',
+                            
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5 ]
+                            }
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF' ,
+                            orientation: 'landscape',
+                            
+                                exportOptions: {
+                                	columns: [ 0, 1, 2, 3, 4, 5 ]
+                                } 
+                        } ,
+                        {
+                            extend:    'print',
+                            text:      '<i class="fa fa-print"></i>',
+                            titleAttr: 'print',
+                            orientation: 'landscape',
+                            
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5 ]
+                            }
+                        } 
+                    ]
+				});
+
+		        $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+			});
+       	 $("#inwardMisSentboxLink").addClass("active");
+		</script>
+    </th:block>
+    <!-- FOR ADDING CUSTOM SCRIPTS inward html  -->
+
+</body>
+</html>

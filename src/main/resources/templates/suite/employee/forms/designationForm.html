@@ -1,0 +1,31 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Add Designation</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="designationForm" class="custom-form" method="POST" th:action="@{/designationForm}" th:object="${designationForm}" autocomplete="off">
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		<div class="form-row">
+			<div class="form-group col-sm-12">
+				<label for="designationname" class="col-form-label col-form-label-sm">Designation <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="designationname"
+					 id="designationname" maxlength="100" placeholder="Enter designation name" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);"  required="required" >
+				<div class="text-danger" th:if="${#fields.hasErrors('designationname')}" th:errors="*{designationname}">designation name Error</div>
+			</div>
+
+		</div>
+	</form>
+</div>

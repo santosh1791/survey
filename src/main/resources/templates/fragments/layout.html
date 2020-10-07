@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+<link href="../../../resources/css/virtuoMain.min.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/virtuoMain.min.css}" />
+<link href="../../../resources/css/shubCustom.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/shubCustom.css}" />
+
+
+<!-- Icons -->
+<link href="../../../resources/vendors/css/font-awesome.min.css"
+	rel="stylesheet" media="screen"
+	th:href="@{/resources/vendors/css/font-awesome.min.css}">
+<link href="../../../resources/vendors/css/simple-line-icons.min.css"
+	rel="stylesheet" media="screen"
+	th:href="@{/resources/vendors/css/simple-line-icons.min.css}">
+<link
+	href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap4.min.css"
+	rel="stylesheet">
+<!--<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" rel="stylesheet">-->
+<link
+	href="https://cdn.datatables.net/fixedheader/3.1.3/css/fixedHeader.dataTables.min.css"
+	rel="stylesheet">
+
+<!-- Auto Complete using select2 plug-in -->
+	<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+
+<!-- Main styles for this application -->
+<link href="../../../resources/css/style.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/style.css}">
+<!-- Styles required by this views -->
+
+
+</head>
+
+
+<body>
+	<!-- Header -->
+	<header th:fragment="header" class="app-header navbar ">
+
+        <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- <a style="background-color: transparent;" class="navbar-brand" href="/efilesuite/home"></a> -->
+       <!-- <button class="navbar-toggler sidebar-minimizer d-md-down-none" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>-->
+
+		<!--<a style="background-color: transparent;" class="navbar-brand"
+			href="#"></a>-->
+
+        <th:block th:fragment="header/page-head" class="page-head">
+
+        </th:block>
+        <!-- page-head -->
+
+        <ul class="nav navbar-nav d-md-down-none nav-left">
+
+        	<li class="org_logo">
+        		<!-- &nbsp; -->
+            	<!-- <th:block
+						th:if="${session.orgImagePath}!= null">
+            	<img style="max-height: 50px;" th:src="@{'/organizationIcon/{logoPath}'(logoPath=${session.orgImagePath})}">
+            	</th:block>
+            	<th:block
+						th:if="${session.orgImagePath}== null">
+						<img style="height: 50px; width: 50px;" th:src="@{/resources/img/org-default.png}">
+				</th:block> -->
+
+            </li>
+
+        	<!-- <li class="px-3">
+				<div class="ogr_name" style="font-weight: bold; color: #3d6fb2; font-size: 20px;">
+					<span th:text="${session.orgName}"></span>
+				</div>
+			</li> -->
+
+
+
+        </ul>
+
+		<ul class="nav navbar-nav nav-right ml-auto">
+
+           <!-- <li >&lt;!&ndash; <i class="mdi  mdi-18px mdi-account-box-outline "></i> &ndash;&gt;
+            <th:block
+						th:if="${#authentication.getPrincipal().getEmployeeName()}!= null">
+				<span th:text ="${#authentication.getPrincipal().getEmployeeName()}"></span></th:block></li>
+
+            &nbsp;&nbsp;&nbsp;-->
+
+			<li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}" style="border-left: 1px solid #eee;">
+                <a class="login-info-wrapper nav-link dropdown-toggle nav-link text-xs-right py-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				aria-expanded="false">
+
+                    <!-- <th:block  th:if="${#authentication.getPrincipal().getEmployeeName()}!= null">
+                        <span class="logger-name" th:text ="${#authentication.getPrincipal().getEmployeeName()}"></span>
+                    </th:block> -->
+                    <span class="profile-img" >
+
+                    <img th:attr="src=@{/resources/img/avatars/6.jpg}" th:src="@{'/organizationIcon/{profilePicturePath1}'(profilePicturePath1=${session.profilePicturePath})}" class="img-avatar"
+					  />
+                    </span>
+                    <!-- _th:attr="src=@{/resources/img/avatars/6.jpg}, alt='Avatar', title='Avatar'" -->
+			    </a>
+				<div class="dropdown-menu dropdown-menu-right" style="min-width: 250px; margin-top: 0;">
+
+					<!-- <a class="dropdown-item" href="#index.jsp"
+						th:classappend="${module == 'documentation' ? 'active' : ''}"
+						th:href="@{/pms/documentation}"><i class="icon-book-open"></i>Documentation</a> -->
+
+
+                    <!-- <a class="dropdown-item" th:href="@{/changePassword}">
+					<i class="mdi mdi-18px mdi-account-edit"></i>Change Password</a> -->
+
+					<!-- <a class="dropdown-item" th:href="@{/userPreferences}">
+					<i class="mdi mdi-18px mdi-settings"></i>Preferences</a> -->
+
+
+
+					<!-- <th:block th:if="${#authentication.getPrincipal().getPostMasterDetails()}!= null">
+							<a class="dropdown-item"><i class="mdi  mdi-18px mdi-account-card-details"></i><span th:text ="${#authentication.getPrincipal().getPostMasterDetails().getPostname()}"></span></a>
+                    </th:block> -->
+
+					<a class="dropdown-item" href="/logout" th:href="@{#}"
+						onclick="$('#logout').submit();"><i class="fa fa-lock"></i>
+						Logout
+						<form style="visibility: hidden" id="logout" method="post"
+							action="#" th:action="@{/api/logout}"></form> </a>
+
+				</div>
+            </li>
+		</ul>
+	</header>
+	<div class="app-body">
+		<!--<div >-->
+
+			<div class="sidebar hover" th:fragment="sidebar_left">
+			    <nav class="sidebar-nav">
+                    <ul class="nav">
+                       
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/dashboard/home}"><i class="mdi mdi-view-dashboard"></i> Dashboard </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" 
+                            th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
+                            th:href="@{/student/survey}"><i class="mdi mdi-view-dashboard"></i> Survey </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" 
+                            th:if="${#authorization.expression('hasRole(''ROLE_SCHOOL_PRINCIPAL'')')}"
+                            th:href="@{/principal/report}"><i class="mdi mdi-view-dashboard"></i> Report </a>
+                        </li>
+
+                        <!-- <li class="nav-item" _th:if="${#authorization.expression('hasRole(''ROLE_MISCELLANEOUS_SCHEDULER'')')}">
+                            <a class="nav-link"  th:href="@{/calendarview}"><i class="mdi mdi-calendar-check"></i> Scheduler </a>
+                        </li> -->
+                    </ul>
+                </nav>
+                <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+                <!--<a class="sidebar-footer">Powered by Centre for Good Governance</a>-->
+		    </div>
+
+
+
+
+		<!--</div>-->
+
+		<main class="main">
+		<ol th:fragment="breadcrumb" class="breadcrumb hidden-xs">
+			<li class="breadcrumb-item">&nbsp;</li>
+		</ol>
+		</main>
+
+	</div>
+	<!-- .app-body-->
+
+</body>
+</html>
+

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block layout:fragment="metas">
+
+    </th:block>
+    <!-- FOR ADDING METAS -->
+   <!-- <title _th:text="#{view.index.title}">Welcome22222!</title>-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="../../../resources/img/favicons/favicon-32x32.png" th:href="@{/resources/img/favicons/favicon-32x32.png}" sizes="32x32" type="image/png">
+    <link rel="shortcut icon" href="../../../resources/img/favicons/favicon-16x16.png" th:href="@{/resources/img/favicons/favicon-16x16.png}" sizes="16x16" type="image/png">
+    <!--<link rel="icon" href="/favicon.ico">-->
+    <link rel="shortcut icon" href="resources/img/favicons/favicon.ico" th:href="@{/resources/img/favicons/favicon.ico}">
+
+    <th:block layout:fragment="links-before-bs4">
+
+    </th:block>
+    <!-- FOR ADDING CSS STYLESHEET LINKS -->
+
+    <link href="../../../resources/css/virtuoSuiteMain.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/virtuoSuiteMain.min.css}"/>
+    <!-- Above link is for Base Framework Stylesheet which includes FontAwosone, SImple line Icons, -->
+
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/vendors/DataTables-BS4/datatables.min.css" th:href="@{/resources/vendors/DataTables-BS4/datatables.min.css}"/>
+    <!-- All Bootstap 4 Datatables required stylesheet in single file -->
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css" th:href="@{/resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css}"/>
+    <!-- DataRangePicker local file -->
+
+
+    <th:block layout:fragment="links">
+
+    </th:block>
+    <!-- FOR ADDING CSS STYLESHEET LINKS -->
+	<link href="../../../resources/vendors/select2/css/select2.min.css" rel="stylesheet" media="screen" th:href="@{/resources/vendors/select2/css/select2.min.css}"/>
+	<link href="../../../resources/css/cggCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/cggCustom.css}"/>
+    <link href="../../../resources/css/shubCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/shubCustom.css}"/>
+
+    <th:block th:if="${session.theme}!='Default'  ">
+    	<link href="../../../resources/css/${session.theme}.css" rel="stylesheet" media="screen" th:href="@{'/resources/css/{style}.css'(style=${session.theme})}"/>
+    </th:block>
+
+
+	<!-- Auto Complete using select2 plug-in -->
+	<!-- <link href="../../../resources/css/autoCmoplete/select2.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/autoCmoplete/select2.min.css}" /> -->
+
+
+    <style type="text/css">
+
+
+    body{
+        font-family: 'Roboto', sans-serif;
+        color: black;
+    }
+    body.pace-running:not(.pace *) {
+        background: white;
+        opacity: 0;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Open Sans','Roboto', sans-serif;
+    }
+        .breadcrumb-item.active {
+            color: #000000;
+
+        }
+
+        .breadcrumb {
+            padding: .55rem 1.5rem;
+            margin-bottom: 0rem;
+            list-style: none;
+            _background-color: #6eb9c3;
+        }
+        .pace-running > *:not(.pace) {
+          opacity:0.9;
+          pointer-events: none!important;
+        }
+
+		.eFile-tabs .nav-link.active .badge.badge-secondary {
+    		background: #3b70b4;
+		}
+
+		.latterUpperCase 
+		{
+		    text-transform:uppercase;
+		}
+		
+    </style>
+    <th:block layout:fragment="styles">
+    </th:block>
+    <!-- FOR ADDING CSS CUSTOM STYLES -->
+</head>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized _brand-minimized ">
+    <div th:replace="fragments/layout :: header"></div>
+
+        <div class="app-body">
+            <div th:replace="fragments/layout :: sidebar_left"></div>
+
+
+
+            <main layout:fragment="content" class="main nischal">
+
+            </main>
+            <!-- .main -->
+
+            <th:block layout:fragment="aside-menu">
+
+            </th:block>
+            <!-- FOR ADDING ASIDE MENU  -->
+
+
+
+
+        </div>
+    <footer class="app-footer bg-white">
+        
+    </footer>
+
+    <div class="loading" style="display: none;">Loading&#8230;</div>
+    <!-- .app-body main-->
+        <!--<th:block th:replace="fragments/layout :: footer">&copy; 2016 The Static Templates</th:block>-->
+        <!--<div th:replace="projects/forms/projectForm"></div>
+        <div th:replace="projects/forms/taskForm"></div>-->
+        <!--<div th:replace="fragments/modals/project/projectNewTask :: projectNewTask"></div>
+        <div th:replace="fragments/modals/user/userNew :: userNew"></div>
+        <div th:replace="fragments/modals/group/groupNew :: groupNew"></div>-->
+        <div th:replace="fragments/modals/modalBlank :: modalBlank"></div>
+        <div th:replace="fragments/modals/inwardModalBlank :: inwardModalBlank"></div>
+        <div th:replace="fragments/modals/modalConfirm :: modalConfirm"></div>
+        <!--<div th:replace="fragments/modals/modalBlank-lg :: modalBlank"></div>
+        <div th:replace="fragments/modals/modalBlank-sm :: modalBlank"></div>-->
+        <div th:replace="fragments/modals/commonModal :: commonModal"></div>
+
+		<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>Are you sure you want to proceed?</p>
+                            <ul>
+                                <li><button class="btn btn-sm btn-primary">Yes</button></li>
+                                <li><button class="btn btn-sm btn-outline-primary">No</button></li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+
+        <script type="text/javascript" src="../../../resources/js/virtuoSuiteMain.min.js" th:src="@{/resources/js/virtuoSuiteMain.min.js}"></script>
+
+    <script type="text/javascript" src="../../../resources/js/jquery-ui.min.js" th:src="@{/resources/js/jquery-ui.min.js}"></script>
+
+        <!--<script type="text/javascript" src="../../../resources/vendors/bootstrap-daterangepicker/js/moment.min.js" th:href="@{/resources/vendors/bootstrap-daterangepicker/js/moment.min.js}"></script>-->
+
+        <script type="text/javascript" src="../../../resources/vendors/bootstrap-daterangepicker/js/daterangepicker.js"
+                th:src="@{/resources/vendors/bootstrap-daterangepicker/js/daterangepicker.js}"></script>
+
+
+        <!--	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+            <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
+            <script src="https://cdn.datatables.net/responsive/2.2.1/js/responsive.bootstrap4.min.js"></script>
+            <script src="https://cdn.datatables.net/fixedheader/3.1.3/js/dataTables.fixedHeader.min.js"></script>-->
+
+        <script type="text/javascript" src="../../../resources/vendors/DataTables-BS4/datatables.min.js" th:src="@{/resources/vendors/DataTables-BS4/datatables.min.js}"></script>
+
+        <script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.2.3/js/dataTables.rowReorder.min.js" th:src="@{https://cdn.datatables.net/rowreorder/1.2.3/js/dataTables.rowReorder.min.js}"></script>
+
+		<script type="text/javascript" src="../../../resources/vendors/select2/js/select2.full.min.js" th:src="@{/resources/vendors/select2/js/select2.full.min.js}"></script>
+
+        <th:block layout:fragment="script-links">
+
+        </th:block>
+        <!-- FOR ADDING CUSTOM SCRIPT-LINKS  -->
+
+    <script type="text/javascript" src="../../../resources/vendors/tinymce/js/tinymce/tinymce.min.js" th:src="@{/resources/vendors/tinymce/js/tinymce/tinymce.min.js}"></script>
+
+    <script type="text/javascript"
+            src="../../../resources/vendors/tinymce/js/tinymce/jquery.tinymce.min.js"
+            th:src="@{/resources/vendors/tinymce/js/tinymce/jquery.tinymce.min.js}"></script>
+
+        <script type="text/javascript" src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
+        <script type="text/javascript" src="../../../resources/js/commonValidations.js" th:src="@{/resources/js/commonValidations.js}"></script>
+        <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" ></script>-->
+
+
+
+
+		<!--auto Complete using select2  -->
+		<!-- <script type="text/javascript" src="../../../resources/js/autoCmoplete/select2.min.js" th:src="@{/resources/js/autoCmoplete/select2.min.js}"></script> -->
+
+        <script>
+        /*$("body").niceScroll({
+            cursorwidth:12,
+            cursoropacitymin:0.5,
+            cursorcolor:'#3d70b2',
+            cursorborder:'none',
+            cursorborderradius:0,
+            autohidemode:'leave'
+        });*/
+        /* DATE RAGNE PICKER */
+
+         /*$("input.datePickerClass").daterangepicker({
+        parentEl: ".modal .modal-body",
+        singleDatePicker: true,
+        showDropdowns: false
+        });
+
+        $("input.datePickerClass").daterangepicker({
+        parentEl: ".modal .modal-body",
+        singleDatePicker: true,
+        showDropdowns: false
+        });
+
+        $('input.datePickerClass').daterangepicker({
+            "singleDatePicker": true,
+            "showDropdowns": true,
+            "timePicker": true,
+            "autoApply": true,
+            "linkedCalendars": false,
+            "alwaysShowCalendars": true,
+            "startDate": "12/22/2017",
+            "endDate": "12/28/2017",
+            "minDate": "12/01/2017"
+        }, function(start, end, label) {
+          console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+
+        */
+
+
+        /*
+         $("input.singleDate").daterangepicker({
+        //parentEl: ".modal .modal-body",
+        singleDatePicker: true,
+        showDropdowns: false
+        });
+        */
+
+        /* $('input.modalSingleDate').daterangepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true
+        }); */
+
+
+        </script>
+        <script>
+		function goBack(){
+		 	window.history.back();
+	 	}
+		 $(document).ready(function() {
+
+
+			 /*$(".js-example-basic-single").select2({
+				allowClear: true,
+				placeholder: {
+					id: "-1",
+					text: "Display another project"
+				}
+			});
+			$("#cggProjectTaskTags").select2({
+			  	tags: true,
+				multiple:"multiple",
+				placeholder: {
+					text: "Enter Tags"
+				}
+			});
+
+
+		function formatColor (state) {
+			if (!state.id) {
+				return state.text;
+			}
+			var $state = $(
+					'<div class="color-picker-option"><div class="color-picker-square color-'+ state.element.value.toLowerCase() + '"></div><div class="color-picker-label">' + state.text + '</div></div>'
+			);
+			return $state;
+		  };
+
+
+		  $('select#cggProjectTaskColorSelect').select2({
+			   	dropdownCssClass : 'no-search',
+				width: "100%",
+				templateResult: formatColor,
+				templateSelection: formatColor
+		  }); */
+			/*
+			'<div class="color-picker-option"><div class="color-picker-square color-'+ state.element.value.toLowerCase() + '"></div><div class="color-picker-label">' + state.text + '</div></div>'
+			*/
+
+			//$("#cggProjectTaskDueDate , #cggProjectTaskStartDate ").datetimepicker({format: 'dd-mm-yyyy hh:ii'});
+
+			/*$('.selectpicker').selectpicker({
+			  style: 'btn-info',
+			  size: 4
+			});*/
+
+
+
+			$('#modalBlank').on('show.bs.modal', function (e) {
+				$("#modalBlank .modal-insert").empty();
+				//console.log(e.relatedTarget);
+				var url = $(e.relatedTarget).data("url");
+			  	$.ajax({
+				   url: url,
+				   data: {},
+				   success: function (data) {
+					  $("#modalBlank .modal-insert").html(data);
+						//console.log(data);
+					   setTimeout(function(){
+						  $('#modalBlank .modal-insert input ,#modalBlank .modal-insert textarea ').first().focus();
+						},500);
+
+				   },
+				   dataType: 'html'
+				});
+			}).on('hidden.bs.modal', function (e) {
+			  $("#modalBlank .modal-insert").empty();
+
+			});
+
+			$('#modalBlank').on('hidden.bs.modal', function () {
+				 location.reload();
+			});
+
+			$('#modalBlank .modal-footer button.btn.btn-primary').click(function(){
+				var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				var action = $('#modalBlank .modal-insert form').first().attr('action');
+				var formData = new FormData($('#modalBlank .modal-insert form')[0]);
+				//var formData = $('#modalBlank .modal-insert form').serialize();
+
+				$('.loading').show();
+				console.log('action', action);
+				$.ajax({
+							type: "POST",
+							method: "POST",
+							url: action,
+							data: formData,
+							cache: false,
+							contentType: false,
+							processData: false,
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader(header, token);
+							},
+							success: function(data, status, jqXHR) {
+							   // console.log('data', data);
+								if (data) {
+									$("#modalBlank .modal-insert").empty().html(data);
+								} else {
+									$('#modalBlank').modal('close');
+								}
+								//console.log('success', data);
+								//alert('success:'+data);
+								$('.loading').hide();
+							},
+							error: function(request, status, error) {
+								//alert('error:'+status);
+								$('.loading').hide();
+							}
+				});
+			});
+
+			//inwardModalBlank Start
+
+				$('#inwardModalBlank').on('show.bs.modal', function (e) {
+				$("#inwardModalBlank .modal-insert").empty();
+				//console.log(e.relatedTarget);
+				var url = $(e.relatedTarget).data("url");
+			  	$.ajax({
+				   url: url,
+				   data: {},
+				   success: function (data) {
+					  $("#inwardModalBlank .modal-insert").html(data);
+						//console.log(data);
+					   setTimeout(function(){
+						  $('#inwardModalBlank .modal-insert input ,#inwardModalBlank .modal-insert textarea ').first().focus();
+						},500);
+
+				   },
+				   dataType: 'html'
+				});
+			}).on('hidden.bs.modal', function (e) {
+			  $("#inwardModalBlank .modal-insert").empty();
+
+			});
+
+			$('#inwardModalBlank').on('hidden.bs.modal', function () {
+				 location.reload();
+			});
+
+			$('#inwardModalBlank .modal-footer button.btn.btn-primary').click(function(){
+				var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				var action = $('#inwardModalBlank .modal-insert form').first().attr('action');
+				var formData = new FormData($('#inwardModalBlank .modal-insert form')[0]);
+				//var formData = $('#modalBlank .modal-insert form').serialize();
+
+				$('.loading').show();
+				console.log('action', action);
+				$.ajax({
+							type: "POST",
+							method: "POST",
+							url: action,
+							data: formData,
+							cache: false,
+							contentType: false,
+							processData: false,
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader(header, token);
+							},
+							success: function(data, status, jqXHR) {
+							   // console.log('data', data);
+								if (data) {
+									$("#inwardModalBlank .modal-insert").empty().html(data);
+								} else {
+									$('#inwardModalBlank').modal('close');
+								}
+								//console.log('success', data);
+								//alert('success:'+data);
+								$('.loading').hide();
+							},
+							error: function(request, status, error) {
+								//alert('error:'+status);
+								$('.loading').hide();
+							}
+				});
+			});
+
+			//End
+
+
+
+			$('#commonModal').on('show.bs.modal', function (e) {
+				$("#commonModal .modal-insert").empty();
+				//console.log(e.relatedTarget);
+				var url = $(e.relatedTarget).data("url");
+			  	$.ajax({
+				   url: url,
+				   data: {},
+				   success: function (data) {
+					  $("#commonModal .modal-insert").html(data);
+						//console.log(data);
+					   setTimeout(function(){
+						  $('#commonModal .modal-insert input ,#commonModal .modal-insert textarea ').first().focus();
+						},500);
+
+				   },
+				   dataType: 'html'
+				});
+			}).on('hidden.bs.modal', function (e) {
+			  $("#commonModal .modal-insert").empty();
+
+			});
+			
+			$('#commonModal').on('hidden.bs.modal', function () {
+				 location.reload();
+			});
+
+			$('#commonModal .modal-footer button.btn.btn-primary').click(function(){
+				var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				var action = $('#commonModal .modal-insert form').first().attr('action');
+				//var formData = new FormData($('#commonModal .modal-insert form')[0]);
+				var formData = $('#commonModal .modal-insert form').serialize();
+				console.log('action', action);
+				$.ajax({
+							type: "POST",
+							url: action,
+							data: formData,
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader(header, token);
+							},
+							success: function(data, status, jqXHR) {
+								if (data) {
+									$("#commonModal .modal-insert").empty().html(data);
+								} else {
+									$('#commonModal').modal('close');
+								}
+								//console.log('success', data);
+								//alert('success:'+data);
+							},
+							error: function(request, status, error) {
+								alert('error:'+status);
+							}
+				});
+			});
+
+
+
+			/* tinymce.init({
+			  selector: 'textarea',
+			  height: 200,
+			  menubar: false,
+			  plugins: [
+				'advlist autolink lists link image charmap print preview anchor textcolor',
+				'searchreplace visualblocks code fullscreen',
+				'insertdatetime media table contextmenu paste code'
+			  ],
+			  toolbar: 'insert | undo redo |  styleselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat'
+
+			}); */
+
+
+			toastr.options = {
+					  "closeButton": true,
+					  "debug": false,
+					  "newestOnTop": false,
+					  "progressBar": true,
+					  "positionClass": "toast-top-center",
+					  "preventDuplicates": false,
+					  "onclick": null,
+					  "showDuration": "300",
+					  "hideDuration": "2000",
+					  "timeOut": "5000",
+					  "extendedTimeOut": "1000",
+					  "showEasing": "swing",
+					  "hideEasing": "linear",
+					  "showMethod": "fadeIn",
+					  "hideMethod": "fadeOut"
+					}
+
+		    });
+		 $(function () {
+             $('[data-toggle="tooltip"]').tooltip();
+
+
+             $.fn.dataTable.render.ellipsis = function ( cutoff ) {
+                return function ( data, type, row ) {
+                    return type === 'display' && data.length > cutoff ?
+                        data.substr( 0, cutoff ) +'…' :
+                        data;
+                }
+            };
+
+             /*
+             $.fn.dataTable.render.ellipsis = function () {
+                return function ( data, type, row ) {
+                    return type === 'display' && data.length > 10 ?
+                        data.substr( 0, 10 ) +'…' :
+                        data;
+                }
+            };
+            */
+
+           /*
+            $.fn.dataTable.render.ellipsis = function ( cutoff, wordbreak, escapeHtml ) {
+                    var esc = function ( t ) {
+                        return t
+                            .replace( /&/g, '&amp;' )
+                            .replace( /</g, '&lt;' )
+                            .replace( />/g, '&gt;' )
+                            .replace( /"/g, '&quot;' );
+                    };
+
+                    return function ( d, type, row ) {
+                        // Order, search and type get the original data
+                        if ( type !== 'display' ) {
+                            return d;
+                        }
+
+                        if ( typeof d !== 'number' && typeof d !== 'string' ) {
+                            return d;
+                        }
+
+                        d = d.toString(); // cast numbers
+
+                        if ( d.length < cutoff ) {
+                            return d;
+                        }
+
+                        var shortened = d.substr(0, cutoff-1);
+
+                        // Find the last white space character in the string
+                        if ( wordbreak ) {
+                            shortened = shortened.replace(/\s([^\s]*)$/, '');
+                        }
+
+                        // Protect against uncontrolled HTML input
+                        if ( escapeHtml ) {
+                            shortened = esc( shortened );
+                        }
+
+                        return '<span class="ellipsis" title="'+esc(d)+'">'+shortened+'&#8230;</span>';
+                    };
+                };
+                */
+
+
+           })
+
+        </script>
+
+    <th:block layout:fragment="scripts">
+
+    </th:block>
+    <!-- FOR ADDING CUSTOM SCRIPTS  -->
+
+
+
+
+</body>
+
+</html>

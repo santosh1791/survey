@@ -1,0 +1,42 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 400px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Leave Type </h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<head>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container">
+	<form name="leaveTypeForm"  class="custom-form" id="leaveTypeForm" method="post"  onsubmit="javascript:return validate();"
+	th:action="@{'/editLeaveType/{id}'(id=${id})}"  th:object="${leaveTypeForm}"  autocomplete="off" >
+
+	 <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+
+	<div class="form-row">
+	 <div class="form-group col-md-12">
+	    <label for=leaveName class="col-form-label col-form-label-sm">Leave Name<span class="text-danger">*</span></label>
+	    <input type="text" class="form-control form-control-sm" id="leaveName" name="leaveName" th:field="*{leaveName}">
+	    <div class="text-danger" th:if="${#fields.hasErrors('leaveName')}" th:errors="*{leaveName}">leaveName Error</div>
+	  </div>
+	  <div class="form-group col-md-12">
+	    <label for="leaveShortName" class="col-form-label col-form-label-sm">Leave Short Name<span class="text-danger">*</span></label>
+	    <input type="text" class="form-control form-control-sm" id="leaveShortName" name="leaveShortName" th:field="*{leaveShortName}">
+	       <div class="text-danger" th:if="${#fields.hasErrors('leaveShortName')}" th:errors="*{leaveShortName}">leaveShortName Error</div>
+	  </div>
+	  </div>
+	</form>
+</div>
+</div>

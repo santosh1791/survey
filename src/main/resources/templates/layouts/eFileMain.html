@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block layout:fragment="metas">
+
+    </th:block>
+    <!-- FOR ADDING METAS -->
+   <!-- <title _th:text="#{view.index.title}">Welcome22222!</title>-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <th:block layout:fragment="links-before-bs4">
+
+    </th:block>
+    <!-- FOR ADDING CSS STYLESHEET LINKS -->
+
+    <link href="../../../resources/css/virtuoSuiteMain.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/virtuoSuiteMain.min.css}"/>
+    <!-- Above link is for Base Framework Stylesheet which includes FontAwosone, SImple line Icons, -->
+
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/vendors/DataTables-BS4/datatables.min.css" th:href="@{/resources/vendors/DataTables-BS4/datatables.min.css}"/>
+    <!-- All Bootstap 4 Datatables required stylesheet in single file -->
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css" th:href="@{/resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css}"/>
+    <!-- DataRangePicker local file -->
+
+
+    <th:block layout:fragment="links">
+
+    </th:block>
+    <!-- FOR ADDING CSS STYLESHEET LINKS -->
+	<link href="../../../resources/vendors/select2/css/select2.min.css" rel="stylesheet" media="screen" th:href="@{/resources/vendors/select2/css/select2.min.css}"/>
+	<link href="../../../resources/css/cggCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/cggCustom.css}"/>
+    <link href="../../../resources/css/shubCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/shubCustom.css}"/>
+
+
+	<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+
+    <style type="text/css">
+
+
+    body{
+        font-family: 'Roboto', sans-serif;
+        color: black;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Open Sans','Roboto', sans-serif;
+    }
+        .breadcrumb-item.active {
+
+        }
+
+        .breadcrumb {
+           /* padding: .55rem 1.5rem;*/
+            padding: 0rem 1.5rem;
+            margin-bottom: 1rem;
+            list-style: none;
+            max-height: 50px;
+
+        }
+        .pace-running > *:not(.pace) {
+          opacity:0.5;
+          pointer-events: none!important;
+        }
+
+    </style>
+    <th:block layout:fragment="styles">
+
+    </th:block>
+    <!-- FOR ADDING CSS CUSTOM STYLES -->
+</head>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized brand-minimized  aside-menu-fixed  aside-menu-hidden footer-fixed">
+    <div th:replace="fragments/layout :: header"></div>
+
+        <div class="app-body">
+
+
+            <div th:replace="fragments/layout :: sidebar_left"></div>
+
+            <main class="main nischal"  style="max-height: calc( 100vh - 100px );overflow-y: auto;">
+
+                <div class="efile-single-page" style="min-height: calc ( 100vh - 100px ); position: relative;">
+
+                    <th:block layout:fragment="content">
+
+
+                </th:block>
+
+
+
+
+
+
+
+                </div><!-- .efile-single-page -->
+
+
+            </main>
+            <!-- MAIN FRAGMENT :: "content"-->
+
+
+
+            <th:block layout:fragment="aside-menu">
+
+            </th:block>
+            <!-- FOR ADDING ASIDE MENU  -->
+
+
+
+
+
+
+
+        </div>
+    <!-- .app body  -->
+
+    <footer class="app-footer _mt-3 d-flex  bg-white" _style="position: absolute; bottom: 0; right: 35%; ">
+        <span href="https://virtuo.cgg.gov.in"><h6>Virtuo Suite &copy;&nbsp;2017. </h6></span>
+        <span class="text-primary d-inline-block ml-auto text-black">
+                        Powered by <a href="https://www.cgg.gov.in/" alt="Center for Good Governance">
+                                <img height="40" class="text-center mx-auto" src="../../../resources/img/CGG_logo.png" th:src="@{/resources/img/CGG_logo.png}"/>
+                           </a>
+                    </span>
+    </footer>
+
+
+
+
+    <div class="loading" style="display: none;">Loading&#8230;</div>
+    <!-- .app-body main-->
+        <!--<th:block th:replace="fragments/layout :: footer">&copy; 2016 The Static Templates</th:block>-->
+        <!--<div th:replace="projects/forms/projectForm"></div>
+        <div th:replace="projects/forms/taskForm"></div>-->
+        <!--<div th:replace="fragments/modals/project/projectNewTask :: projectNewTask"></div>
+        <div th:replace="fragments/modals/user/userNew :: userNew"></div>
+        <div th:replace="fragments/modals/group/groupNew :: groupNew"></div>-->
+        <div th:replace="fragments/modals/modalBlank :: modalBlank"></div>
+        <div th:replace="fragments/modals/modalConfirm :: modalConfirm"></div>
+        <!--<div th:replace="fragments/modals/modalBlank-lg :: modalBlank"></div>
+        <div th:replace="fragments/modals/modalBlank-sm :: modalBlank"></div>-->
+        <div th:replace="fragments/modals/commonModal :: commonModal"></div>
+
+        <script type="text/javascript" src="../../../resources/js/virtuoSuiteMain.min.js" th:src="@{/resources/js/virtuoSuiteMain.min.js}"></script>
+
+        <!--<script type="text/javascript" src="../../../resources/vendors/bootstrap-daterangepicker/js/moment.min.js" th:href="@{/resources/vendors/bootstrap-daterangepicker/js/moment.min.js}"></script>-->
+
+        <script type="text/javascript" src="../../../resources/vendors/bootstrap-daterangepicker/js/daterangepicker.js"
+                th:src="@{/resources/vendors/bootstrap-daterangepicker/js/daterangepicker.js}"></script>
+
+        <script type="text/javascript" src="../../../resources/vendors/DataTables-BS4/datatables.min.js" th:src="@{/resources/vendors/DataTables-BS4/datatables.min.js}"></script>
+
+		<script type="text/javascript" src="../../../resources/vendors/select2/js/select2.full.js" th:src="@{/resources/vendors/select2/js/select2.full.js}"></script>
+
+
+
+        <th:block layout:fragment="script-links">
+
+        </th:block>
+        <!-- FOR ADDING CUSTOM SCRIPT-LINKS  -->
+
+
+        <script type="text/javascript" src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
+
+
+
+        <script>
+
+
+
+        //$(".main.nischal, .aside-menu.eFile-aside-menu").niceScroll().resize();;
+        /* DATE RAGNE PICKER */
+
+         /*$("input.datePickerClass").daterangepicker({
+        parentEl: ".modal .modal-body",
+        singleDatePicker: true,
+        showDropdowns: false
+        });
+
+        $("input.datePickerClass").daterangepicker({
+        parentEl: ".modal .modal-body",
+        singleDatePicker: true,
+        showDropdowns: false
+        });
+
+        $('input.datePickerClass').daterangepicker({
+            "singleDatePicker": true,
+            "showDropdowns": true,
+            "timePicker": true,
+            "autoApply": true,
+            "linkedCalendars": false,
+            "alwaysShowCalendars": true,
+            "startDate": "12/22/2017",
+            "endDate": "12/28/2017",
+            "minDate": "12/01/2017"
+        }, function(start, end, label) {
+          console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+
+        */
+
+
+        /*
+         $("input.singleDate").daterangepicker({
+        //parentEl: ".modal .modal-body",
+        singleDatePicker: true,
+        showDropdowns: false
+        });
+        */
+
+        /* $('input.modalSingleDate').daterangepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true
+        }); */
+
+
+        </script>
+        <script>
+		function goBack(){
+		 	window.history.back();
+	 	}
+		 $(document).ready(function() {
+
+			$('#modalBlank').on('show.bs.modal', function (e) {
+				$("#modalBlank .modal-insert").empty();
+				//console.log(e.relatedTarget);
+				var url = $(e.relatedTarget).data("url");
+			  	$.ajax({
+				   url: url,
+				   data: {},
+				   success: function (data) {
+					  $("#modalBlank .modal-insert").html(data);
+						//console.log(data);
+					   setTimeout(function(){
+						  $('#modalBlank .modal-insert input ,#modalBlank .modal-insert textarea ').first().focus();
+						},500);
+
+				   },
+				   dataType: 'html'
+				});
+			}).on('hidden.bs.modal', function (e) {
+			  $("#modalBlank .modal-insert").empty();
+
+			});
+
+			$('#modalBlank').on('hidden.bs.modal', function () {
+				 location.reload();
+			});
+
+			$('#modalBlank .modal-footer button.btn.btn-primary').click(function(){
+				var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				var action = $('#modalBlank .modal-insert form').first().attr('action');
+				var formData = new FormData($('#modalBlank .modal-insert form')[0]);
+				//var formData = $('#modalBlank .modal-insert form').serialize();
+
+				$('.loading').show();
+				console.log('action', action);
+				$.ajax({
+							type: "POST",
+							method: "POST",
+							url: action,
+							data: formData,
+							cache: false,
+							contentType: false,
+							processData: false,
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader(header, token);
+							},
+							success: function(data, status, jqXHR) {
+							   // console.log('data', data);
+								if (data) {
+									$("#modalBlank .modal-insert").empty().html(data);
+								} else {
+									$('#modalBlank').modal('close');
+								}
+								//console.log('success', data);
+								//alert('success:'+data);
+								$('.loading').hide();
+							},
+							error: function(request, status, error) {
+								//alert('error:'+status);
+								$('.loading').hide();
+							}
+				});
+			});
+
+
+			$('#commonModal').on('show.bs.modal', function (e) {
+				$("#commonModal .modal-insert").empty();
+				//console.log(e.relatedTarget);
+				var url = $(e.relatedTarget).data("url");
+			  	$.ajax({
+				   url: url,
+				   data: {},
+				   success: function (data) {
+					  $("#commonModal .modal-insert").html(data);
+						//console.log(data);
+					   setTimeout(function(){
+						  $('#commonModal .modal-insert input ,#commonModal .modal-insert textarea ').first().focus();
+						},500);
+
+				   },
+				   dataType: 'html'
+				});
+			}).on('hidden.bs.modal', function (e) {
+			  $("#commonModal .modal-insert").empty();
+
+			});
+
+			$('#commonModal .modal-footer button.btn.btn-primary').click(function(){
+				var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				var action = $('#commonModal .modal-insert form').first().attr('action');
+				//var formData = new FormData($('#commonModal .modal-insert form')[0]);
+				var formData = $('#commonModal .modal-insert form').serialize();
+				console.log('action', action);
+				$.ajax({
+							type: "POST",
+							url: action,
+							data: formData,
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader(header, token);
+							},
+							success: function(data, status, jqXHR) {
+								if (data) {
+									$("#commonModal .modal-insert").empty().html(data);
+								} else {
+									$('#commonModal').modal('close');
+								}
+								//console.log('success', data);
+								//alert('success:'+data);
+							},
+							error: function(request, status, error) {
+								alert('error:'+status);
+							}
+				});
+			});
+
+		    $(function () {
+             $('[data-toggle="tooltip"]').tooltip();
+           });
+           console.log("eFile ends here ");
+        });
+        </script>
+
+    <th:block layout:fragment="scripts">
+
+    </th:block>
+    <!-- FOR ADDING CUSTOM SCRIPTS  -->
+
+
+
+
+</body>
+
+</html>

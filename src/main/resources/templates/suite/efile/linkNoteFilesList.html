@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+			<input type="hidden" name="org.apache.struts.taglib.html.TOKEN"
+				value="f04ae4fa6d250990ad506e6349f0f48c">
+		</div>
+		<input type="hidden" name="method" value="" id="method">
+		<div class="container-fluid"  >
+			<div class="animated fadeIn">
+				<div class="card card-block " style="padding: 0.5rem 1rem 1.2rem;margin-top: 10%;">
+					<div class="d-flex flex-row flex-wrap justify-content-around  no-gutters">
+						<div style="overflow: auto; width: 100%;">
+							<div class="row">
+								<h2 align="center" class="col-sm-12"> Link To eFile </h2>
+							</div>
+							<table id="registeredCurrents" border="1" class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+								cellspacing="0" width="100%">
+								<thead class="thead-default w-100">
+									<tr>
+										<th rowspan="2">Sno</th>
+										<th rowspan="2">Notefile Number</th>
+										<th rowspan="2">File Initiator</th>
+										<th rowspan="2">Subject</th>
+										<th rowspan="2">Created On</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- <th:block th:object="${efileInwardList}"> -->
+									<tr th:each="linkFile , sNo: ${linkFileList}">
+										<td th:text="${sNo.count}"></td>
+										
+										<td >
+											<a style="color: blue;" role="button" aria-pressed="false" th:text="${linkFile.notefileNumber}" th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${linkFile.notefileNumber})}"></a>
+										
+										</td>
+										<td th:text="${linkFile.fileInitiator}"></td>
+										<td th:text="${linkFile.subject}"></td>
+										<td th:text="${linkFile.entryDate}"></td>
+										
+									</tr>
+									<!-- </th:block> -->
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+</body>
+</html>

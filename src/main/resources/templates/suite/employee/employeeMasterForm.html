@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Employee Details</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+    <style>
+        .btn {
+
+            border-width: 2px;
+        }
+        h6[role="button"]{
+            cursor: pointer;
+        }
+    </style>
+</th:block>
+
+
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+		<div class="container-fluid px-3">
+        <div class="animated fadeIn">
+            <div class="form-row">
+	            <div class="col-md-12">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Employee Details</h5>
+                            <button
+                                class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1"
+                                onclick="goBack()"> <i class="fa fa-list"></i>
+                                All Employees
+                            </button>
+                        </div>
+                          
+							 <th:block th:if="${statusMessage != null}">
+					            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+					        </th:block>
+					        <th:block th:if="${failureMessage != null}">
+					            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+					        </th:block>
+					 
+                        <!--<div class=""></div>-->
+                            <div class="card-block bg-white py-4 ">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <form class="custom-form" id="employeeMasterForm" method="post" enctype="multipart/form-data" th:action="@{/employeeMstForm}" th:modelAttribute="photo" th:object="${employeeMasterForm}"  autocomplete="off" data-toggle="validator" >
+
+
+                                                <div class="card card-block p-0 border-0 mb-0" id="employeeDetailsContent">
+                                                    <div class="form-row">
+
+                                                        <div class="col-md-6">
+
+												    <!--###### Personal Details ######-->
+                                                    <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-1" aria-expanded="false" aria-controls="collapseExample">1. Personal Details</h6>
+
+                                                    <section id="section-1" class="show">
+                                                        <div id="personalDetails" class="card-block pt-0" style="border-color: grey;">
+
+																<div class="">
+																		<div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			    <label class="col-form-label col-form-label-sm " for="employeeID">Employee ID<span class="text-danger">*</span></label>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+																			<input autocomplete="false" required="" type="text" class="form-control form-control-sm" maxlength="6" name="employeeID" id="employeeID" placeholder="Employee ID" th:field="*{employeeID}" onkeypress="javascript:return integersOnly(event);" >
+																			<span class="text-danger" id="checkEmpIDExistSpanID"></span>
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeeID')}" th:errors="*{employeeID}">employeeID Error</div>
+                                                                            </div>
+																		</div>
+																		<div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			    <label class="col-form-label col-form-label-sm" for="employeeFirstName">Employee First Name<span class="text-danger">*</span></label>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+																			<input  autocomplete="false"  type="text" class="form-control form-control-sm latterUpperCase" name="employeeFirstName" id="employeeFirstName" placeholder="Employee First Name" th:field="*{employeeFirstName}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" onkeyup="wordsWithSingelSpaceBetween(this);" >
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeeFirstName')}" th:errors="*{employeeFirstName}">employeeFirstName Error</div>
+                                                                            </div>
+																		</div>
+																<!--</div>
+																<div class="form-row">-->
+
+																		<div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="employeeMiddleName">Employee Middle Name</label>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+																			<input autocomplete="false" type="text" class="form-control form-control-sm latterUpperCase" name="employeeMiddleName" id="employeeMiddleName" placeholder="Employee Middle Name" th:field="*{employeeMiddleName}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="javascript:return toUpper(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeeMiddleName')}" th:errors="*{employeeMiddleName}">employeeMiddleName Error</div>
+                                                                            </div>
+																		</div>
+																		<div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="employeeLastName">Employee Last Name<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                         <div class="col-sm-8">
+																			<input  autocomplete="false" type="text" class="form-control form-control-sm latterUpperCase" name="employeeLastName" id="employeeLastName" placeholder="Employee Last Name" th:field="*{employeeLastName}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="javascript:return toUpper(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeeLastName')}" th:errors="*{employeeLastName}">employeeLastName Error</div>
+                                                                        </div>
+																		</div>
+																<!--</div>
+																<div class="form-row">-->
+																		<div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="dob">DOB(DD/MM/YYYY)<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                    <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm datePicker dob" name="dob" id="dob" placeholder="DD/MM/YYYY" th:field="*{dob}"  readonly="readonly" >
+																			<div class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}">DOB Error</div>
+                                                                    </div>
+																		</div>
+
+																		<div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="gender">Gender<span class="text-danger">*</span></label>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+																			<input autocomplete="false"  type="radio" name="gender" value="M" id="gender1" th:field="*{gender}">&nbsp; Male&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" id="gender2" value="F" th:field="*{gender}">&nbsp;Female
+																			<div class="text-danger" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">gender Error</div>
+                                                                            </div>
+																		</div>
+																<!--</div>
+																<div class="form-row">-->
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="fatherName">Father Name</label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input  autocomplete="false" type="text" class="form-control form-control-sm" name="fatherName" id="fatherName" placeholder="Father Name" th:field="*{fatherName}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('fatherName')}" th:errors="*{fatherName}">fatherName Error</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="motherName">Mother Name</label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="motherName" id="motherName" placeholder="Mother Name" th:field="*{motherName}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('motherName')}" th:errors="*{motherName}">motherName Error</div>
+																		</div>
+                                                                    </div>
+																<!--</div>
+																<div class="form-row">-->
+
+                                                                        <div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="mothertongue">Mother Tongue</label>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+                                                                                <input autocomplete="false"  type="text" class="form-control form-control-sm" name="mothertongue" id="mothertongue" placeholder="Mother Tongue" th:field="*{mothertongue}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('mothertongue')}" th:errors="*{mothertongue}">mothertongue Error</div>
+                                                                            </div>
+																		</div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="bloodGroup">Blood Group</label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<select class="custom-select custom-select-sm" name="bloodGroup" id="bloodGroup"  th:field="*{bloodGroup}">
+																					<option value="0">--Select--</option>
+																					<option value="O+ve">O +ve</option>
+																					<option value="O-ve">O -ve</option>
+																					<option value="A+ve">A +ve</option>
+																					<option value="A-ve">A -ve</option>
+																					<option value="B+ve">B +ve</option>
+																					<option value="B-ve">B -ve</option>
+																					<option value="AB+ve">AB +ve</option>
+																					<option value="AB-ve">AB -ve</option>
+																					<option value="BBG">Bombay blood group</option>
+																			</select>
+																			<div class="text-danger" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}">bloodGroup Error</div>
+																		</div>
+                                                                    </div>
+																<!--</div>
+																<div class="form-row">-->
+
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="isMarried">Marital Status<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<select class="custom-select custom-select-sm" name="isMarried" id="isMarried"  th:field="*{isMarried}">
+																					<option value="0">-- Select --</option>
+																					<option value="true">Married</option>
+																					<option value="false">Unmarried</option>
+																			</select>
+																			<div class="text-danger" th:if="${#fields.hasErrors('isMarried')}" th:errors="*{isMarried}">isMarried Error</div>
+																		</div>
+                                                                    </div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="physicallyHandicapped">PHC<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                    <div class="col-sm-8">
+																			<input  autocomplete="false" type="radio"   name="physicallyHandicapped" id="PHC1" class="physicallyHandicapped" value="true" th:field="*{physicallyHandicapped}">
+																				&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<input type="radio" name="physicallyHandicapped" class="physicallyHandicapped" id="PHC2" value="false" th:field="*{physicallyHandicapped}">&nbsp;No
+																			<div class="text-danger" th:if="${#fields.hasErrors('physicallyHandicapped')}" th:errors="*{physicallyHandicapped}">physicallyHandicapped Error</div>
+																		</div>
+                                                                </div>
+																<!--</div>
+																<div class="form-row">-->
+
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="designationMasterID">Designation<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<select class="custom-select custom-select-sm"  style="min-width: 200px; text-align: left!important;"  name="designationMaster"  id="designationMasterID" >
+																				<option value="0" default selected="true" disabled="disabled" >-- Select --</option>
+																				<th:block th:object="${designationList}">
+																					<p th:each="anItem : ${designationList}">
+																						<option  th:value="${anItem.id}"  th:selected="( ${anItem.id} == ${designationID1})"><span th:text="${anItem.designationname}"></span></option>
+																					</p>
+																				</th:block>
+																			</select>
+																			<div class="text-danger" th:if="${#fields.hasErrors('designationMaster')}" th:errors="*{designationMaster}">designationMaster Error</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="office">Office<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<select class="custom-select custom-select-sm"  style="min-width: 200px; text-align: left!important;"  name="officeMaster"  id="officeMasterID">
+																				<option value="0" default selected="true" disabled="disabled" >-- Select --</option>
+																				<th:block th:object="${officeList}">
+																					<p th:each="anItem : ${officeList}">
+																						<option  th:value="${anItem.id}"  th:selected="( ${anItem.id} == ${officeID1})"><span th:text="${anItem.officename}"></span></option>
+																					</p>
+																				</th:block>
+																			</select>
+																			<div class="text-danger" th:if="${#fields.hasErrors('officeMaster')}" th:errors="*{officeMaster}">officeMaster Error</div>
+                                                                        </div>
+
+																		</div>
+																<!--</div>
+																<div class="form-row">-->
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="photopath">Photo</label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input type="file" name="photo" class="form-control form-control-sm" id="photo" onchange="javascript:validateFiles();" placeholder="Upload employee photo" accept="image/*" >
+                                                                        </div>
+
+																			<div class="text-danger" th:if="${#fields.hasErrors('photo')}" th:errors="*{photo}">photo path Error</div>
+																			<span th:if="*{photopath} != null">
+																				<!-- <a href="<"></a> -->
+																			</span>
+
+																		</div>
+																		<!--</div>-->
+
+																		<!--<div class="form-group col-sm-6">
+
+																		</div>-->
+																<!--</div>
+																<div class="form-row">-->
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="identityMarkOne">Marks of Identification 1</label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+
+                                                                        <input autocomplete="false"  type="text" class="form-control form-control-sm" name="identityMarkOne" id="identityMarkOne" placeholder="Identity Mark One" th:field="*{identityMarkOne}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('identityMarkOne')}" th:errors="*{identityMarkOne}">identityMarkOne Error</div>
+                                                                        </div>
+
+																		</div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="identityMarkTwo">Marks of Identification 2</label>
+
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="identityMarkTwo" id="identityMarkTwo" placeholder="Identity Mark Two" th:field="*{identityMarkTwo}"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('identityMarkTwo')}" th:errors="*{identityMarkTwo}">identityMarkTwo Error</div>
+																		</div>
+																		</div>
+
+																<!--</div>
+																<div class="form-row">-->
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="grossSalary">Gross Salary<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="grossSalary" id="grossSalary" placeholder="Gross salary" th:field="*{grossSalary}" onchange="trimValue(this);numberValidation(this);" maxlength="10">
+																			<div class="text-danger" th:if="${#fields.hasErrors('grossSalary')}" th:errors="*{grossSalary}">identityMarkOne Error</div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="form-group form-row mb-0">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="doj">Date of Join(DD/MM/YYYY)<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm datePicker doj" name="doj" id="doj" placeholder="DD/MM/YYYY" th:field="*{doj}" onchange="trimValue(this);" readonly="readonly">
+																			<div class="text-danger" th:if="${#fields.hasErrors('doj')}" th:errors="*{doj}">identityMarkTwo Error</div>
+																		</div>
+																		</div>
+
+																</div>
+															</div>
+														</section>
+													</div>
+													<!--###### END Personal Details ######-->
+                                                        </div>
+                                                        <div class="col-md-6">
+													<!--######START  Contact Information ######-->
+                                                	<div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-2" aria-expanded="false" aria-controls="collapseExample">2. Contact Information</h6>
+
+                                                   		<section id="section-2" class="show">
+                                                        <div id="contactDetails" class="card-block pt-0" style="border-color: grey;">
+
+																<div class="_form-row">
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="phoneNumber">Phone Number<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="off"  type="text" class="form-control form-control-sm" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" th:field="*{phoneNumber}"  onkeypress="javascript:return integersOnly(event);" onchange="trimValue(this);IsMobileNumber(this);" maxlength="11">
+																			<div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">phoneNumber Error</div>
+                                                                        </div>
+
+																		</div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="alternatePhoneNumber">Alternate Phone Number</label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="alternatePhoneNumber" id="alternatePhoneNumber" placeholder="Alternate Phone Number" th:field="*{alternatePhoneNumber}"  onkeypress="javascript:return integersOnly(event);" onchange="trimValue(this);IsMobileNumber(this);"  maxlength="11">
+																			<div class="text-danger" th:if="${#fields.hasErrors('alternatePhoneNumber')}" th:errors="*{alternatePhoneNumber}">alternatePhoneNumber Error</div>
+                                                                        </div>
+																		</div>
+
+																<!--</div>
+																<div class="form-row">-->
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="employeeEmail">e-Mail<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="employeeEmail" id="employeeEmail" placeholder="e-Mail"  th:field="*{employeeEmail}">
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeeEmail')}" th:errors="*{employeeEmail}">employeeEmail Error</div>
+																		</div>
+																		</div>
+																		<div class="form-group col-sm-6 d-none">
+																			<!-- <label for="alternatePhoneNumber">Marks of Identification 2<span class="text-danger">*</span></label>
+																			<input type="text" class="form-control" name="alternatePhoneNumber" id="alternatePhoneNumber" placeholder="Marks of Identification 2"> -->
+																		</div>
+
+																</div>
+																<div class="form-row mt-3 mb-0">
+                                                                    <div class="col-12">
+																	<p  class="text-primary font-weight-bold mb-0" _style="font-weight: 800;margin-left:5px;">Present Address:</p>
+                                                                    </div>
+                                                                    <hr>
+
+																</div>
+																<div class="_form-row">
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="employeePresentAddress">Address<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<textarea  autocomplete="false"   class="form-control form-control-sm"   rows="6" style="resize: none !important;" name="employeePresentAddress" id="employeePresentAddress" placeholder="Address" th:field="*{employeePresentAddress}" onkeypress="javascript: return validateTextArea(event);"></textarea>
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeePresentAddress')}" th:errors="*{employeePresentAddress}">employeePresentAddress Error</div>
+																		</div>
+																		</div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="pinCodePresent">Pin Code<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="pinCodePresent" id="pinCodePresent" placeholder="pincode"  th:field="*{pinCodePresent}" maxlength="6" onkeypress="javascript:return integersOnly(event);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('pinCodePresent')}" th:errors="*{pinCodePresent}">pinCodePresent Error</div>
+																		</div>
+                                                                    </div>
+
+																</div>
+                                                            <div class="form-row mt-3 mb-0">
+                                                                <div class="col-12">
+																	<p class="text-primary font-weight-bold mb-0" _style="font-weight: 800;margin-left:5px;">Permanent Address:</p>
+                                                                </div>
+                                                                <hr>
+                                                            </div>
+																<div class="_form-row">
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="employeePermanentAddress">Address<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<textarea  autocomplete="false"   class="form-control form-control-sm" rows="6" style="resize: none !important;"  name="employeePermanentAddress" id="employeePermanentAddress" placeholder="Address"  th:field="*{employeePermanentAddress}" onkeypress="javascript: return validateTextArea(event);" ></textarea>
+																			<div class="text-danger" th:if="${#fields.hasErrors('employeePermanentAddress')}" th:errors="*{employeePermanentAddress}">employeePermanentAddress Error</div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="pinCodePermanent">Pin Code<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="pinCodePermanent" id="pinCodePermanent" placeholder="pincode" th:field="*{pinCodePermanent}" maxlength="6" onkeypress="javascript:return integersOnly(event);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('pinCodePermanent')}" th:errors="*{pinCodePermanent}">pinCodePermanent Error</div>
+                                                                        </div>
+                                                                    </div>
+
+																</div>
+															</div>
+														</section>
+													</div>
+													<!--######END  Contact Information ######-->
+
+													<!--######START  Citizenship Numbers ######-->
+                                                	<div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-3" aria-expanded="false" aria-controls="collapseExample">3. Citizenship Numbers</h6>
+
+                                                   		<section id="section-3" class="show">
+                                                        <div id="contactDetails" class="card-block pt-0" style="border-color: grey;">
+
+																<div class="_form-row">
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="aadharNumber">Aadhaar Number<span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+																			<input autocomplete="false"  class="form-control form-control-sm" name="aadharNumber" id="aadharNumber" placeholder="Aadhaar Number" th:field="*{aadharNumber}" maxlength="12"  onkeypress="javascript:return integersOnly(event);" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('aadharNumber')}" th:errors="*{aadharNumber}">aadharNumber Error</div>
+																		</div>
+                                                                    </div>
+                                                                        <div class="form-group form-row mb-2">
+                                                                            <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="panNumber">PAN Number</label>
+                                                                            </div>
+                                                                            <div class="col-sm-8">
+																			<input autocomplete="false"  type="text" class="form-control form-control-sm" name="panNumber" id="panNumber" placeholder="PAN Number" th:field="*{panNumber}" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('panNumber')}" th:errors="*{panNumber}">panNumber Error</div>
+                                                                            </div>
+																		</div>
+
+																<!--</div>
+																<div class="form-row">-->
+
+                                                                    <div class="form-group form-row mb-2">
+                                                                        <div class="col-sm-4">
+																			<label class="col-form-label col-form-label-sm" for="passport">Passport Number</label>
+                                                                        </div>
+                                                                    <div class="col-sm-8">
+																			<input  autocomplete="false"  class="form-control form-control-sm" name="passport" id="passport" placeholder="Passport number"  th:field="*{passport}" onchange="trimValue(this);">
+																			<div class="text-danger" th:if="${#fields.hasErrors('passport')}" th:errors="*{passport}">passport Error</div>
+                                                                    </div>
+																		</div>
+																		<!--<div class="form-group col-sm-6">
+
+																		</div>-->
+
+																</div>
+															</div>
+														</section>
+													</div>
+													<!--######END  Citizenship Numbers ######-->
+                                                        </div>
+											</div>
+											    <!-- END OF Employee Details content -->
+
+                                            </div>
+											<div class="card-footer bg-white py-2 w-100">
+	                                            <div class="form-row">
+	                                                <div class="col-md-12 text-right" >
+	                                                    <button style="width: 130px;" type="submit" class="btn btn-sm btn-primary" id="saveBtn" value="Submit" onclick="return validateEmpForm();" >Submit</button>
+	                                                </div>
+	                                            </div>
+                                        	</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- </div> -->
+</div>
+</body>
+<th:block layout:fragment="scripts">
+<script>
+/* DATE RAGNE PICKER */
+	$("input.doj").daterangepicker({
+	 
+	 locale: {
+	      format: 'DD/MM/YYYY'
+	    },
+	showDropdowns: true,
+	"singleDatePicker": true,
+    "autoApply": true,
+    "autoUpdateInput": false
+    
+	});
+	 
+	$("input.dob").daterangepicker({
+		locale: {
+		      format: 'DD/MM/YYYY'
+		    },
+		showDropdowns: true,
+		"singleDatePicker": true,
+	    "autoApply": true,
+	    "autoUpdateInput": false 
+	     
+	});
+
+	$('input.datePicker').on('apply.daterangepicker', function(ev, picker) {
+	    $(this).val(picker.startDate.format('DD/MM/YYYY'));
+
+	});
+
+	$('input.datePicker').on('cancel.daterangepicker', function(ev, picker) {
+	    $(this).val('');
+	});
+	
+	
+	var context = "[[@{/}]]";
+	$( "#employeeID" ).on('input' ,function() {
+
+		var employeeVal = $( "#employeeID" ).val();
+		if(employeeVal ==null || employeeVal == ""  ){
+			return false;
+		}else if(parseInt(employeeVal) == 0){
+			$( "#employeeID" ).val("Invalid Employee ID");
+			$( "#employeeID" ).val("");
+			return false;
+
+		}
+
+		 var token = $("meta[name='_csrf']").attr("content");
+		 var header = $("meta[name='_csrf_header']").attr("content");
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkEmpIDExist/"+employeeVal+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#saveBtn").attr("disabled", "disabled");
+							$("#checkEmpIDExistSpanID").html("Employee ID: "+employeeVal+" already exists");
+						}else{
+							$("#checkEmpIDExistSpanID").html("");
+							$("#saveBtn").removeAttr("disabled");
+						}
+					}
+		});
+
+	});
+
+</script>
+<script>
+
+function validateFiles() {
+	//alert("4444");
+    //var modelname=$("#inputmodelname").val();
+    for (var i = 0; i < $("#photo").get(0).files.length; ++i) {
+        var file1=$("#photo").get(0).files[i].name;
+		//alert("File NAme : "+file1);
+        if(file1){                        
+            var file_size=$("#photo").get(0).files[i].size;
+            if(file_size<5242880){
+                var ext = file1.split('.').pop().toLowerCase();                            
+                if($.inArray(ext,["pdf","PDF","png","jpg","jpeg"])===-1){
+                    alert("Invalid file extension. File Name : "+file1);
+                    $("#photo").val('');
+                    return false;
+                }
+
+            }else{
+                alert("File size should be less than 5 MB. File Name : "+file1);
+                $("#photo").val('');
+                return false;
+            }                        
+        }else{
+            alert("Please upload file");         
+            return false;
+        }
+    }
+};
+
+function validateEmpForm(){
+
+	var dateRegex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/[1-9]{1}\d{3}$/;
+
+	
+
+	if($("#dob").val()==null || $("#dob").val()=="" ){
+		alert("Please provide DOB");
+		$("#dob").focus();
+		return false;
+	}else if(!dateRegex.test( $("#dob").val() ) ){
+		alert("Invalid DOB format");
+		$("#dob").focus();
+		return false;
+
+	}else if($("#isMarried").val()==0 ){
+		alert("Please select marital  status");
+		$("#isMarried").focus();
+		return false;
+	}/* else if($(".physicallyHandicapped").val()==true){
+		alert("Please choose PHC type");
+		$(".physicallyHandicapped").focus();
+		return false;
+	} */else if($("#designationMasterID").val()==0){ 
+		alert("Please select designation");
+		$("#designationMasterID").focus();
+		return false;
+	}else if($("#officeMasterID").val()==0){
+		alert("Please select office");
+		$("#officeMasterID").focus();
+		return false;
+	}else if($("#doj").val()==null || $("#doj").val()=="" ){
+		alert("Please provide  Date of join");
+		$("#doj").focus();
+		return false;
+
+	}else if($("#doj").val()!=null && $("#doj").val()!="" && !dateRegex.test( $("#doj").val() ) ){
+		alert("Invalid Date of join format");
+		$("#doj").focus();
+		return false;
+
+	}else if($("#aadharNumber").val()==null || $("#aadharNumber").val() =="" || $("#aadharNumber").val().length!="12" ){
+		$("#aadharNumber").focus();
+		alert("Invalid Aadhar Number");
+		return false;
+
+	}else if($("#pinCodePresent").val()==null || $("#pinCodePresent").val() =="" || $("#pinCodePresent").val().length !="6" ){
+		$("#pinCodePresent").focus();
+		alert("Invalid pincode");
+		return false;
+
+	}else  if($("#pinCodePermanent").val()==null || $("#pinCodePermanent").val() =="" || $("#pinCodePermanent").val().length !="6" ){
+		$("#pinCodePermanent").focus();
+		alert("Invalid pincode");
+		return false;
+
+	}else  if($("#phoneNumber").val()==null || $("#phoneNumber").val() =="" || $("#phoneNumber").val().length <"10" ||  $("#phoneNumber").val().length >"11" ){
+		$("#phoneNumber").focus();
+		alert("Invalid Phone Number");
+		return false;
+
+	}else{
+
+		$("#employeeMasterForm").submit();
+	 }
+
+	$("#employeeMasterForm").submit();
+
+
+}
+
+</script>
+</th:block>
+</html>
+

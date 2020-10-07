@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="styles">
+	<style>
+#mastersTable a.btn {
+	min-width: 60px;
+}
+
+#mastersTable>thead {
+	visibility: hidden;
+	padding: 0;
+	height: 0;
+}
+
+#mastersTable>thead  th, #mastersTable>thead  th:before, #mastersTable>thead  th:after
+	{
+	padding: 0;
+	margin: 0;
+}
+</style>
+</th:block>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Masters List</title>
+</th:block>
+
+<body>
+	<div layout:fragment="content">
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+			
+				<!-- <div class="row">
+					<div class="w-100">
+						<div
+							class="card card-accent-primary bg-transparent mt-4 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+							<div
+								class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+								<h5 class="d-inline-block mt-1 font-weight-bold">Masters
+									list</h5>
+							</div>
+							<div class="card-block bg-white py-0 ">
+								<div class="table-responsive">
+									<table id="mastersTable"
+										class="table table-sm table-bordered table-striped mb-0 w-100">
+										<thead>
+											<tr class="flex-row">
+												<th class="col-10"></th>
+												<th class="col"></th>
+												<th class="col"></th>
+
+											</tr>
+
+										</thead>
+										<tbody>
+											
+												<td>Organization Name / Logo</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/organizationDetails}"><i class="fa fa-edit"></i>Edit</a>
+												</td>
+
+												<td></td>	
+											</tr>
+
+											<tr>
+												<td>State Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/stateMstForm}"><i
+														class="fa fa-plus"></i>&nbsp; Add</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/statesMasterList}"><i class="fa fa-tasks"></i>&nbsp;
+														View All</a></td>
+
+											</tr>
+
+
+											<tr>
+												<td>Department</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/efilesuite/department}"><i
+														class="fa fa-tasks"></i>&nbsp; Add</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/efilesuite/departmentMasterList}"><i
+														class="fa fa-tasks"></i>&nbsp; View All</a></td>
+
+											</tr>
+
+											<tr>
+												<td>HOD/Sub Department</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/efilesuite/hod}"><i
+														class="fa fa-tasks"></i>&nbsp; Add</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/efilesuite/hodMasterList}"><i
+														class="fa fa-tasks"></i>&nbsp; View All</a></td>
+
+											</tr>
+
+
+											<tr>
+												<td>District Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/districtMstForm}"><i
+														class="fa fa-tasks"></i>&nbsp; Add</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/districtMasterList}"><i class="fa fa-tasks"></i>&nbsp;
+														View All</a></td>
+
+											</tr>
+
+
+											<tr>
+												<td>Mandal Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/mandalMstForm}"><i
+														class="fa fa-tasks"></i>&nbsp; Add</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/mandalMasterList}"><i class="fa fa-tasks"></i>&nbsp;
+														View All</a></td>
+
+											</tr>
+
+											<tr>
+												<td>Village Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/villageMstForm}"><i
+														class="fa fa-tasks"></i>&nbsp; Add</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/villageMasterList}"><i class="fa fa-tasks"></i>&nbsp;
+														View All</a></td>
+
+											</tr>
+
+
+											<tr>
+												<td>Office Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/officeForm}"><i
+														class="fa fa-tasks"></i>&nbsp; Add</a></td>
+
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/officeMasterList}"><i class="fa fa-tasks"></i>&nbsp;
+														View All</a></td>
+											</tr>
+
+											<tr>
+												<td>Cader</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-primary text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/caderForm}"><i class="fa fa-user"></i>&nbsp;
+														Add </a></td>
+
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/caderMasterList}"><i class="fa fa-tasks"></i>&nbsp;
+														View All </a></td>
+
+											</tr>
+
+
+											<tr>
+												<td>Post Master</td>
+												<td>
+													<a class="btn btn-sm btn-raised btn-primary text-white"
+														role="button" aria-pressed="false" data-toggle="modal"
+														data-target="#modalBlank" data-placement="top"
+														th:attr="data-url=@{/postForm}">
+														<i class="fa fa-tasks"></i>&nbsp;Add</a>
+												</td>
+												
+											<tr>
+												<td>Role</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/roleForm}"><i
+														class="fa fa-user"></i> Add </a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/roleMasterList}"><i
+														class="fa fa-tasks"></i>View All </a></td>
+											</tr>
+											<tr>
+												<td>Designation</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/designationForm}"><i
+														class="fa fa-user"></i> Add </a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/designationMasterList}"><i
+														class="fa fa-tasks"></i>View All </a></td>
+											</tr>
+											
+											<tr>
+												<td>Employee</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" th:href="@{/employeeMstForm}"><i
+														class="fa fa-user"></i> Add </a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/employeeMasterList}"><i
+														class="fa fa-tasks"></i>View All </a></td>
+											</tr>
+											<tr>
+												<td>Employee Role Map</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/empRoleMap}"> <i
+														class="fa fa-user"></i> Map
+												</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/empRoleMappedList}"><i class="fa fa-tasks"></i>View
+														All </a></td>
+											</tr>
+
+
+											<tr>
+												<td>Employee Post Map</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/empPostMap}"> <i
+														class="fa fa-user"></i> Map
+												</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/empPostMappedList}"><i class="fa fa-tasks"></i>View
+														All </a></td>
+											</tr>
+											
+											<tr>
+												<td>User</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/userEmpMapForm}"> <i
+														class="fa fa-user"></i> Map
+												</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/userEmpRoleList}"><i class="fa fa-tasks"></i>View
+														All </a></td>
+											</tr>
+											
+											
+											<tr>
+												<td>Section Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/sectionForm}"><i
+														class="fa fa-user"></i> Add </a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/sectionMasterList}"><i class="fa fa-tasks"></i>View
+														All </a></td>
+											</tr>
+
+											<tr>
+												<td>CurrentType Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/currentTypeForm}"><i
+														class="fa fa-user"></i> Add </a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/currentTypeMasterList}"><i
+														class="fa fa-tasks"></i>View All </a></td>
+											</tr>
+
+
+											<tr>
+												<td>Leave Type Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/leaveType}"> <i class="fa fa-user"></i>Add
+												</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/leaveTypeList}"><i class="fa fa-tasks"></i>View
+														All</a></td>
+											</tr>
+
+
+											<tr>
+												<td>Holiday Master</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/holiday}"> <i class="fa fa-user"></i>Add
+												</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/holidaysList}"><i class="fa fa-tasks"></i>View
+														All</a></td>
+											</tr>
+
+											<tr>
+												<td>Section Post Mapping</td>
+												<td><a
+													class="btn btn-sm btn-raised btn-warning text-white"
+													role="button" aria-pressed="false" data-toggle="modal"
+													data-target="#modalBlank" data-placement="top"
+													th:attr="data-url=@{/sectionPostMap}"> <i
+														class="fa fa-user"></i>Map
+												</a></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button" aria-pressed="false"
+													th:href="@{/sectionPostMapList}"><i class="fa fa-tasks"></i>View
+														All</a></td>
+											</tr>
+ -->
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<!-- /.conainer-fluid -->
+	</div>
+	<!-- FRAGMENT: main-fragment-->
+
+	<th:block layout:fragment="scripts">
+		<script>
+            $(document).ready(function() {
+                var table = $('#mastersTable').DataTable({
+                    "fnDrawCallback": function ( oSettings ) {
+                        //$(oSettings.nTHead).hide();
+                    },
+                    responsive: true,
+                    paging: false,
+                    fixedHeader: {
+                        header: true,
+                        headerOffset: 48
+                    },
+                    "autoWidth": false,
+
+                });
+                table.columns.adjust().draw();
+
+                /*new $.fn.dataTable.FixedHeader(table, {
+                    "top": true,
+                    "offsetTop": 100,
+                    "zTop": "999999"
+
+                });*/
+            });
+	    </script>
+
+	</th:block>
+</body>
+
+</html>
+

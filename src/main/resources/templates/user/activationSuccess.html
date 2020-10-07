@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title _th:text="#{view.index.title}">Welcome!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="../../../resources/css/virtuoMain.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/virtuoMain.min.css}" />
+    <link href="../../../resources/css/shubCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/shubCustom.css}" />
+</head>
+
+
+<body class="app flex-row align-items-center">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <div class="card-group mb-0">
+                <div class="card p-2">
+                    <div class="card-block text-center">
+
+                        <h4 class="text-success">Activation Success !</h4>
+                        <p class="px-5 py-2">Your user account has been activated. Please login.</p>
+                        <p><a class="btn btn-primary mx-auto" href="#" th:href="@{/}">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

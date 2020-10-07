@@ -1,0 +1,53 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Edit KPI Reporting Employee Mapping Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="kpiReportingForm"  class="custom-form" method="POST" th:action="@{/kpiReportingForm}"  th:object="${kpiReportingForm}"  autocomplete="off">
+
+		 <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        <th:block th:if="${failureMessage != null}">
+            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+        </th:block>
+
+		<div class="form-row">
+			<div class="form-group col-md-12">
+			    <label for="empid" class="col-form-label col-form-label-sm">Employee<span class="text-danger">*</span></label>
+			    <select name="rolesMaster"  id="roleID" class="custom-select custom-select-sm">
+			    	<option value="0">--Select Employee--</option>
+						<!-- <th:block th:object="${roleList}">
+												<p th:each="anItem : ${roleList}">
+												<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${roleID1} )"><span th:text="${anItem.rolename}"></span></option>
+												</p>
+							</th:block> -->
+			    </select>
+			    <div class="text-danger" th:if="${#fields.hasErrors('empid')}" th:errors="*{empid}">empid Error</div>
+			  </div>
+
+			  <div class="form-group col-md-12">
+			    <label for="reportingEmpid" class="col-form-label col-form-label-sm">Reporting Employee<span class="text-danger">*</span></label>
+			    <select  name="reportingEmpid"  id="reportingEmpid" class="custom-select custom-select-sm">
+			    	<option value="0">--Select Reporting Employee--</option>
+						<!-- <th:block th:object="${keyareaList}">
+												<p th:each="anItem : ${mappedEmployeeList}">
+												<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${reportingEmpid} )"><span th:text="${anItem.empName}"></span></option>
+												</p>
+							</th:block> -->
+			    </select>
+			    <div class="text-danger" th:if="${#fields.hasErrors('reportingEmpid')}" th:errors="*{reportingEmpid}">reportingEmpid Error</div>
+			  </div>
+
+		</div>
+	</form>
+</div>

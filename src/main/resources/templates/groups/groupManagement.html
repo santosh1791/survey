@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+</head>
+
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+
+        <div layout:fragment="content">
+			<!-- Breadcrumb -->
+			<ol class="breadcrumb mb-3">
+				<li class="breadcrumb-item active">Groups</li>
+			</ol>
+
+
+			<!--			<h1 class="tab_title text-muted"><i class="icon-speedometer"></i> Dashboard</h1>-->
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+					<div class="row">
+
+					<div class="card w-100">
+							<div class="card-header">
+								<h5 class="mb-0"> <span class="badge badge-info _badge-pill">3</span> Groups</h5>
+							</div>
+							<div class="card-block p-0">
+								<table class="table table-sm table-hover table-bordered table-responsive mb-0">
+									<thead>
+										<tr>
+											<th style="width: 50px;">#ID</th>
+											<th>Group Name</th>
+											<th>Owner</th>
+											<th>Users</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th scope="row">
+												<div class="dropdown">
+													<a class="dropdown-toggle text-gray-dark" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												#1
+											  </a>
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+														<a class="dropdown-item" href="#"><i class="fa fa-plus fa-fw js-modal-medium" aria-hidden="true"></i>Add group member</a>
+														<a class="dropdown-item" href="#"><i class="fa fa-fw fa-users" aria-hidden="true"></i>Members</a>
+
+													</div>
+												</div>
+											</th>
+											<td><img src="../../../resources/img/avatars/6.jpg"  th:attr="src=@{/resources/img/avatars/6.jpg}, alt='Avatar', title='Avatar'" class="img-avatar"  style="background:#5f5d5d; height: 20px; width: 20px;" /> Group A</td>
+											<td>Ujwal</td>
+											<td> <span class="badge badge-info badge-pill"><i class="icon-people"></i> 30</span>
+											</td>
+										</tr>
+
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<!-- /.conainer-fluid -->
+
+
+        </div>	<!-- main-fragment-->
+
+
+        <th:block layout:fragment="scripts"></th:block>
+</body>
+

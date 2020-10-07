@@ -1,0 +1,11 @@
+id;question;option_one;option_two;option_three;option_four;option_five
+1;Punctuality of the teachers -- Percentage of Teachers taking classes regularly?;all;>=90% and <100;>=70% and <90;>=50% and < 70;Less than 50%
+2;Syllabus is completed before the preparatory examinations for the year?;all subjects;>=90% and <100;>=70% and <90;>=50% and < 70;Less than 50%
+3;Class tests are conducted for all subjects?;all subjects;>=90% and <100;>=70% and <90;>=50% and < 70;Less than 50%
+4;Student performance is discussed with the students by each teacher?;all subjects;>=90% and <100;>=70% and <90;>=50% and < 70;Less than 50%
+5;Student improvement programs are conducted by taking extra classes to explain the difficult portions? ;;>=90% and <100;>=70% and <90;>=50% and < 70;Less than 50%
+6;Facilities for sports and physical education are provided for both boys and girls?;All facilities are there;Excellent School Ground is provided;Excellent School Ground and Gym are provided;Excellent Gym is provided;Facilities or inadequate or unusable
+7;School has a good library with prescribed books and other current books for improving the general knowledge? ;Excellent library;90% Good;70% Good;50% Good;Not Good
+8;Student performance;>90% get 1st class;70-90% get 1st class;50-70% get 1st class;30-50% get 1st class;<=30% 1st classes
+9;Safety and guidance for children;"(class leader; school leader; mentor)";Very Good;Good;Average;Poor
+10;School fees and cost of transport and books;Low;Reasonable;average;high;very high

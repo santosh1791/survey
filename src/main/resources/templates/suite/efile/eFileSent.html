@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>eFiles Sent</title>
+</th:block>
+
+
+<th:block layout:fragment="styles">
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+	z-index: 999;
+	border-top: 2px solid #3d70b2 !important;
+	color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+</style>
+</th:block>
+
+<body>
+
+	<div layout:fragment="content">
+		<ol class="breadcrumb pr-0 py-0 mb-2">
+			<!--<li class="breadcrumb-item"><i class="icon-home"></i><i class="fa fa-home"></i> </li>-->
+			<li class="breadcrumb-item"><i class="mdi mdi-file-document"></i>&nbsp;eFile
+			</li>
+			<li class="breadcrumb-item active text-primary">Sent</li>
+			<li class="breadcrumb-menu"></li>
+			<li class="breadcrumb-menu pr-3 ">
+				<div class="btn-group " role="group" aria-label="Basic example">
+					<button style="height: 35px;" type="button" th:if="${#authorization.expression('hasRole(''ROLE_EFILE_CREATE_FILE'')')}"
+						class="btn bg-primary text-white" data-toggle="modal"
+						data-target="#commonModal" _aria-haspopup="true"
+						_aria-expanded="false" data-placement="top"
+						title="Create new eFile"
+						th:attr="data-url=@{/efilesuite/createNoteFile}">
+						<i class=" mdi mdi-file-plus"></i><span class="icon-btn-text">&nbsp;
+							Create</span>
+					</button>
+
+					<!-- <button type="button" class="btn bg-transparent py-1 navbar-toggler aside-menu-toggler"><i class="icon-menu"></i></button>-->
+				</div>
+			</li>
+		</ol>
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="w-100">
+						<th:block th:replace="fragments/layout :: eFileTabs">
+
+						</th:block>
+						<!-- sent Files List -->
+						<div>
+							<div class="card  bg-transparent mb-0 card-shadow ">
+
+								<div class="card-block py-0 bg-white"
+									style="_min-height: calc(100vh - 130px);">
+									<table border="1" id="eFileSentBoxFileTable"
+										class="table table-bordered table-hover table-striped table-sm _mb-0"
+										width="100%" cellspacing="0">
+										<thead class="table-primary">
+
+											<tr>
+												<th>S.No</th>
+												<th>File Number</th>
+												<th>Sent To</th>
+												<th>Subject</th>
+												<th>Created Date</th>
+											</tr>
+										</thead>
+										<tbody th:if="${sentFilesListCount} == false">
+											<!--/* <select class="form-control" name="category"th:field="*{categoryList}" > */-->
+											<!--/* <select class="form-control" name="category" >
+														<option value="0"> select category</option>
+														<option th:each="category: ${savedFilesList}" th:value="${category.notefileNumber}"th:text="${category.keywords}"></option>
+													</select> */-->
+
+											<tr th:each="sentFiles , sNo : ${sentFilesList}">
+												<td th:text="${sNo.count}"></td>
+												<td><a role="button"
+													th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${sentFiles.id})}">
+														<p th:text="${sentFiles.notefileNumber}"></p>
+												</a></td>
+												<!--/* <td th:text="${sentFiles.efileOwnerPostMaster.postname}"></td> */-->
+												<td><span
+													th:text="${sentFiles.efileOwnerPostMaster.postname}"></span>
+													<span
+													th:if="${sentFiles.efileOwnerPostMaster.employeeMaster}!=null">
+														(<span
+														th:text="${sentFiles.efileOwnerPostMaster.employeeMaster.employeefirstname}"></span>
+														<span
+														th:text="${sentFiles.efileOwnerPostMaster.employeeMaster.employeelastname}"></span>
+														)
+												</span> <span
+													th:if="${sentFiles.efileOwnerPostMaster.employeeMaster}==null">
+
+												</span></td>
+
+												<!--/* <td> <span th:text="${postMasters.postname}"></span> (<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  <span th:text="${postMasters.employeeMaster.employeelastname}"></span> )</td> */-->
+												<td th:text="${sentFiles.subject}"></td>
+												<td
+													th:text="${#dates.format(sentFiles.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+						</div>
+
+
+
+
+
+					</div>
+					<!-- main > .w-100 -->
+				</div>
+				<!-- main > .row -->
+			</div>
+			<!-- main > .animated.fadeIn -->
+		</div>
+		<!-- main > .container-fluid -->
+
+	</div>
+	<!-- FRAGMENT: "content" -->
+
+
+	<th:block layout:fragment="scripts">
+		<script>
+			/*$(document).ready(function() {
+				var table = $('#eFileSentBoxFileTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+			            searchPlaceholder: "Search..."
+			         },
+				    "dom":"<'row'<'col-sm-3'f><'col-sm-9 text-right'lB>>",
+					responsive: false,
+					paging: false,
+					//"pagingType": "full_numbers"
+					lengthChange: false,
+					 columns: [
+
+						 { width:'1%', targets: 0 },
+			                { _width: '10%', targets: 1 },
+			               { _width:'90%', targets: 2 },
+			               { width: '22%', targets: 3, className: "px-1" },
+			                 { width: '20%', targets: 4, "orderable": false, className: "px-1" }
+
+					],
+					buttons: [
+			            {
+			                extend:    'copyHtml5',
+			                text:      '<i class="fa fa-files-o"></i>',
+			                titleAttr: 'Copy'
+			            },
+			            {
+			                extend:    'excelHtml5',
+			                text:      '<i class="fa fa-file-excel-o"></i>',
+			                titleAttr: 'Excel'
+			            },
+			            {
+			                extend:    'csvHtml5',
+			                text:      '<i class="fa fa-file-text-o"></i>',
+			                titleAttr: 'CSV'
+			            },
+			            {
+			                extend:    'pdfHtml5',
+			                text:      '<i class="fa fa-file-pdf-o"></i>',
+			                titleAttr: 'PDF'
+			            }
+			        ],
+					fixedHeader: {
+						header: true,
+						headerOffset: 48
+					}
+				});*/
+
+			$(document)
+					.ready(
+							function() {
+								var table = $('#eFileSentBoxFileTable')
+										.DataTable(
+												{
+													language : {
+														search : "_INPUT_",
+														searchPlaceholder : "Search...",
+														"lengthMenu" : "_MENU_",
+														paginate : {
+															previous : '<i class="fa fa-chevron-left"></i>',
+															next : '<i class="fa fa-chevron-right"></i>'
+														},
+														aria : {
+															paginate : {
+																previous : 'Previous',
+																next : 'Next'
+															}
+														}
+													},
+													"dom" : "<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+													responsive : {
+														details : {
+															type : 'column',
+															target : 'tr'
+														}
+													},
+													paging : true,
+													"pagingType" : "full_numbers",
+													lengthChange : true,
+													"lengthMenu" : [
+															[ 10, 25, 50, -1 ],
+															[ 10, 25, 50, "All" ] ],
+													//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+
+													columns : [ {
+														width : '1%',
+														targets : 0
+													}, {
+														width : '18%',
+														targets : 1
+													}, {
+														_width : '20%',
+														targets : 2
+													}, {
+														width : '35%',
+														targets : 3,
+														className : "px-1"
+													}, {
+														width : '16%',
+														targets : 4,
+														className : "px-1"
+													}
+
+													],
+													order : [ 0, 'asc' ],
+													buttons : [
+															{
+																extend : 'copyHtml5',
+																text : '<i class="fa fa-files-o"></i>',
+																titleAttr : 'Copy'
+															},
+															{
+																extend : 'excelHtml5',
+																text : '<i class="fa fa-file-excel-o"></i>',
+																titleAttr : 'Excel'
+															},
+															{
+																extend : 'csvHtml5',
+																text : '<i class="fa fa-file-text-o"></i>',
+																titleAttr : 'CSV'
+															},
+															{
+																extend : 'pdfHtml5',
+																text : '<i class="fa fa-file-pdf-o"></i>',
+																titleAttr : 'PDF'
+															} ]
+												});
+
+								/*$('table').on('click','.actionSwitch', function(e){
+								    var $this = $(this);
+								    var $input = $this.find('.switch-input');
+								    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+								    e.preventDefault();
+								    e.stopPropagation();
+								    bootbox.confirm({
+								        message: message,
+								        buttons: {
+								            confirm: {
+								                label: 'Yes',
+								                className: 'btn-primary'
+								            },
+								            cancel: {
+								                label: 'No',
+								                className: 'btn-outline-primary'
+								            }
+								        },
+								        callback: function (result) {
+								            var context = "[[@{/}]]";
+								            var isChecked = $input.prop("checked")
+								            var url = isChecked ? "disableEmployee" : "enableEmployee";
+								            var id = $this.data('id');
+								            console.log('This was logged in the callback: ' + result);
+								            if(result){
+								                $.get(context + url + '/' + id + '/' , function(){
+								                    $input.prop('checked',!isChecked);
+								                });
+								            }
+								        }
+								    });
+								});*/
+
+								$(".dataTables_length select")
+										.removeClass(
+												"form-control form-control-sm")
+										.addClass(
+												"custom-select custom-select-sm")
+
+							});
+
+			$("#eFileSentboxLink").addClass("active");
+
+			/*function onSwitch(id,status)= {
+
+			}*/
+		</script>
+	</th:block>
+
+</body>
+</html>

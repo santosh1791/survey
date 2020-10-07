@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head>
+<title th:text="#{view.index.title}">KPI</title>
+
+
+<style>
+.details-header {
+	width: 100%;
+	background-color: #198C8C;
+}
+.table-sm td, .table-sm th {
+    padding: .3rem .5rem .3rem .5rem!important;
+}
+</style>
+
+</head>
+<body  onload="return findSum();"
+	class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+		<div class="container-fluid">
+
+			<div class="animated fadeIn">
+
+				<div class="row">
+
+					<div class="col-lg-12 col-xl-10 offset-xl-1">
+
+						<div
+							class="card  card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+
+							<div
+								class="card-header bg-light border-bottom-0 border-secondary d-flex py-3">
+								<h5
+									class="d-inline-block mb-0 _mt-1 font-weight-bold header-title text-primary">Appraisee
+									Key Performance Indicators</h5>
+							</div>
+							<th:block th:if="${statusMessage != null}">
+									<div
+										th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+								</th:block>
+								<th:block th:if="${failureMessage != null}">
+									<div
+										th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+								</th:block>
+							<th:block th:if="${statusMessage == null or failureMessage != null}">
+									<!-- <div class="col-offset-4"> -->
+									<form class="custom-form" id="kpiForm" method="post"
+										enctype="multipart/form-data" th:action="@{/kpiForm}"
+										th:object="${kpiForm}" autocomplete="off">
+
+
+
+										<div class="card-block pt-0 bg-white">
+											<div class="container" align="right">
+												<h6
+													class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-success">
+													SELF KPI of-<span th:text="${employeeName}"></span>
+												</h6>
+											</div>
+											<!--<div class="card-body pt-0 bg-white"-->
+												<!--_style="min-height: calc(100vh - 130px); width: 100%;">-->
+												<div class="table-responsive">
+													<table id="seflKpiReportTable" class=" table compact table-bordered table-hover table-striped table-sm mb-0" cellspacing="0" width="100%">
+															<thead class="table-primary">
+															<tr>
+																<th>#</th>
+																<th>Key Area</th>
+																<th>Performance Indicator</th>
+																<th>Marks</th>
+																<th>Break Up</th>
+																<th>Self Ratings</th>
+																<th>Self Remarks</th>
+															</tr>
+														</thead>
+														<tbody>
+
+															<sapn th:each="anItem, iterStat : ${formList}">
+																<tr th:if="${anItem.performanceIndicator} == null">
+																	<td><span th:text="${anItem.outerIndex}"></span></td>
+																	<td><span th:text="${anItem.keyArea}"></span></td>
+																	<td></td>
+																	<td><input type="hidden" th:attr="class='totalMarks'" th:value="${anItem.totalMarks}"><span th:text="${anItem.totalMarks}"></span></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																</tr>
+																<tr th:if="${anItem.performanceIndicator} != null">
+																	<td></td>
+																	<td><input type="hidden"
+																		th:value="${anItem.keyAreaId}"
+																		th:attr="name='kpiFormDTO[' + ${anItem.index} + '].keyAreaId'"></td>
+																	<td><input type="hidden"
+																		th:attr="name='kpiFormDTO[' + ${anItem.index} + '].performanceIndicatorId'"
+																		th:value="${anItem.performanceIndicatorId}"> <span
+																		th:text="${anItem.performanceIndicator}"></span></td>
+
+																	<td></td>
+
+																	<td><span th:text="${anItem.marks}"></span> <input
+																		type="hidden"
+																		th:attr="name='marks_'+${anItem.index},id='marks_'+ ${anItem.index}, class='breakupMarks'"
+																		th:value="${anItem.marks}" /></td>
+
+																	<td><input type="text" class="form-control"
+																		placeholder="Ratings"
+																		th:attr="name='kpiFormDTO[' + ${anItem.index} + '].ratings', id='ratings_'+ ${anItem.index}, class='ratings', onchange='return checkValue(this,' + ${anItem.index} +');'"
+																		maxlength="4"
+																		onkeypress="return integersOnly(event);"
+																		 /></td>
+																	<td>
+																		<textarea rows="2" class="form-control" placeholder="Remarks" style="resize: none;" th:attr="name='kpiFormDTO[' + ${anItem.index} + '].remarks', id='remarks_'+ ${anItem.index}" ></textarea>
+																	<!-- <input type="text" class="form-control"
+																		placeholder="Remarks"
+																		th:attr="name='kpiFormDTO[' + ${anItem.index} + '].remarks', id='remarks_'+ ${anItem.index}" /> -->
+																	</td>
+																</tr>
+
+															</sapn>
+
+															<tr>
+																<td></td>
+																<td></td>
+																<td><b>Grand Total</b></td>
+																<td><b><span id="totalMarks"></span></b></td>
+																<td><b><span id="breakupTotal"></span></b></td>
+																<td><b><span id="total_ratings"></span></b></td>
+																<td></td>
+															</tr>
+
+														</tbody>
+													</table>
+													</div>
+		                                    </div>
+		                                    <div class="card-footer bg-white pb-3 pt-0 w-100">
+														<div class="row">
+															<div class="col-md-12 text-right">
+																<b  class="text-primary">Submit to Your Reporting Employee :  <span
+																	th:text="${superiorEmpName}"></span></b> &nbsp
+
+																<button style="width: 130px;" type="submit"
+																	class="btn btn-sm btn-primary" id="submitKpiDetails"
+																	onclick="return validateForm();">Submit</button>
+															</div>
+														</div>
+													</div>
+									</form>
+								</th:block>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<th:block layout:fragment="scripts">
+<script type="text/javascript">
+
+function findSum(){
+
+	//Calculating totalMarks
+	var total = 0;
+	$(".totalMarks").each(function(){
+		var marks = $(this).val();
+		if(marks !=null && marks !="" ){
+			total += parseInt(marks);
+		}
+	});
+	alert
+	$("#totalMarks").text(total);
+
+
+	//Calculating breakups
+	total = 0;
+	$(".breakupMarks").each(function(){
+		var marks = $(this).val();
+		if(marks !=null && marks !="" ){
+			total += parseInt(marks);
+		}
+	});
+	$("#breakupTotal").text(total);
+
+}
+
+/*  */
+function doRatingsSum(){
+	//Calculating rating's total
+	var total = 0;
+	$(".ratings").each(function(){
+		var marks = $(this).val();
+		if(marks !=null && marks !="" ){
+			total += parseInt(marks);
+		}
+	});
+
+	$("#total_ratings").text(total);
+
+
+
+}
+
+
+function checkValue(obj, index){
+	//alert("hi check value");
+	var actualRating = $("#marks_"+index).val();
+	var enteredRating = obj.value;
+	var pattern = /^\d+$/;
+	if(pattern.test(enteredRating) && actualRating!=null && actualRating!="" && enteredRating != null && enteredRating != ""){
+
+			if(parseInt(enteredRating) > parseInt(actualRating) ){
+				alert("Given rating exceeded the breakup!");
+				obj.value = "";
+			}
+
+	}else
+		obj.value="";
+
+	doRatingsSum();
+
+}
+
+function validate() {
+	var noOfRows = $('input[id*="ratings_"]').length;
+
+	var ratings = 0;
+	var remarks = "";
+	for(var i=0;i<noOfRows; i++){
+		ratings = $("#ratings_"+i).val();
+		remarks = $("#remarks_"+i).val();
+
+		if(ratings==null || ratings =="" ){
+			alert("Please provide ratings in row "+(i+1));
+			$("#ratings_"+i).focus();
+			return false;
+
+		}if(remarks == null || remarks ==""){
+			alert("Please enter remarks in row "+(i+1));
+			$("#remarks_"+i).focus();
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+
+</script>
+
+		<script type="text/javascript">
+	function validateForm(){
+    	var noOfRows = $('input[id*="ratings_"]').length;
+       // alert("hi");
+        //alert("noOfRows value"+noOfRows);
+
+        var flag = validate();
+    	if(flag ==true){
+    		if(confirm("Do you want to submit?"))
+	    		return true;
+    		else
+    			return false;
+    	}
+    	else
+    		return false;
+    }
+</script>
+
+	</th:block>
+</body>
+
+</html>

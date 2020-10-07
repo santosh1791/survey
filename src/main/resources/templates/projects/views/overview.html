@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+
+</head>
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+			<div layout:fragment="content">
+
+			<!-- Breadcrumb : thymeleaf -->
+				<!--<div th:replace="fragments/layout :: breadcrumb"></div>-->
+			<!-- Breadcrumb -->
+			<ol class="breadcrumb mb-3">
+				<li class="breadcrumb-item">Overview</li>
+				<li class="breadcrumb-icons float-right">
+				<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'overview' ? 'active' : ''}" th:href="@{/pms/overview}"><i class="fa fa-eye"></i><span class="d-xs-down-none"> &nbsp; Overview</span></a>
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'listview' ? 'active' : ''}" th:href="@{/pms/listview}"><i class="icon-list"></i><span class="d-xs-down-none"> &nbsp; List</span></a>
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'boardview' ? 'active' : ''}" th:href="@{/pms/boardview}"><i class="icon-grid"></i><span class="d-xs-down-none"> &nbsp; Board</span></a>
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'calenderview' ? 'active' : ''}" th:href="@{/pms/calenderview}"><i class="icon-calendar"></i> <span class="d-xs-down-none">&nbsp; Calender</span></a>
+
+                        <a class="btn btn-secondary" href="#" th:classappend="${module == 'ganttview' ? 'active' : ''}" th:href="@{/pms/ganttview}"><i class="icon-directions"></i> <span class="d-xs-down-none">&nbsp; Gantt</span></a>
+                    </div>
+
+				</li>
+			</ol>
+
+
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+					<div class="row">
+
+					<h5>Overview</h5>
+
+
+					</div>
+					<div class="row">
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-inverse card-info">
+                                <div class="card-block">
+                                    <div class="h4 mb-0">1</div>
+                                    <small class="text-muted text-uppercase font-weight-bold">Visitors</small>
+                                    <div class="progress progress-white progress-xs mt-1">
+                                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.col-->
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-inverse card-success">
+                                <div class="card-block">
+
+                                    <div class="h4 mb-0">2</div>
+                                    <small class="text-muted text-uppercase font-weight-bold">New Clients</small>
+                                    <div class="progress progress-white progress-xs mt-1">
+                                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.col-->
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-inverse card-warning">
+                                <div class="card-block">
+
+                                    <div class="h4 mb-0">3</div>
+                                    <small class="text-muted text-uppercase font-weight-bold">Products sold</small>
+                                    <div class="progress progress-white progress-xs mt-1">
+                                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.col-->
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-inverse card-primary">
+                                <div class="card-block">
+
+                                    <div class="h4 mb-0">4</div>
+                                    <small class="text-muted text-uppercase font-weight-bold">Done</small>
+                                    <div class="progress progress-white progress-xs mt-1">
+                                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.col-->
+
+
+                    </div>
+                    <!--/.row-->
+				</div>
+
+			</div>
+			<!-- /.conainer-fluid -->
+
+
+
+			</div>	<!-- main-fragment-->
+
+<th:block layout:fragment="scripts">
+
+
+</th:block>
+</body>
+
+</html>

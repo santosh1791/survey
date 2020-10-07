@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+</head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Dispatch Entry</title>
+</th:block>
+<th:block layout:fragment="links">
+	 <link href="../../../resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css" rel="stylesheet" media="screen" th:href="@{/resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css}" />
+</th:block>
+
+<th:block layout:fragment="styles">
+	<style type="text/css">
+		.tblSubHead {
+			background-color: #1f618d !important;
+			color: #FFFFFF !important;
+		}
+	</style>
+</th:block>
+
+<body>
+
+	<div layout:fragment="content">
+		<!--<ol class="tab_title breadcrumb mb-3">
+			<li class="breadcrumb-item active">Dispatch Entry</li>
+		</ol>-->
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+                <div class="row">
+                    <div class="w-100">
+				    <form class="custom-form" method="post" th:action="@{/dispatchForm}" th:object="${dispatchFileRegisterForm}" enctype="multipart/form-data" id="dispatchFileRegisterForm">
+					<div>
+						<input type="hidden" name="org.apache.struts.taglib.html.TOKEN" value="f04ae4fa6d250990ad506e6349f0f48c">
+					</div>
+					<input type="hidden" name="method" value="" id="method">
+
+                     <div class="card card-accent-primary bg-transparent mt-2 border-left-0 border-right-0 border-bottom-0 card-shadow">
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Dispatch Entry</h5>
+                            <a
+                                class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1"
+                                th:href="@{/dispatchedFileReport}">
+                                <i class="fa fa-th-list"></i>&nbsp; View Dispatched File Report
+                            </a>
+                        </div>
+                         <div class="card-block bg-white mt3">
+                            <!-- <div class="col-sm-12 d-flex" width="100%">
+                            <div class="card border-primary align-self-stretch" width="100%">
+                            <h6 class="mb-0 text-inverse formTitle font-weight-bold text-primary" style="width: auto;">Current Details</h6> -->
+
+                            <div class="form-row">
+                                <div class="col-md-8">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="letterNumber">
+                                                            Received From<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                                <select required  name="postMaster"  id="postMasterID" class="custom-select custom-select-sm w-100">
+                                                    <option value="0">-- Select --</option>
+                                                        <p th:each="anItem : ${postsList}">
+                                                            <option  th:value="${anItem.id}"  th:selected="( ${anItem.id} == ${postID})"><span th:text="${anItem.postname}"></span></option>
+                                                        </p>
+                                                </select>
+                                                <div class="text-danger" th:if="${#fields.hasErrors('postMaster')}" th:errors="*{postMaster}">postMaster Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="fileNumber">
+                                                    File No. ( optional )
+                                                </label>
+                                            </div>
+                                            <input th:field="*{fileNumber}" class="form-control form-control-sm" placeholder="File Number" id="fileNumber" onchange="trimValue(this);" />
+                                            <div class="text-danger" th:if="${#fields.hasErrors('fileNumber')}" th:errors="*{fileNumber}">fileNumber Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6  mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="letterNumber">
+                                                            Letter No.<span class="red">*</span>
+                                                        </label>
+                                            </div>
+                                            <input required th:field="*{letterNumber}" placeholder="Letter Number" id="letterNumber"  onchange="trimValue(this);" class="form-control form-control-sm"/>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('letterNumber')}" th:errors="*{letterNumber}">letterNumber Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6  mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="letterDate">
+                                                            Letter Date<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <input required class="form-control form-control-sm"  th:field="*{letterDate}" placeholder="DD/MM/YYYY" id="letterDate"/>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('letterDate')}" th:errors="*{letterDate}" >letterDate Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="dispatchMode">
+                                                    Dispatch Mode<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <select required  th:field="*{dispatchMode}" id="dispatchMode" class="text-left custom-select custom-select-sm w-100">
+                                                <option value="">-- Select --</option>
+                                                <option value="Speed Post">Speed Post</option>
+                                                <option value="Register Post">Register Post</option>
+                                                <option value="Courier">Courier</option>
+                                            </select>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('dispatchMode')}" th:errors="*{dispatchMode}">dispatchMode Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="dispatchDate">
+                                                    Dispatch Date<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <input required class="form-control form-control-sm" th:field="*{dispatchDate}" placeholder="DD/MM/YYYY" id="dispatchDate"/>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('dispatchDate')}" th:errors="*{dispatchDate}">dispatchDate Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="pincode">
+                                                    Pincode<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <input required class="form-control form-control-sm"  th:field="*{pincode}" placeholder="Pincode" id="pincode" onkeypress="javascript:return integersOnly(event);" maxlength="6" />
+                                            <div class="text-danger" th:if="${#fields.hasErrors('pincode')}" th:errors="*{pincode}">pincode Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="amount">
+                                                    Amount (<i class="fa fa-inr" aria-hidden="true"></i>) <span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <input required class="form-control form-control-sm"   th:field="*{amount}" placeholder="Amount" id="amount" onchange="trimValue(this);numberValidation(this);"/>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">amount Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-12 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="remarks">
+                                                    Remarks<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <textarea required class="form-control form-control-sm" rows="3" th:field="*{remarks}" style="width:100%" placeholder="Remarks" id="remarks"></textarea>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}">remarks Error</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12  mb-1 ">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="subject">
+                                                    Subject<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <textarea required class="form-control form-control-sm "  style="
+    min-height: 90px;
+" rows="4" th:field="*{subject}" placeholder="Subject"  onchange="trimValue(this);" id="subject"></textarea>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}">subject Error</div>
+                                        </div>
+
+                                        <div class="form-group col-md-12 mb-1">
+                                            <div>
+                                                <label class="col-form-label col-form-label-sm " for="toAddress">
+                                                    To Address<span class="red">*</span>
+                                                </label>
+                                            </div>
+                                            <textarea class="form-control form-control-sm" rows="4" th:field="*{toAddress}" style="width:100%; min-height: 87px;" placeholder="To Address" id="toAddress" required="required"></textarea>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('toAddress')}" th:errors="*{toAddress}">subject Error</div>
+                                        </div>
+
+
+                                        <div class="form-group col-md-12  mb-1">
+                                            <label class="col-form-label col-form-label-sm" for="dispatchFile">
+                                                Attach Dispatch <span class="red">*</span>
+                                            </label>
+
+                                            <input required style="height: 65px;" type="file" name="dispatchFile" value="" onchange="javascript:validateFiles();" id="dispatchFile" class="form-control form-control-sm" >
+                                            <small style="position:  relative;top: -20px;left: 10px;" class="help-text text-muted d-inline-block">
+                                                ( Supported Formats : .pdf, .png, .jpg, .jpeg )</small>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('filePath')}" th:errors="*{filePath}">file Error</div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-12 d-flex flex-column " align="center"><button type="submit" name="send" value="Send" id="sendBtn" class="btn btn-primary d-inline-block ml-auto" onclick="return submitData();">Submit</button>
+                                </div>
+                            </div>
+
+                        </div>
+                         <!-- /.card-block -->
+                     </div>
+                     <!-- /.card -->
+                    </form>
+                </div>
+                <!-- .w-100 -->
+                </div>
+                <!-- /.row -->
+                </div>
+                <!-- .animated.fadeIn -->
+			</div>
+             <!-- .container-fluid -->
+	</div>
+    <!-- END FRAGMENT: "content" -->
+
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript">
+		
+		 
+		$('#letterDate').daterangepicker({
+			"singleDatePicker": true,
+			"showDropdowns": true,
+			"timePicker": false,
+			"autoApply": true,
+			"linkedCalendars": false,
+			"alwaysShowCalendars": true,
+			locale : {
+				
+				format:"DD/MM/YYYY"
+			}
+			/* "startDate": "12/22/2017",
+			"endDate": "12/28/2017",
+			"minDate": "12/01/2017" */
+		}, function(start, end, label) {
+			console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+		});
+		
+		$('#dispatchDate').daterangepicker({
+			"singleDatePicker": true,
+			"showDropdowns": true,
+			"timePicker": false,
+			"autoApply": true,
+			"linkedCalendars": false,
+			"alwaysShowCalendars": true,
+			locale : {
+				
+				format:"DD/MM/YYYY"
+			}
+			/* "startDate": "12/22/2017",
+			"endDate": "12/28/2017",
+			"minDate": "12/01/2017" */
+		}, function(start, end, label) {
+			console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+		});
+		
+		 
+
+			function chkOnlySplChars(obj, msg) {
+				var txtValue = obj.value.trim();
+				if (txtValue == "") {
+					return false;
+				}
+				var flag = true;
+				var _x = 0;
+				for (var x = 0; x < txtValue.length; x++) {
+					var _charCode = txtValue.charCodeAt(x);
+					if (!((_charCode >= 33 && _charCode <= 64) || (_charCode >= 91 && _charCode <= 96) ||
+							(_charCode >= 123 && _charCode <= 126))) {
+						_x++;
+					}
+				}
+				if (_x == 0) {
+					alert("Only Special Charaters are not allowed " + msg);
+					obj.value = "";
+					return false;
+				} else {
+					return true;
+				}
+			}
+
+
+			function submitData() {
+				/* if ($("#postMasterID").val() == 0) {
+					alert("Select Post ");
+					$("#postMasterID").focus();
+					return false;
+				} else if ($("#letterNumber").val() == "") {
+					alert("Provide letter number");
+					$("#letterNumber").focus();
+					return false;
+				} else if ($("#letterDate").val() == "") {
+					alert("Provide letter date");
+					$("#letterDate").focus();
+					return false;
+				} else if ($("#subject").val() == "") {
+					alert("Provide subject");
+					$("#subject").focus();
+					return false;
+				} else if ($("#toAddress").val() == "") {
+					alert("Provide dispatching address");
+					$("#toAddress").focus();
+					return false;
+				} else if ($("#pincode").val() == "" || $("#pincode").val().length !=6) {
+					alert("Please provide pincode");
+					$("#pincode").focus();
+					return false;
+				}else if ($("#dispatchMode").val() == "") {
+					alert("Select dispatch mode");
+					$("#dispatchMode").focus();
+					return false;
+				} else if ($("#dispatchDate").val() == "") {
+					alert("Select dispatch date");
+					$("#dispatchDate").focus();
+					return false;
+				}else if ($("#amount").val() == "") {
+					alert("Provide amount");
+					$("#amount").focus();
+					return false;
+				}
+				else if ($("#remarks").val() == "") {
+					alert("Provide remarks");
+					$("#remarks").focus();
+					return false;
+				}else if ($("#dispatchFile").val() == "") {
+					alert("Provide upload dispatch document");
+					$("#dispatchFile").focus();
+					return false;
+				}else {
+					return true;
+				} */
+				return true;
+
+			}
+			
+			function validateFiles() {
+				//alert("4444");
+		        //var modelname=$("#inputmodelname").val();
+		        for (var i = 0; i < $("#dispatchFile").get(0).files.length; ++i) {
+		            var file1=$("#dispatchFile").get(0).files[i].name;
+					//alert("File NAme : "+file1);
+		            if(file1){                        
+		                var file_size=$("#dispatchFile").get(0).files[i].size;
+		                if(file_size<5242880){
+		                    var ext = file1.split('.').pop().toLowerCase();                            
+		                    if($.inArray(ext,["pdf","PDF","png","jpg","jpeg"])===-1){
+		                        alert("Invalid file extension. File Name : "+file1);
+		                        $("#dispatchFile").val('');
+		                        return false;
+		                    }
+
+		                }else{
+		                    alert("File size should be less than 5 MB. File Name : "+file1);
+		                    $("#dispatchFile").val('');
+		                    return false;
+		                }                        
+		            }else{
+		                alert("Please upload file");         
+		                return false;
+		            }
+		        }
+		    };	
+
+		</script>
+	</th:block>
+
+
+
+</body>
+
+</html>

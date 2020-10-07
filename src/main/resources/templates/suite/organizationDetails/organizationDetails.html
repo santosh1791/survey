@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Organization Details</title>
+</th:block>
+
+
+<body>
+	<div layout:fragment="content">
+        <div class="container-fluid">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 col-sm-8 offset-sm-2 ">
+
+                           <!-- <div class="card mt-4">
+                                <div class="card-header py-2">
+                                    <h5 class="card-title mb-0">Organization Details</h5>
+                                </div>
+                                <div class="card-body">-->
+                            <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+                                <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                                    <h5 class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Organization Details</h5>
+                                </div>
+
+                                <div class="card-block bg-white py-4">
+                                    <form class="custom-form" id="organizationDetailsForm" enctype="multipart/form-data"
+                                        th:modelAttribute="logo" _th:modelAttribute="letterHeadLogo" method="POST"
+                                        th:action="@{/organizationDetails}"
+                                        th:object="${organizationDetailsForm}">
+
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-form-label col-form-label-sm" for="organizationName">Organization Name<span
+                                                        class="text-danger"> *</span></label>
+                                                    <input type="text"
+                                                        class="form-control form-control-sm " name="organizationName"
+                                                        id="organizationName" placeholder="Name"
+                                                        th:field="*{organizationName}">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-form-label col-form-label-sm" for="shortName">Organization Short Name<span
+                                                        class="text-danger"> *</span></label>
+                                                    <input type="text"
+                                                        class="form-control form-control-sm " name="shortName"
+                                                        id="shortName" placeholder="Short Name"
+                                                        th:field="*{shortName}">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            	<div class="form-group col-md-6">
+                                                        <label for="logo">Logo</label>
+                                                    <input onchange="javascript:validateFiles();" type="file" 
+                                                            class="form-control-file" name="logo" id="logo"
+                                                            accept="image/*" aria-describedby="fileHelp">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Logo : <!-- <span class="text-danger">*</span> --></label>
+                                                    <div class="">
+                                                        <img  th:src="@{'/organizationIcon/{logoPath}'(logoPath=${logoPathImg})}">
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                            
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                        <label for="logo">Letter Head Logo</label>
+                                                    <input onchange="javascript:validateFiles();" type="file" 
+                                                            class="form-control-file" name="letterHeadLogoFile" id="letterHeadLogoFile"
+                                                            accept="image/*" aria-describedby="fileHelp">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Letter Head Logo : <!-- <span _th:text="${letterHeadLogo}" class="text-danger">*</span> --></label>
+                                                    <div class="">
+                                                        <img  th:src="@{'/organizationIcon/{letterHeadLogo}'(letterHeadLogo=${letterHeadLogo})}">
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+
+                                        <div class="row" align="center">
+                                            <div class="form-group col-md-12 text-center mb-0 mt-3">
+                                                <button  class="btn btn-raised btn-primary" type="submit"> Submit</button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- col-md-6 offset-md-3 col-sm-8 offset-sm-2 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.animated.fadeIn -->
+            </div>
+            <!--/.main .container-fluid -->
+        </div>
+        <!-- END FRAGMENT :: "content"-->
+	<th:block layout:fragment="scripts">
+		<script>
+		function validateFiles() {
+			//alert("4444");
+	        //var modelname=$("#inputmodelname").val();
+	        for (var i = 0; i < $("#logo").get(0).files.length; ++i) {
+	            var file1=$("#logo").get(0).files[i].name;
+				//alert("File NAme : "+file1);
+	            if(file1){                        
+	                var file_size=$("#logo").get(0).files[i].size;
+	                if(file_size<5242880){
+	                    var ext = file1.split('.').pop().toLowerCase();                            
+	                    if($.inArray(ext,["png","jpg","jpeg"])===-1){
+	                        alert("Invalid file extension. File Name : "+file1);
+	                        $("#logo").val('');
+	                        return false;
+	                    }
+
+	                }else{
+	                    alert("File size should be less than 5 MB. File Name : "+file1);
+	                    $("#logo").val('');
+	                    return false;
+	                }                        
+	            }else{
+	                alert("Please upload file");         
+	                return false;
+	            }
+	        }
+	    };	
+		 </script>
+	</th:block>
+</body>
+</html>

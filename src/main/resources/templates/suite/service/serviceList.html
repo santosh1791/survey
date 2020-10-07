@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head>
+<title th:text="#{view.index.title}">Welcome!</title>
+
+
+</head>
+<body
+	class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+
+		<div class="col-md-12">
+			<div class="card mt-4">
+				<div class="card-header py-2">
+					<h5 class="card-title mb-0">Service List</h5>
+					<div align="right">
+						<a class="btn btn-sm btn-raised btn-success text-white"
+							role="button" aria-pressed="false" data-toggle="modal"
+							data-target="#modalBlank" data-placement="top"
+							th:attr="data-url=@{/postForm}"><i class="fa fa-plus"></i>
+							Add</a>
+					</div>
+				</div>
+
+				<div class="card-block p-0 ">
+					<div class="table-responsive">
+						<table id="serviceList"
+							class=" compact table table-hover table-bordered table-responsive-sm table-sm  mb-0"
+							cellspacing="0" width="100%">
+							<thead class="thead-table">
+							<tr>
+								<th>S.NO.</th>
+								<th>Service Name</th>
+								
+
+							</tr>
+							</thead>
+							<th:block th:object="${serviceList}">
+
+	
+									<tr th:each="anItem, iterStat : ${serviceList}">
+									<td><span th:text="${iterStat.count}" ></span></td>
+									<td><span th:text="${anItem.serviceName}"></span></td>
+									
+									
+								</tr>
+							</th:block>
+
+						</table>
+
+					</div>
+				</div>
+				<!-- main-fragment-->
+			</div>
+		</div>
+	</div>
+	<th:block layout:fragment="scripts">
+
+
+		<script>
+			$(document).ready(function() {
+				//alert("aaaaaaaaaa");
+				var table = $('#serviceList').DataTable({
+					responsive : true,
+					paging : false,
+					fixedHeader : {
+						header : true,
+						headerOffset : 48
+					}
+				});
+
+				/*new $.fn.dataTable.FixedHeader(table, {
+					"top": true,
+					"offsetTop": 100,
+					"zTop": "999999"
+
+				});*/
+
+			});
+		</script>
+
+	</th:block>
+
+
+
+
+</body>
+
+</html>

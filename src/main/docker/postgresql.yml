@@ -1,0 +1,11 @@
+version: '2'
+services:
+    pms-postgresql:
+        image: postgres:9.6.2
+        # volumes:
+        #     - ~/volumes/jhipster/pms/postgresql/:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=pms
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

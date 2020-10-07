@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head>
+<title th:text="#{view.index.title}">Welcome!</title>
+</head>
+<body
+	class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+		<div class="col-md-12">
+			<div class="card mt-4">
+				<div class="card-header py-2">
+					<h5 class="card-title mb-0">Role - Service List</h5>
+				</div>
+				<div class="card-block p-0 ">
+					<form  method="POST" th:action="@{/roleService/roleServiceForm}" th:object="${roleServiceForm}">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<select id="selectedRoleId" th:field="*{selectedRoleId}" _th:field="*{roleMaster}" 
+										class="text-left form-control _mt-1 js-example-basic-single">
+										<option th:value=0 default selected>Please select Role</option>
+										<p th:each="role : *{roleMaster}">
+											<option  th:value="${role.id}" th:selected="( ${role.id} == *{selectedRoleId})"
+												th:text="${role.rolename}"></option>
+										</p>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-sm-6">
+								<div class="form-group">
+
+									<p th:each="service : *{serviceMaster}">
+										<input name="selectedServiceMaster" type="checkbox" th:value= "${service.id}" th:text="${service.servicename}"
+											_th:field="*{serviceMaster}" _th:value="|${sm.id}-${enviro}|" />
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+
+							<div class="col-sm-6">
+								<div class="form-group">
+									<input type=submit class="btn">
+								</div>
+							</div>
+						</div>
+					</form>
+
+				</div>
+				<!-- main-fragment-->
+			</div>
+		</div>
+	</div>
+	<th:block layout:fragment="scripts">
+	
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script>
+				
+		$( "#selectedRoleId" ).change(function() {
+			 
+			var stateVal = $( "#selectedRoleId" ).val();
+			if(stateVal ==null || stateVal == "" || stateVal =="0" )
+				return false; 
+			
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 $.ajax ({
+						type: "POST",
+						url: "/roleService/roleServiceList/"+$( "#selectedRoleId" ).val(),
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+							 html = "<option value='0'>-- Select --</option>"+html;
+							$("#districtMaster").html(html); 
+						} 
+			}); 
+		
+		});
+		
+		
+	</script>
+	
+	</th:block>
+</body>
+</html>

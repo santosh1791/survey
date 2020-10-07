@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+	<title _th:text="#{view.index.title}">Welcome!</title>
+</head>
+	
+
+
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active"><!-- <i class="icon-speedometer"></i> -->  Principal Report</li>
+		</ol>
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<!-- <div th:text="${questionsList}"></div> -->
+				<div class="row">
+			                    <div class="col-sm-12 col-md-12">
+			                        
+			                        <div class="card  _card-accent-primary _bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+			                        	
+				<table id = "reportTable" class=" table _table-bordered  table-hover table-striped table-sm mb-0" cellspacing="0" width="100%">
+					<thead  class="table-primary">
+						<tr>
+						<th>#</th>
+						<th>Question</th>
+						<th>Total Submissions</th>
+						<th>Sum of marks</th>
+						<th>Average</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each="submission, sno: ${submissions}">
+						<td th:text="${sno.count}"></td>
+						<td th:text="${submission[0]}"></td>
+						<td th:text="${submission[2]}"></td>
+						<td th:text="${submission[3]}"></td>
+						<td th:text="${submission[3]/submission[2]}"></td>
+						</tr>
+					</tbody>
+					
+					
+				</table>
+				</div>
+				</div>
+				</div>
+				
+        		
+			</div>
+
+
+
+
+		<!-- /.conainer-fluid -->
+	</div>
+	</div>
+	<!-- main-fragment-->
+
+
+		
+			<th:block layout:fragment="scripts">
+        <script>
+			$(document).ready(function() {
+				var table = $('#reportTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+                       { width:'1%', targets: 0 },
+                        { _width: '10%', targets: 1 },
+                        { _width:'90%', targets: 2 },
+                        
+                        { _width: '1%', targets: 3  },
+                        { _width: '1%', targets: 4}
+					],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ],
+					fixedHeader: {
+						header: true,
+						headerOffset: 48
+					}
+				});
+			});
+				</script>
+				</th:block>
+
+</body>
+
+</html>

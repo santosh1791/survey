@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head>
+<meta charset="ISO-8859-1">
+<title>inwardReport</title>
+
+
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<ol class="tab_title breadcrumb mb-3">
+			<li class="breadcrumb-item active">Inward Report</li>
+		</ol>
+
+		<div>
+			<input type="hidden" name="org.apache.struts.taglib.html.TOKEN"
+				value="f04ae4fa6d250990ad506e6349f0f48c">
+		</div>
+		<input type="hidden" name="method" value="" id="method">
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="card card-block " style="padding: 0.5rem 1rem 1.2rem">
+					<div
+						class="d-flex flex-row flex-wrap justify-content-around  no-gutters">
+						<div style="overflow: auto; width: 100%;">
+							<div align="right" style="padding: 2%;">
+								<!-- <a name="viewregisCurrents" value="Register New Currents" onclick="redirectTo()" class="btn btn-primary"> -->
+								<a class="btn btn-primary" th:href="@{/efilesuite/inward}">
+									Register New Currents</a>
+							</div>
+
+							<table id="registeredCurrents" border="1"
+								class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+								cellspacing="0" width="100%">
+
+
+
+								<thead class="thead-default w-100">
+									<tr>
+										<th rowspan="2">Sno</th>
+										<th rowspan="2">Inward No.</th>
+										<th rowspan="2">Current No.</th>
+										<th rowspan="2">Current Subject</th>
+										<th rowspan="2">Received Date</th>
+										<th colspan="2">Current Received Details</th>
+										<th colspan="3">Current Sent to Details</th>
+										<th rowspan="2">Department Name</th>
+										<th rowspan="2">View Attached Current</th>
+										
+										<th rowspan="2">Action</th>
+									</tr>
+									<tr>
+										<th colspan="2">Dept. Received from</th>
+										<!-- <th>From Officer</th> -->
+										<th>Section</th>
+										<th>Officer</th>
+										<th>Date</th>
+
+									</tr>
+								</thead>
+
+								<tbody>
+									<!-- <th:block th:object="${efileInwardList}"> -->
+									<tr th:each="inwardReport , sNo: ${efileInwardList}">
+									
+										<td th:text="${sNo.count}"></td>
+										<td nowrap="nowrap" th:text="${inwardReport.inwardFileNumber}">
+										</td>
+										<td nowrap="nowrap" th:text="${inwardReport.currentNumber}">
+										</td>
+										<td th:text="${inwardReport.subject}"></td>
+										<td th:text="${inwardReport.recievedDate}"></td>
+										<td colspan="2" th:text="${inwardReport.concernedOfficer}">
+										</td>
+										<td th:text="${inwardReport.sectionId}"></td>
+										<!-- <td>test</td> -->
+
+										<td align="center" th:text="${inwardReport.ownerId}"></td>
+										<td th:text="${inwardReport.currentDate}"></td>
+										<!-- <td th:text="${inwardReport.uploadFile}"> </td> -->
+
+										<td th:text="${inwardReport.departmentId}"></td>
+										
+										<td align="center"><a
+											th:href="${inwardReport.uploadFile}" target="_blank"><img
+												title="View Attached Current"
+												src="http://test.cgg.gov.in:80/eFile/efile/images/view.png"
+												width="20" height="20" border="0"></a>
+										</td>
+										
+										<td><!-- <a class="btn btn-primary"
+											th:href="@{/efilesuite/createEfile}"></a> -->
+											<a  class="btn btn-primary" role="button" aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+											data-placement="top" th:attr="data-url=@{'/efilesuite/createEfile/{currentNumber}'(currentNumber=${inwardReport.inwardFileNumber})}">Create e-File</a>	
+										</td>
+									</tr>
+									<!-- </th:block> -->
+
+								</tbody>
+							</table>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+		$(document).ready(function() {
+			var table = $('#registeredCurrents').DataTable({
+				responsive: true,
+				paging: false,
+				fixedHeader: {
+					header: true,
+					headerOffset: 48
+				}
+			});
+
+			/*new $.fn.dataTable.FixedHeader(table, {
+				"top": true,
+				"offsetTop": 100,
+				"zTop": "999999"
+
+			});*/
+
+
+		});
+	</script>
+	</div>
+</body>
+</html>

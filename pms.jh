@@ -1,0 +1,146 @@
+// JDL definition for application 'pms' generated with command 'jhipster export-jdl'
+
+entity UserExtra (user_extra) {
+  notificationsEnabled Boolean,
+  notificationsFilter Integer,
+  language String maxlength(5),
+  token String maxlength(255),
+  lockExpirationDate ZonedDateTime,
+  failedLoginAttempts Integer,
+  projectAdmin Boolean,
+  role String maxlength(50),
+  apiaccesstoken String maxlength(255)
+}
+entity UserNotification (user_notification)
+entity Options (options) {
+  name String required maxlength(100),
+  value String
+}
+entity Swimlane (swimlane) {
+  name String maxlength(255),
+  description String,
+  position Integer,
+  active Boolean
+}
+entity Project (project) {
+  identifier String maxlength(50),
+  name String maxlength(255),
+  description String,
+  active Boolean,
+  accessPublic Boolean,
+  accessPrivate Boolean,
+  everybodyAllowed Boolean,
+  token String maxlength(255),
+  startDate ZonedDateTime,
+  endDate ZonedDateTime,
+  priorityDefault Integer,
+  priorityStart Integer,
+  priorityEnd Integer
+}
+entity ProjectFile (project_file) {
+  name String maxlength(255),
+  path String maxlength(255),
+  image Boolean,
+  size Integer
+}
+entity ProjectUser (project_user) {
+  role String maxlength(50)
+}
+entity ProjectCategory (project_category) {
+  name String maxlength(255),
+  description String
+}
+entity ProjectActivity (project_activity)
+entity ProjectDailyStats (project_daily_stats) {
+  day String maxlength(10),
+  averageLeadTime Integer,
+  averageCycleTime Integer
+}
+entity ProjectDailyQueueStats (project_daily_queue_stats) {
+  day String maxlength(10),
+  total Integer,
+  score Integer
+}
+entity Queue (queue) {
+  title String maxlength(255),
+  description String,
+  position Integer,
+  taskLimit Integer,
+  hideInDashboard Boolean
+}
+entity Task (task) {
+  title String maxlength(255),
+  description String,
+  priority Integer,
+  color String,
+  position Integer,
+  active Boolean,
+  score Integer,
+  reference String maxlength(255),
+  dateCompleted ZonedDateTime,
+  dateDue ZonedDateTime,
+  dateStarted ZonedDateTime,
+  dateMoved ZonedDateTime,
+  timeEstimated Float,
+  timeSpent Float
+}
+entity Subtask (subtask) {
+  title String maxlength(255),
+  status Integer,
+  position Integer,
+  timeEstimated Float,
+  timeSpent Float
+}
+entity SubtaskTimeTracking (subtask_time_tracking) {
+  start Integer,
+  end Integer,
+  timeSpent Float
+}
+entity TaskFile (task_file) {
+  name String maxlength(255),
+  path String maxlength(255),
+  image Boolean,
+  size Integer
+}
+entity TaskTransition (task_transition)
+entity Comment (comment) {
+  comment String,
+  reference String maxlength(255)
+}
+entity Link (link)
+entity TaskLink (task_link)
+entity Action (action)
+entity ActionParam (action_param)
+
+relationship OneToOne {
+  UserExtra{user} to User
+}
+relationship ManyToOne {
+  UserNotification{user} to User,
+  UserNotification{project} to Project,
+  Swimlane{project} to Project,
+  Project{owner} to User,
+  ProjectFile{project} to Project,
+  ProjectUser{user} to User,
+  ProjectUser{project} to Project,
+  ProjectCategory{project} to Project,
+  ProjectDailyStats{project} to Project,
+  ProjectDailyQueueStats{project} to Project,
+  ProjectDailyQueueStats{queue} to Queue,
+  Queue{project} to Project,
+  Task{project} to Project,
+  Task{queue} to Queue,
+  Task{owner} to User,
+  Task{creator} to User,
+  Task{category} to ProjectCategory,
+  Task{swimlane} to Swimlane,
+  Subtask{task} to Task,
+  Subtask{user} to User,
+  SubtaskTimeTracking{subTask} to Subtask,
+  SubtaskTimeTracking{user} to User,
+  TaskFile{task} to Task,
+  TaskFile{user} to User,
+  Comment{task} to Task,
+  Comment{user} to User
+}
+

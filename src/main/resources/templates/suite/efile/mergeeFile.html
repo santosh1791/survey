@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>eFile Inbox</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+	z-index: 999;
+	border-top: 2px solid #3d70b2 !important;
+	color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+
+/*
+Access denied message styles
+*/
+#accesdenied {
+	background-color: lightgray;
+	border-radius: 10px;
+	margin: auto;
+	width: 50%;
+	cursor: not-allowed;
+	margin-top: 10%;
+}
+
+#accessdeniedhead {
+	padding-top: 30px;
+	font-size: 60px;
+	font-family: Arial;
+	text-align: center;
+	border-bottom: 1px solid #333;
+	border-bottom-style: dashed;
+	padding-bottom: 20px;
+}
+
+#redx {
+	color: red;
+	text-decoration: none;
+	cursor: not-allowed;
+}
+
+#accessdeniedpara {
+	text-align: center;
+	font-family: Arial;
+	font-weight: bold;
+	padding-bottom: 3%;
+}
+
+#accessdeniedlines {
+	font-family: Arial;
+	text-align: center;
+	word-spacing: -1px;
+	font-size: 10px;
+	font-weight: normal;
+	color: gray;
+}
+
+#gears {
+	text-align: center;
+	color: #333;
+	width: 200px;
+	margin: auto;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.85);
+	/* opacity: 0.85; */
+	padding: 30px 0px;
+}
+
+.breadcrumb-menu button.navbar-toggler.aside-menu-toggler {
+	font-size: 14px;
+	line-height: inherit;
+}
+
+body.aside-menu-fixed:not(.aside-menu-hidden) span.d-lg-down-none {
+	display: none;
+}
+
+table#inwardInboxTable tbody tr > td:first-child:before ,
+table#inwardInboxTable tbody tr:hover > td:first-child:before {
+    content:"\f1dd";
+    font: normal normal normal 24px/1 "Material Design Icons";
+    postition: relative;
+    left: -5px;;
+    top: 0;
+    display: inline;
+    color: grey;
+    opactiy: 0.5;
+    font-size: 20px;
+    margin-left: -15px;
+}
+table#inwardInboxTable tbody tr:hover > td:first-child:before {
+    color: green!important;
+    opacity: 1;
+
+}
+table#inwardInboxTable tbody tr > td:first-child:hover{
+        cursor: -webkit-grab;
+}
+table#inwardInboxTable tbody tr > td:first-child.ui-draggable-dragging:hover{
+        cursor:-webkit-grabbing;
+}
+div#inwardInboxTable_wrapper {
+    margin-top: -31px;
+}
+div#inwardInboxTable_wrapper .wrapper {
+    overflow: hidden;
+    margin: 0;
+}
+body.aside-menu-hidden .aside-menu-toggler {
+    transform: rotate(0deg);
+    transition: 1s all ease-in-out;
+}
+body:not(.aside-menu-hidden) .aside-menu-toggler {
+    transform: rotate(-180deg);
+    transition: 1s all ease-in-out;
+}
+</style>
+</th:block>
+
+
+<body
+	class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed aside-menu-hidden ">
+
+	<div layout:fragment="content">
+
+
+		<ol class="breadcrumb pr-0 py-0 mb-2">
+			<!--<li class="breadcrumb-item"><i class="icon-home"></i><i class="fa fa-home"></i> </li>-->
+			<li class="breadcrumb-item"><i class="mdi mdi-file-document"></i>&nbsp;eFile
+			</li>
+			<li class="breadcrumb-item active text-primary">Inbox</li>
+			<li class="breadcrumb-menu"></li>
+			<li class="breadcrumb-menu  _d-md-down-none">
+				<div class="btn-group " role="group" aria-label="Basic example">
+
+					<button style="height: 34px;" type="button"
+						class="btn bg-primary text-white" data-toggle="modal"
+						data-target="#commonModal" _aria-haspopup="true"
+						_aria-expanded="false" data-placement="top"
+						title="Create new eFile"
+						th:attr="data-url=@{/efilesuite/createNoteFile}">
+						<i class="mdi mdi-file-plus"></i><span class="icon-btn-text">&nbsp;
+							Create</span>
+					</button>
+
+					<button type="button"
+						class="btn bg-transparent py-1 navbar-toggler aside-menu-toggler">
+						<i class="mdi mdi-18px mdi-backburger"></i>
+					</button>
+				</div>
+			</li>
+		</ol>
+
+		<form method="post" class="custom-form"   th:action="@{/mergeeFile}" enctype="multipart/form-data" >
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="w-100">
+						<span th:if="${additionalChargePost} == false"> 
+						<th:block th:replace="fragments/layout :: eFileTabs">
+
+							</th:block>
+							
+							
+							
+							
+							
+							<div class="card  bg-transparent mb-0 card-shadow ">
+								<div class="card-body py-0 bg-white"
+									style="_min-height: calc(100vh - 130px);">
+
+								<th:block th:if="${statusMessage != null}">
+						            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+						        </th:block>
+
+								
+								<section class="form-row py-1 border-bottom-1">
+
+                                    <div class="col-sm-7">
+                                        <div class="form-group form-row mb-0 ">
+                                            <label for="remarks" class="col-form-label col-form-label-sm text-center">Main Note file: </label>
+                                        	<select class="custom-select custom-select-sm" name="notefileDetails" id="parentMergeFile" 
+                                        		onchange="javascript:return getMergeFilesList(this.value);" >
+                                        		<option value="0"> --select--</option>
+                                        		<th:block th:each="mergefileList : ${initiatorNotefilesList}">	
+                                        			<option th:value="${mergefileList.id}">
+                                        				<span th:text="${mergefileList.notefileNumber}" ></span> (<span th:text="${mergefileList.subject}" ></span>)
+                                        			</option>
+                                        		</th:block>
+                                        	</select>
+                                        </div>
+                                     </div>
+                                 </section>
+									
+									
+									
+									
+									<div class="table-responsive ">
+									
+									
+										<table border="1" id="eFileINboxFileTable"
+											class="table table-bordered table-hover table-striped table-sm _mb-0"
+											width="100%" cellspacing="0">
+											<thead class="table-primary">
+												<tr>
+													<th></th>
+													<th>#</th>
+													<th>File Number</th>
+													<th>Received From</th>
+													<th>Subject</th>
+													<th>Created Date</th>
+												</tr>
+											</thead>
+
+											<!-- <h1 th:text="${inboxFilesList}"></h1> -->
+
+											<tbody th:if="${inboxFilesListCount} == false">
+												
+												
+												
+												
+												
+												<tr class="droppable ui-widget-content mergedFileHide" th:each="inboxFiles, sNo : ${inboxFilesList}"
+													th:classappend="${inboxFiles.fileInitiator}==${inboxFiles.presentOwner} ? initiator : '' "  th:id="${inboxFiles.id}" >
+												
+													 
+													
+													<td>
+														<!-- <input type="text" name="notefileId"
+															id="notefilesDetails" th:value="${inboxFiles.id}" /> -->
+														<input type="checkbox" name="notefileDetailsMerge"
+															id="notefilesDetails" th:value="${inboxFiles.id}" />
+													
+													</td>
+
+													<td  th:text="${sNo.count}"></td>
+													<td><a role="button"
+														th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${inboxFiles.id})}">
+															<p th:text="${inboxFiles.notefileNumber}"></p>
+													</a></td>
+													<td><span
+														th:text="${inboxFiles.notefileReceivedFromPostMaster.postname}"></span>
+														<span
+														th:if="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster}!=null">
+															(<span
+															th:text="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster.employeefirstname}"></span>
+															<span
+															th:text="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster.employeelastname}"></span>
+															)
+													</span> <span
+														th:if="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster}==null">
+															(N/A) </span></td>
+
+													<td th:text="${inboxFiles.subject}"></td>
+													<td
+														th:text="${#dates.format(inboxFiles.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+									<!-- table-responsive px-3-->
+									
+									
+									<section class="form-row py-1 border-bottom-1">
+
+                                    <!--/* <div class="col-sm-7">
+                                        <div class="form-group form-row mb-0 ">
+
+                                            <label for="remarks" class="col-form-label col-form-label-sm col-sm-2 text-center">Remarks : </label>
+                                            <div class="w-100">
+                                            <textarea  name="remarks" class="form-control col-md-9" _class="form-control form-control-sm"
+												 id="remarks"
+												placeholder="Enter Remarks . . " ></textarea>
+                                            </div>
+
+
+                                        </div>
+                                    </div> */-->
+                                    <div class="col-sm-1 text-left pull-left">
+                                        <div class="form-group mb-0">
+                                            <div class="w-100">
+                                               <!--  <button type="submit" value="Search" class="btn btn-sm btn-primary d-inline-block ml-auto"  >Search</button> -->
+                                               <button type="submit" name="merge" value="merge"
+												class="btn btn-outline-primary"
+												onclick="javascript:return validateData();">
+												<i class="mdi mdi-link"></i>&nbsp; Merge
+											</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 text-left"></div>
+                                    
+
+                                </section>
+									
+									
+									
+								</div>
+								<!-- .card-block-->
+							
+								
+							</div> <!--  main > .w-100 >.card -->
+						</span>  
+					</div>
+					<!-- main > .w-100 -->
+				</div>
+				<!-- main > .row -->
+			</div>
+			<!-- main > .animated.fadeIn -->
+		</div>
+		</form>
+		<!-- main > .container-fluid -->
+	</div>
+	
+	
+	
+	<!-- FRAGMENT: "content"  Drag Content -->
+	<!--/*<th:block layout:fragment="aside-menu">
+		<aside class="aside-menu eFile-aside-menu" style="max-width: 35%;">
+			<div class="card card-accent-primary">
+				<div class="card-header pb-1 pt-1" style="height: 32px;">
+					<h5 class="mb-0">Inward List</h5>
+				</div>
+				<div class="card-body">
+					<div class="form-group row text-right px-3 pt-3 eFile-button-footer">
+	                    <div class="col-md-12">
+	                        <button type="submit" name="save" value="Save"
+	                                class="btn btn-outline-primary"
+	                                onclick="javascript:return formValidations(this.value);" >
+	                            <i class="fa fa-save"></i>&nbsp; Save
+	                        </button>
+	                    </div>
+	                </div>
+                </div>
+				
+				<div class="card-body p-0">
+					<table id="inwardInboxTable"
+						class="table table-bordered table-striped table-sm  mb-0 mt-0"
+						cellspacing="0" width="100%">
+						<thead class="table-primary">
+							<tr>
+								<th>#</th>
+								<th>Inward Number</th>
+								<th>Received From</th>
+								<th>Subject</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr class="draggable ui-widget-header"  th:each="inboxFiles, sNo : ${inwardInboxFilesList}">
+								<td th:text="${sNo.count}"></td>
+								<td><a class="btn btn-outline-default " role="button"
+									aria-pressed="false" data-toggle="modal"
+									data-target="#commonModal" data-placement="top"
+									th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${inboxFiles.id})}">
+										<p th:text="${inboxFiles.inwardFileNumber}"></p>
+								</a></td>
+								  <td th:text="${inboxFiles.postMaster.postname}"></td>  
+								<td><span th:text="${inboxFiles.postMaster.postname}"></span>
+									<span th:if="${inboxFiles.postMaster.employeeMaster} != null ">
+										( <span
+										th:text="${inboxFiles.postMaster.employeeMaster.employeefirstname}"></span>
+										<span
+										th:text="${inboxFiles.postMaster.employeeMaster.employeelastname}"></span>
+										)
+								</span> <span th:if="${inboxFiles.postMaster.employeeMaster} == null ">
+										( ) </span></td>
+
+								<td th:text="${inboxFiles.subject}"></td>
+								 
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</aside>
+	</th:block>*/-->
+
+	<th:block layout:fragment="scripts">
+	<script type="text/javascript">
+	function validateData() {
+		 
+		var checkBoxValues = [];
+		$.each($("input[name='notefileDetailsMerge']:checked"), function() {
+			checkBoxValues.push($(this).val());
+		});
+		if($("#parentMergeFile").val()==0){
+			alert("Please select Main Note file");
+			$("#parentMergeFile").focus();
+			return false;
+		} else if (parseInt(checkBoxValues.length) < 1 ) {
+			alert("Please select at least two files to merge");
+			$("#notefilesDetails").focus();
+			return false;
+		}/* else if($("#remarks").val()==""){
+			alert("Enter remarks ");
+			$("#remarks").focus();
+			return false;
+		} */else{
+			return true;
+		} 
+	}
+ 
+
+			$(document).ready(function() {
+
+				//INward Inbox Files Datatable
+				var table2 = $('#inwardInboxTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'><'col-sm-8 d-flex  justify-content-end 'f>>>t<'wrapper bottom'<'row'<'col-sm-4'><'col-sm-8 d-flex  justify-content-end '>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+                    rowReorder: {
+                        selector: 'td:first-child'
+
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+					{ width:'1%', targets: 0 },
+	                    { width: '30%', targets: 1 },
+	                   { width:'30%', targets: 2, render: $.fn.dataTable.render.ellipsis(20) },
+	                   { width: '30%', targets: 3, className: "px-1", render: $.fn.dataTable.render.ellipsis(20) }
+	                   
+
+
+
+					],
+					order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+
+				//NoteFile INwabox List Datatable
+
+				var table1 = $('#eFileINboxFileTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+					{ width:'1%', targets: 0 },
+	                    { width: '1%', targets: 1 },
+	                   { _width:'30%', targets: 2 },
+	                   { _width: '25%', targets: 3, className: "px-1" },
+	                     { _width: '16%', targets: 4, className: "px-1" },
+	                   { _width: '16%', targets: 5, className: "px-1" }
+
+
+
+					],
+					order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+
+				$('#inwardInboxTable tbody tr').on( 'click', 'td:first-child', function () {
+                    var row = table1.row( $(this).parents('tr') );
+                    var rowNode = row.node();
+                    row.remove();
+
+                    table2
+                        .row.add( rowNode )
+                        .draw();
+                });
+
+
+                $('table').on('click','.actionSwitch', function(e){
+                    var $this = $(this);
+                    var $input = $this.find('.switch-input');
+                    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+                    e.preventDefault();
+                    e.stopPropagation();
+                    bootbox.confirm({
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-outline-primary'
+                            }
+                        },
+                        callback: function (result) {
+                            var context = "[[@{/}]]";
+                            var isChecked = $input.prop("checked")
+                            var url = isChecked ? "disableEmployee" : "enableEmployee";
+                            var id = $this.data('id');
+                            console.log('This was logged in the callback: ' + result);
+                            if(result){
+                                $.get(context + url + '/' + id + '/' , function(){
+                                    $input.prop('checked',!isChecked);
+                                });
+                            }
+                        }
+                    });
+                });
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+			});
+
+			$("#eFileMergeLink").addClass("active");
+
+			$( function() {
+                $( ".draggable" ).draggable({ revert: "valid" });
+                //$( "#draggable2" ).draggable({ revert: "invalid" });
+
+                $( ".droppable" ).droppable({
+                  classes: {
+                    "ui-droppable-active": "ui-state-active",
+                    "ui-droppable-hover": "ui-state-hover"
+                  },
+                  drop: function( event, ui ) {
+                    $( this )
+                      .addClass( "ui-state-highlight" )
+                      .find( "tr" )
+                        .addClass( "Dropped!" );
+                        bootbox.confirm({
+                            message: "Are you sure, you want to add this?",
+                            buttons: {
+                                confirm: {
+                                    label: 'Yes',
+                                    className: 'btn-primary'
+                                },
+                                cancel: {
+                                    label: 'No',
+                                    className: 'btn-outline-primary'
+                                }
+                            },
+                            callback: function (result) {
+                                console.log('This was logged in the callback: ' + result);
+                            }
+                        });
+                  }
+                });
+            });
+
+
+			
+			
+			
+			function getMergeFilesList(event){
+				//$("input[name='notefileDetailsMerge']:checked").attr('checked',false);
+				
+				$("input[name='notefileDetailsMerge']").each(function() 
+				{ 
+				        this.checked = false; 
+				}); 
+				
+				$(".mergedFileHide").show();
+				$("#"+event).hide();
+				
+			}
+		</script>
+	</th:block>
+</body>
+</html>

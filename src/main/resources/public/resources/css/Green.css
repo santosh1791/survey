@@ -1,0 +1,51 @@
+body {
+    background: rgba(77, 189, 116, 0.15);
+}
+
+.app-header.navbar, .app-header.navbar .navbar-brand {
+    background-color: #4dbd74!important;
+}
+
+.ogr_name span {
+    font-weight: bold;
+    color: #fff;
+    font-size: 20px;
+}
+
+.logger-name {
+    color:  #fff;
+}
+.sidebar {
+    /*background: #006824;*/
+}
+
+footer.app-footer   {
+    /*background-color: rgb(1, 81, 28)!important;*/
+}
+
+footer.app-footer  h6.text-primary, footer.app-footer .text-primary  {
+    /*color: #fff!important;*/
+        font-weight: 500!important;
+}
+/*
+body.preferences-page .card-header.bg-light h5, body.preferences-page .card-header.vs-header h5 {
+    margin: 0!important;
+    font-weight: 600!important;
+    color: #4e805f!important;
+}
+
+body.preferences-page .card-accent-primary {
+    border-top-width: 3px;
+    border-top-color: #4dbe74;
+}
+
+body.preferences-page thead.table-primary{
+    background-color: #cdedd8;
+}
+
+body.preferences-page .btn-primary {
+    color: #fff;
+        background-color: #1f8a44!important;
+            border-color: #1f8a44!important;
+}
+*/

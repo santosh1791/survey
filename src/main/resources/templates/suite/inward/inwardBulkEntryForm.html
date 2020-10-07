@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<!-- <div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Inward Bulk Entry
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div> -->
+
+
+
+
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Inward Entry</title>
+</th:block>
+
+
+
+<th:block layout:fragment="links">
+	<!--<link
+		href="../../../resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css"
+		rel="stylesheet" media="screen"
+		th:href="@{/resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css}" />-->
+
+</th:block>
+
+<th:block layout:fragment="styles">
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 1200px;
+        }
+    }
+
+.tblSubHead {
+	background-color: #1f618d !important;
+	color: #FFFFFF !important;
+}
+
+#errmsg, #errmsgMobile, #errmsgFax {
+	color: red;
+}
+
+form.custom-form span.red {
+	color: red;
+}
+
+.redText {
+	color: red;
+}
+</style>
+</th:block>
+
+<body  class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+		<div class="container-fluid px-3">
+        <div class="animated fadeIn">
+            <div class="row">
+	            <div class="col-md-12">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Inward Bulk Entry</h5>
+                            
+                            <span class="text-danger d-inline-block ml-auto mt-1" style="font-size:12px;">*All inputs are mandatory</span>
+                            <button
+                                class="btn btn-sm btn-primary d-inline-block ml-auto mt-1" value="0" id="addCurrent"
+                                onclick="javascript:addCurrentRow()"> <i class="fa fa-plus" ></i>
+                                Add
+                            </button>
+                            <!-- <button
+                                class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1"
+                                onclick="goBack()"> <i class="fa fa-chevron-left"></i>
+                                Back
+                            </button> -->
+                        </div>
+						<span th:text="${msg}"></span>
+						<form class="custom-form" method="post"
+							th:action="@{/efilesuite/bulkInwards}"
+							th:object="${inwardBulkEntryForm}" enctype="multipart/form-data"
+							id="inwardBulkEntryForm">
+							
+								<select style="display: none;" name="currentTypesList" id="currentTypesList" _class="auto-complete-select " > 
+									<option value="0"  selected="selected">Select</option>
+									<option th:each="currentList : ${currentNameList}"
+										th:text="${currentList.currentName}"
+										th:value="${currentList.id}" ></option>
+								</select>
+								<select style="display: none;" name="departmentList" id="departmentList">
+									<option value="0" selected="selected">Select</option>
+									<th:block th:object="${departmentList}">
+										<p th:each="anItem : ${departmentList}">
+											<option th:value="${anItem.id}"><a
+													th:text="${anItem.departmentname}"></a>
+											</option>
+										</p>
+										<option value="-1">Other</option>
+									</th:block>
+								</select>
+	
+								<div class="card-block bg-white py-4">
+									<!--<form id="inwardCurrentEntry" class="" method="" action="">-->
+									<div class="form-row" style="width: 100%;overflow: auto;">
+									
+									<th:block th:if="${statusMessage != null}">
+							            <div th:replace="fragments/components :: bootbox.alert (type='success', message=${statusMessage})">Alert</div>
+							        </th:block>
+							        
+										<!-- <input type="hidden" name="id" id ="id" value="null"> -->
+										<div class="col-lg-12 col-md-12">
+											
+											<table id="inwardBulkEntryTableID" class="mx-auto table table-bordered  table-sm _mb-0" cellspacing="0" width="100%">
+												<thead class="table-primary">
+														<tr>
+															<th>#</th>
+															<th>Type</th>
+															<th>Number</th>
+															<th>Date</th>
+															<th>Subject</th>
+															<th>Department</th>
+															<th>Received Date</th>
+															<th>Received from Officer</th>
+															<th>Received Mode(By:)</th>
+															<th>Document
+																<span style=" bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"> (.pdf, .png, .jpg, .jpeg )</span>
+															</th>
+															<th>Action</th>
+														</tr>
+													</thead>
+													<tbody id="tbodyId">
+				
+															<tr id="current0">
+																<td>
+																	<span id="span_no0">1</span>
+																</td>
+																<td>
+																	<select name="efileInwardMasterDtos[0].currentTypeMaster" id="currentTypeMaster0"
+																		class="auto-complete-select  form-control_ custom-select custom-select-sm"
+																		required th:field="*{efileInwardMasterDtos[0].currentTypeMaster}">
+																		<option value="0">Select</option>
+																		<option th:each="currentList : ${currentNameList}"
+																			th:text="${currentList.currentName}"
+																			th:value="${currentList.id}" ></option>
+																	</select>
+																	<div class="text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].currentTypeMaster')}" th:errors="*{efileInwardMasterDtos[0].currentTypeMaster}">Current Type Error</div>
+																</td>
+																<td>
+																	<input type="text" name="efileInwardMasterDtos[0].currentNumber"
+																		 id="currentNumber0"
+																		class="form-control form-control-sm" required
+																		th:field="*{efileInwardMasterDtos[0].currentNumber}">
+																	<div class="text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].currentNumber')}" th:errors="*{efileInwardMasterDtos[0].currentNumber}">Number Error</div>
+																</td>
+																<td>
+																	<input type="text" name="efileInwardMasterDtos[0].currentDate" value=""
+																		id="currentDate0" placeholder="DD/MM/YYYY"
+																		th:field="*{efileInwardMasterDtos[0].currentDate}"
+																		class="calendarBg form-control form-control-sm datePicker currentDate"
+																		required readonly="readonly" />
+																	<div class="text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].currentDate')}" th:errors="*{efileInwardMasterDtos[0].currentDate}">Date Error</div>
+																</td>
+																<td>
+																	<textarea id="subject0"
+																		class="form-control form-control-sm"
+																		name="efileInwardMasterDtos[0].subject" 
+																		rows="2" required th:field="*{efileInwardMasterDtos[0].subject}"></textarea>
+																	<div class="text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].subject')}" th:errors="*{efileInwardMasterDtos[0].subject}">Subject Error</div>
+																</td>
+																<td>
+																	<select name="efileInwardMasterDtos[0].departmentMaster" id="departmentMaster0" 
+																	onchange="showOthersDept(this,0)" class="auto-complete-select  form-control_ custom-select custom-select-sm" required>
+																		<option value="0" selected="selected">Select</option>
+																		<th:block th:object="${departmentList}">
+																			<p th:each="anItem : ${departmentList}">
+																				<option th:value="${anItem.id}"><a
+																						th:text="${anItem.departmentname}"></a>
+																				</option>
+																			</p>
+																		</th:block>
+																		<option value="-1">Other</option>
+																	</select>
+																	<input type="text" name="efileInwardMasterDtos[0].otherDeptName" placeholder='Other Department Name' class='form-control form-control-sm' id="otherDeptName0" style="display: none" />
+																	<div class="invalid-feedback text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].departmentMaster')}" th:errors="*{efileInwardMasterDtos[0].departmentMaster}">Department Error</div>
+																</td>
+																<td>
+																	<input type="text"
+																		name="efileInwardMasterDtos[0].recievedDate" value="" id="recievedDate0"
+																		placeholder="DD/MM/YYYY"
+																		class="calendarBg form-control form-control-sm datePicker recievedDate"
+																		th:field="*{efileInwardMasterDtos[0].recievedDate}" required readonly="readonly" />
+																	<div class="invalid-feedback text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].recievedDate')}" th:errors="*{efileInwardMasterDtos[0].recievedDate}">Received Date Error</div>
+																</td>
+																<td>
+																	<textarea name="efileInwardMasterDtos[0].inwardRecievedFrom" rows="2" 
+																		id="inwardRecievedFrom0"
+																		class="form-control form-control-sm latterUpperCase"
+																		th:field="*{efileInwardMasterDtos[0].inwardRecievedFrom}" required></textarea>
+																	<div class="text-danger" th:if="${#fields.hasErrors('efileInwardMasterDtos[0].inwardRecievedFrom')}" th:errors="*{efileInwardMasterDtos[0].inwardRecievedFrom}">Department Error</div>
+																</td>
+																<td><select id="recievedMode0" name="efileInwardMasterDtos[0].receivedMode" onchange="javascript:showEmail(this,0);" class="custom-select custom-select-sm" style="width: 100%;" required>
+																			<option value="0">Select</option>
+																			<option value="Email">Email</option>
+																			<option value="Hand">Hand</option>
+																			<option value="Post">Post</option>
+																		</select>
+																		<input type="email" name="efileInwardMasterDtos[0].email" placeholder='e-Mail' class='form-control form-control-sm' id="email0" style="display: none" />
+																</td>
+																<td>
+																	<input type="file" name="efileInwardMasterDtos[0].inwardFile" value="" onchange="javascript:validateFiles(0);"
+																		id="inwardFile0" class="form-control form-control-sm"></input>
+																		
+																</td>
+																<td><button type="button"  class="btn btn-sm btn-primary d-inline-block ml-auto mt-1"  id="deleteCurrent0" onclick="javascript:deleteCurrent(0);"><i class="fa fa-trash-o" ></i></button></td>
+															</tr>
+				
+													</tbody>
+											</table>
+											
+											<!-- /.row -->
+										</div>
+	
+	
+										<div class="col-sm-12 text-right" align="center">
+											<button style="width: 80px;" type="submit" name="Save"
+												value="Save" id="sendBtn"
+												class="btn btn-sm btn-primary d-inline-block ml-auto"
+												onclick="javascript:return submitDataSave();">Save</button>
+												
+											<button style="width: 80px;" type="submit" name="MisSent"
+												value="MisSent" id="sendBtn"
+												class="btn btn-sm btn-primary d-inline-block ml-auto"
+												onclick="javascript:return submitDataSave();">Mis-Sent</button>
+											
+										</div>
+									</div>
+									<!-- /.form-row main-->
+									<!--</form>-->
+								</div>
+	
+							<!-- </div> -->
+						</form>
+					</div>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.animated.fadeIn -->
+		</div>
+		<!--/.main .container-fluid -->
+
+	</div>
+</body>
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript">
+			$('input.recievedDate').daterangepicker({
+				"singleDatePicker": true,
+				"showDropdowns": true,
+				"timePicker": false,
+				"autoApply": true,
+				"linkedCalendars": false,
+				"alwaysShowCalendars": true,
+				maxDate : moment(),
+				"autoUpdateInput": false,
+				locale : {
+					
+					format:"DD/MM/YYYY"
+				}
+				/* "startDate": "12/22/2017",
+				"endDate": "12/28/2017",
+				"minDate": "12/01/2017" */
+			}, function(start, end, label) {
+				console.log("New date range selected: ' + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY') + ' (predefined range: ' + label + ')");
+			});
+			
+			$('input.currentDate').daterangepicker({
+				"singleDatePicker": true,
+				"showDropdowns": true,
+				"timePicker": false,
+				"autoApply": true,
+				"linkedCalendars": false,
+				"alwaysShowCalendars": true,
+				maxDate : moment(),
+				"autoUpdateInput": false,
+				locale : {
+					
+					format:"DD/MM/YYYY"
+				}
+				/* "startDate": "12/22/2017",
+				"endDate": "12/28/2017",
+				"minDate": "12/01/2017" */
+			}, function(start, end, label) {
+				console.log("New date range selected: ' + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY') + ' (predefined range: ' + label + ')");
+			});
+			
+			$('input.datePicker').on('apply.daterangepicker', function(ev, picker) {
+			    $(this).val(picker.startDate.format('DD/MM/YYYY'));
+
+			});
+
+			$('input.datePicker').on('cancel.daterangepicker', function(ev, picker) {
+			    $(this).val('');
+			});
+		</script>
+
+
+		<script type="text/javascript">
+
+/* Normal Validation */
+
+
+function submitDataSave(){
+	var addCurrent = parseInt($("#addCurrent").val());
+	
+	for(var i=0;i<=addCurrent;i++){
+		var rowMsg = " in row:"+(i+1);
+		//bootbox.alert(evnt);
+		var sEmail = $('#email').val();
+		// console.log($("#currentTypeMaster").val());
+		 if($("#currentTypeMaster"+i).val()==0){
+			 bootbox.alert("Select Current Type "+rowMsg);
+			 $("#currentTypeMaster"+i).focus();
+			 return false;
+		 }else if($("#currentNumber"+i).val()==""){
+			 bootbox.alert("Enter Current Number "+rowMsg);
+			 $("#currentNumber"+i).focus();
+			 return false;
+		 }else if($("#currentDate"+i).val()==""){
+			 bootbox.alert("Select Current Date "+rowMsg);
+			 $("#currentDate"+i).focus();
+			 return false;
+		 }else if($("#subject"+i).val()==""){
+	    	 bootbox.alert("Enter Subject Number "+rowMsg);
+			 $("#subject"+i).focus();
+			 return false;
+	     }else if($("#departmentMaster"+i).val()==0){
+			 bootbox.alert("Select Department "+rowMsg);
+			 $("#departmentMaster"+i).focus();
+			 return false;
+		 }else if($("#departmentMaster"+i).val()=="-1" && ( $("#otherDeptName"+i).val()== null || $("#otherDeptName"+i).val() =="" ) ){
+			 $("#otherDeptName"+i).show();
+			 bootbox.alert("Enter other department name "+rowMsg);
+			 $("#otherDeptName"+i).focus();
+			 return false;
+			 
+		 }else if($("#recievedDate"+i).val()==""){
+			 bootbox.alert("Select Received Date "+rowMsg);
+			 $("#recievedDate"+i).focus();
+			 return false;
+		 }else if($("#inwardRecievedFrom"+i).val()==""){
+			 bootbox.alert("Select Recieved From Officer "+rowMsg);
+			 $("#inwardRecievedFrom"+i).focus();
+			 return false;
+		 }else if($("#recievedMode"+i).val()==0){
+			 bootbox.alert("Select Received Mode "+rowMsg);
+			 $("#recievedMode"+i).focus();
+			 return false;
+		 }else if($("#recievedMode"+i).val()=="Email"  && ( $("#email"+i).val()== null || $("#email"+i).val() =="" ) ){
+			 $("#email"+i).show();
+			 bootbox.alert("Provide e-Mail "+rowMsg);
+			 $("#email"+i).focus();
+			 return false;
+		 }else if($("#inwardFile"+i).val()==null || $("#inwardFile"+i).val()==""){
+			 bootbox.alert("Upload document "+rowMsg);
+			 $("#inwardFile"+i).focus();
+			 return false;
+		 }
+	}
+	return true;
+	
+	
+}
+
+
+/**
+	INput not Allow spaces and tabs
+**/
+function TextToTrim(obj){
+    obj.value = obj.value.trim();
+}
+/*First time Special characters are not allowed   */
+function chkOnlySplChars(obj,msg){
+	var txtValue = obj.value.trim();
+	if(txtValue==""){
+		return false;
+	}
+	var flag = true;
+	var _x = 0;
+	for(var x=0;x<txtValue.length;x++ ){
+		var _charCode = txtValue.charCodeAt(x);
+		if( !((_charCode>=33 && _charCode<=64) || (_charCode>=91 && _charCode<=96)
+				|| (_charCode>=123 && _charCode<=126) )){
+			_x++;
+		}
+	}
+	if(_x==0){
+		console.log(" Special Charaters are not allowed "+msg);
+		obj.value="";
+		return false;
+	}else{
+		return true;
+	}
+}
+ 
+
+jQuery(document).ready(function() {
+	
+	
+	/*Convert textbox user entered text to uppercase */
+	jQuery('#inwardRecievedFrommmmmmmmmm').keyup(function() {
+		 
+		$(this).val($(this).val().toUpperCase());
+	});
+
+	/* Phone number validation */
+	 $("#mobileNumber").keydown(function (e) {
+		 
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+
+//   	      if ($("#mobileNumber").val().charAt(0)=="" || $("#mobileNumber").val().charAt(0)!="9" || $("#mobileNumber").val().charAt(0)!="8" || $("#mobileNumber").val().charAt(0)!="7")
+// //   	     if(isNaN($("#mobileNumber").val())||$("#mobileNumber").val().indexOf(" ")!=1)
+//           {
+//                console.log("it should start with 9 ");
+//                return false
+//           }
+
+
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#mobileNumber").val().length > 9) {
+	        	if($("#mobileNumber").val().length > 9)
+	        	{
+	        		$("#errmsgMobile").html("10 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsgMobile").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+	 /* Pin number validation */
+	 $("#pincode").keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#pincode").val().length > 5) {
+	        	if($("#pincode").val().length > 5)
+	        	{
+
+	        		$("#errmsg").html("6 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsg").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+	 
+	 /* fax number validation */
+	 $("#fax").keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#fax").val().length > 10) {
+	        	if($("#fax").val().length > 10)
+	        	{
+
+	        		$("#errmsgFax").html("11 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsgFax").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+
+
+ 
+	 	
+}); 
+
+</script>
+
+
+		<script type="text/javascript">
+	$(document).ready(function() {
+
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$('#sectionId').change(function() {
+			var sectionid = $(this).val();
+			$.ajax({
+				type : "POST",
+				url : "/efilesuite/editInward/" + sectionid,
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success : function(data) {
+					$("#postMaster").html(data);
+				},
+				error : function() {
+					bootbox.alert("Error");
+				}
+			});
+		})
+	});
+	
+	
+	function validateFiles(row_id) {
+		//bootbox.alert("4444");
+        //var modelname=$("#inputmodelname").val();
+        for (var i = 0; i < $("#inwardFile"+row_id).get(0).files.length; ++i) {
+            var file1=$("#inwardFile"+row_id).get(0).files[i].name;
+			//bootbox.alert("File NAme : "+file1);
+            if(file1){                        
+                var file_size=$("#inwardFile"+row_id).get(0).files[i].size;
+                if(file_size<5242880){
+                    var ext = file1.split('.').pop().toLowerCase();                            
+                    if($.inArray(ext,["pdf","png","jpg","jpeg"])===-1){
+                        bootbox.alert("Invalid file extension. File Name : "+file1);
+                        $("#inwardFile"+row_id).val('');
+                        return false;
+                    }
+
+                }else{
+                    bootbox.alert("File size should be less than 5 MB. File Name : "+file1);
+                    $("#inwardFile"+row_id).val('');
+                    return false;
+                }                        
+            }else{
+                bootbox.alert("Please upload file");         
+                return false;
+            }
+        }
+    };
+    
+function addCurrentRow(){
+	var addCurrentNo=parseInt($("#addCurrent").val()) + 1;
+	var CURRENT_HTML = "<tr id='current"+addCurrentNo+"'> "+
+	"	<td><span id='span_no"+addCurrentNo+"'>"+(addCurrentNo+1)+"</span></td> "+
+	"	<td> "+
+	"		<select name='efileInwardMasterDtos["+addCurrentNo+"].currentTypeMaster' id='currentTypeMaster"+addCurrentNo+"' "+
+	"			class='auto-complete-select  form-control_ custom-select custom-select-sm' "+
+	"			required> "+
+	"		</select> "+
+	"	</td> "+
+	"	<td> "+
+	"		<input type='text' name='efileInwardMasterDtos["+addCurrentNo+"].currentNumber' "+
+	"			 id='currentNumber"+addCurrentNo+"' "+
+	"			class=' form-control form-control-sm' required > "+
+	"	</td> "+
+	"	<td> "+
+	"		<input type='text' name='efileInwardMasterDtos["+addCurrentNo+"].currentDate' value='' "+
+	"			id='currentDate"+addCurrentNo+"' placeholder='DD/MM/YYYY' "+
+	"			class='calendarBg form-control form-control-sm datePicker currentDate' "+
+	"			required readonly='readonly' /> "+
+	"	</td> "+
+	"	<td> "+
+	"		<textarea id='subject"+addCurrentNo+"' "+
+	"			class='form-control form-control-sm' "+
+	"			name='efileInwardMasterDtos["+addCurrentNo+"].subject' "+
+	"			rows='2' required></textarea> "+
+	"	</td> "+
+	"	<td> "+
+	"		<select name='efileInwardMasterDtos["+addCurrentNo+"].departmentMaster' id='departmentMaster"+addCurrentNo+"' "+
+	"               onchange='showOthersDept(this,"+addCurrentNo+")' class='auto-complete-select form-control_ custom-select custom-select-sm' required> "+
+	"		</select> "+
+	"		 <input type='text' name='efileInwardMasterDtos["+addCurrentNo+"].otherDeptName' placeholder='Other Department Name' class='form-control form-control-sm' id='otherDeptName"+addCurrentNo+"' style='display:none' /> "+ 
+	"	</td> "+
+	"	<td> "+
+	"		<input type='text' "+
+	"			name='efileInwardMasterDtos["+addCurrentNo+"].recievedDate' value='' id='recievedDate"+addCurrentNo+"' "+
+	"			placeholder='DD/MM/YYYY' "+
+	"			class='calendarBg form-control form-control-sm datePicker recievedDate' "+
+	"			required readonly='readonly' /> "+
+	"	</td> "+
+	"	<td> "+
+	"		<textarea name='efileInwardMasterDtos["+addCurrentNo+"].inwardRecievedFrom' rows='2'  "+
+	"			id='inwardRecievedFrom"+addCurrentNo+"' "+
+	"			class='form-control form-control-sm latterUpperCase ' required></textarea> "+
+	"	</td> "+
+	"<td> "+
+	"	<select id='recievedMode"+addCurrentNo+"' name='efileInwardMasterDtos["+addCurrentNo+"].receivedMode' onchange='javascript:showEmail(this, "+addCurrentNo+");' class='custom-select custom-select-sm' style='width: 100%;' required> "+
+	"		<option value='0'>Select</option> "+
+	"		<option value='Email'>Email</option> "+
+	"		<option value='Hand'>Hand</option> "+
+	"		<option value='Post'>Post</option> "+
+	"	</select> "+
+	" <input type='email' name='efileInwardMasterDtos["+addCurrentNo+"].email' placeholder='e-Mail' class='form-control form-control-sm' id='email"+addCurrentNo+"' style='display: none' />"+
+	"</td> "+
+	"	<td> "+
+	"		<input type='file' name='efileInwardMasterDtos["+addCurrentNo+"].inwardFile' onchange='javascript:validateFiles("+addCurrentNo+");' "+
+	"			id='inwardFile"+addCurrentNo+"' class='form-control form-control-sm' "+
+	"			 required >  "+
+	"	</td> "+
+	"   <td><button type='button'  class='btn btn-sm btn-primary d-inline-block ml-auto mt-1'  id='deleteCurrent"+addCurrentNo+"' onclick='javascript:deleteCurrent("+addCurrentNo+");'><i class='fa fa-trash-o' ></i></button></td> "+
+	"</tr> ";
+	 
+	$("#tbodyId").append(CURRENT_HTML);
+	//auto complete
+	
+	    $('.auto-complete-select').select2();
+	
+	
+	var CURRENT_TYPE_LIST_HTML = $("#currentTypesList").html();
+	var DEPT_LIST_HTML = $("#departmentList").html();
+	
+	$("#currentTypeMaster"+addCurrentNo+"").html(CURRENT_TYPE_LIST_HTML);
+	$("#departmentMaster"+addCurrentNo+"").html(DEPT_LIST_HTML);
+	
+	$("#addCurrent").val(addCurrentNo);
+	//$(id+" option:selected").removeAttr("selected");
+	
+	$('input.recievedDate').daterangepicker({
+		"singleDatePicker": true,
+		"showDropdowns": true,
+		"timePicker": false,
+		"autoApply": true,
+		"linkedCalendars": false,
+		"alwaysShowCalendars": true,
+		maxDate : moment(),
+		"autoUpdateInput": false,
+		locale : {
+			
+			format:"DD/MM/YYYY"
+		}
+		/* "startDate": "12/22/2017",
+		"endDate": "12/28/2017",
+		"minDate": "12/01/2017" */
+	}, function(start, end, label) {
+		console.log("New date range selected: ' + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY') + ' (predefined range: ' + label + ')");
+	});
+	
+	$('input.currentDate').daterangepicker({
+		"singleDatePicker": true,
+		"showDropdowns": true,
+		"timePicker": false,
+		"autoApply": true,
+		"linkedCalendars": false,
+		"alwaysShowCalendars": true,
+		maxDate : moment(),
+		"autoUpdateInput": false,
+		locale : {
+			
+			format:"DD/MM/YYYY"
+		}
+		/* "startDate": "12/22/2017",
+		"endDate": "12/28/2017",
+		"minDate": "12/01/2017" */
+	}, function(start, end, label) {
+		console.log("New date range selected: ' + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY') + ' (predefined range: ' + label + ')");
+	});
+	
+	
+	$('input.datePicker').on('apply.daterangepicker', function(ev, picker) {
+	    $(this).val(picker.startDate.format('DD/MM/YYYY'));
+
+	});
+
+	$('input.datePicker').on('cancel.daterangepicker', function(ev, picker) {
+	    $(this).val('');
+	});
+	
+} 
+ 
+function deleteCurrent(row_id)
+{
+	var addCurrentNo=parseInt($("#addCurrent").val());
+	//bootbox.alert("addCurrentNo::"+addCurrentNo+"::row_id::"+row_id);
+	if(addCurrentNo==0)
+	{
+		//bootbox.alert("You cannot delete Current 1");
+	}
+	else{
+		var id="#current"+(row_id);
+		$(id).remove();
+		$("#addCurrent").val(addCurrentNo-1);
+		for(var i=row_id;i<addCurrentNo;i++)
+		{
+			//bootbox.alert("i:::"+i);
+			$('#span_no'+(i+1)).attr('id', 'span_no'+(i));
+			$('#span_no'+(i)).html(i+1);
+			
+			$('#currentTypeMaster'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].currentTypeMaster');
+			$('#currentTypeMaster'+(i+1)).attr('id', 'currentTypeMaster'+(i));
+			
+			$('#currentNumber'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].currentNumber');
+			$('#currentNumber'+(i+1)).attr('id', 'currentNumber'+(i));
+
+			$('#currentDate'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].currentDate');
+			$('#currentDate'+(i+1)).attr('id', 'currentDate'+(i));
+
+			$('#subject'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].subject');
+			$('#subject'+(i+1)).attr('id', 'subject'+(i));
+
+			$('#departmentMaster'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].departmentMaster');
+			$('#departmentMaster'+(i+1)).attr('onChange','showOthersDept(this,'+(i)+')');
+			$('#departmentMaster'+(i+1)).attr('id', 'departmentMaster'+(i));
+
+			$('#otherDeptName'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].otherDeptName'+(i));
+			$('#otherDeptName'+(i+1)).attr('id', 'otherDeptName'+(i));
+			
+			$('#recievedDate'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].recievedDate');
+			$('#recievedDate'+(i+1)).attr('id', 'recievedDate'+(i));
+
+			$('#inwardRecievedFrom'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].inwardRecievedFrom');
+			$('#inwardRecievedFrom'+(i+1)).attr('id', 'inwardRecievedFrom'+(i));
+			
+			$('#recievedMode'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].recievedMode');
+			$('#recievedMode'+(i+1)).attr('onChange','javascript:showEmail(this,'+(i)+')');
+			$('#recievedMode'+(i+1)).attr('id', 'recievedMode'+(i));
+
+			$('#email'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].email'+(i));
+			$('#email'+(i+1)).attr('id', 'email'+(i));
+			
+			$('#inwardFile'+(i+1)).attr('name', 'efileInwardMasterDtos['+(i)+'].inwardFile');
+			$('#inwardFile'+(i+1)).attr('onChange', "javascript:validateFiles("+i+");");
+			$('#inwardFile'+(i+1)).attr('id', 'inwardFile'+(i));
+
+			$('#deleteCurrent'+(i+1)).attr('onClick', 'javascript:deleteCurrent('+i+')');
+			$('#deleteCurrent'+(i+1)).attr('id', 'deleteCurrent'+(i)+'');
+
+			//row id
+			$('#current'+(i+1)).attr('id', 'current'+(i));
+			
+			
+		}
+	}
+}
+
+function showOthersDept(deptObj, index){
+	var val = deptObj.value;
+	//bootbox.alert("val::"+val+", index:"+index);
+	if(val == "-1")
+		$("#otherDeptName"+index).show();		
+	else{
+		$("#otherDeptName"+index).val("");
+		$("#otherDeptName"+index).hide();
+	}
+	
+} 
+
+
+function showEmail(modeObj, index){
+	var val = modeObj.value;
+	//bootbox.alert("val::"+val+", index:"+index);
+	if(val == "Email")
+		$("#email"+index).show();		
+	else{
+		$("#email"+index).val("");
+		$("#email"+index).hide();
+	}
+	
+} 
+
+$('.auto-complete-select').select2();
+</script>
+	</th:block>
+
+
+
+
+
+</html>

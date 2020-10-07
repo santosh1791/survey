@@ -1,0 +1,24 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> Create Service</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="serviceMasterForm" method="post" th:action="@{/serviceForm}"  th:object="${serviceMasterForm}"  autocomplete="off" >
+		<div class="row">
+			<!-- <div class="col-sm-12"> -->
+				
+				
+				<div class="form-group col-md-6">
+					<label for="servicename">Service Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control" name="servicename" id="servicename">
+					<div class="text-danger" th:if="${#fields.hasErrors('servicename')}" th:errors="*{servicename}">service name Error</div>
+				</div>
+				
+			<!-- </div> -->
+			
+
+		</div>
+	</form>
+</div>

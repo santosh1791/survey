@@ -1,0 +1,141 @@
+<th:block layout:fragment="styles">
+	<style type="text/css">
+ 
+		.redText{ color:red; }
+	</style>
+</th:block>
+
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> Inward Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+	<div class="card-body p-0 bg-white" _style="min-height: calc(100vh - 130px); width: 100%;">
+			<div class="table-responsive _px-3">
+				<div class="card-block bg-white py-4">
+					<div class="form-row" align="center">
+
+						<div class="col-lg-11 col-md-12" style="margin-left: 3%;">
+							<input type="hidden" name="inwardNumber" th:value="${inwardNumber}" />
+
+								<div style="background-color: #399eb7; padding: .5%;">
+									<h5 align="left" style="color: white;">Current Detail</h5>
+								</div>
+								<input type="hidden" th:value="${inwardNumber}"
+									name="inwardNumber">
+							<div class="table-responsive _px-3">
+								<table   class=" table compact table-bordered table-hover table-striped table-sm mb-0"
+									cellspacing="0" width="100%">
+
+									<div
+										th:each="inwardMaster : ${efileInwardMastersDtoTestEntity}">
+										<tr>
+											<th>Type</th>
+											<td th:text="${inwardMaster.currentTypeMaster.currentName}"></td>
+											<th>Number</th>
+											<td th:text="${inwardMaster.currentNumber}"></td>
+
+										</tr>
+										<tr>
+											<th>Department</th>
+											
+											<td th:if="${inwardMaster.departmentMaster}!=null" th:text="${inwardMaster.departmentMaster.departmentname}"></td>
+											<td th:if="${inwardMaster.departmentMaster}==null" th:text="${inwardMaster.otherDeptName}" >other</td>
+											<th>From Address</th>
+											<td th:text="${inwardMaster.currentRecievedAddress}"></td>
+										</tr>
+										<tr>
+											<th>Received Date</th>
+											<td th:text="${#temporals.format(inwardMaster.recievedDate,'dd/MM/yyyy')}"></td>
+											<th>Received Mode</th>
+											<td th:text="${inwardMaster.receivedMode}"></td>
+
+										</tr>
+										<tr>
+											
+											<th>Current Date</th>
+											<td th:text="${#temporals.format(inwardMaster.currentDate,'dd/MM/yyyy')}"></td>
+											<th>Current</th>
+											<td colspan="3">
+												<div th:if="${inwardMaster.uploadFile}==''">N/A</div>
+												<div th:if="${inwardMaster.uploadFile}!=''">
+													
+													<a target="_blank" th:href="@{'/efilesuite/inwardPreview/{inwardName}'(inwardName=${inwardMaster.uploadFile})}"  
+													style="color: black;">
+																	 <span><i class="mdi  mdi-eye"></i> Preview </span>
+																</a>
+													<!-- <span th:text="${inwardMaster.uploadFile}"></span> -->
+												</div>
+											</td>
+										</tr>
+										<tr>
+											
+											
+											<th>Subject</th>
+											<td colspan="3" th:text="${inwardMaster.subject}"></td>
+										</tr>
+									</div>
+
+
+								</table>
+
+								<div style="background-color: #399eb7; padding: .5%;">
+									<h5 align="left" style="color: white;">Current Sheet Track</h5>
+								</div>
+								<table
+									class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+									width="100%">
+
+									<thead>
+										<tr>
+											<th>S.No.</th>
+											<th>From Officer</th>
+											<th>To Officer</th>
+											<th>Sent On</th>
+											<!-- <th> status</th> -->
+											<!-- <th>Endorsement</th> -->
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											th:each="inwardTransactionDetails , sNo: ${inwardTransactionDetailsDatoEntity}">
+											<td th:text="${sNo.count}"></td>
+											<td>
+												<span th:if="${inwardTransactionDetails.postMasterFrom.employeeMaster} != null" >
+												<span  th:text="${inwardTransactionDetails.postMasterFrom.postname}"></span>
+													(<span th:text="${inwardTransactionDetails.postMasterFrom.employeeMaster.employeefirstname} " > </span>
+														<span th:text="${inwardTransactionDetails.postMasterFrom.employeeMaster.employeelastname} " > </span>)
+												</span>
+												
+												<span th:if="${inwardTransactionDetails.postMasterFrom.employeeMaster} == null" >
+													<span class="redText" th:text="${inwardTransactionDetails.postMasterFrom.postname}"></span>
+														<span class="redText">(N/A)</span>
+												</span>
+											
+											</td>
+											<td>
+												<span th:if="${inwardTransactionDetails.postMasterTo.employeeMaster} != null" >
+												<span  th:text="${inwardTransactionDetails.postMasterTo.postname}"></span>
+													(<span th:text="${inwardTransactionDetails.postMasterTo.employeeMaster.employeefirstname} " > </span>
+														<span th:text="${inwardTransactionDetails.postMasterTo.employeeMaster.employeelastname} " > </span>)
+												</span>
+												
+												<span th:if="${inwardTransactionDetails.postMasterTo.employeeMaster} == null" >
+													<span class="redText"  th:text="${inwardTransactionDetails.postMasterTo.postname}"></span>
+													<span class="redText">(N/A)</span>
+												</span>
+											</td>
+											<td
+												th:text="${#dates.format(inwardTransactionDetails.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+											
+											<!-- <td th:text="${inwardTransactionDetails.content}"></td> -->
+										</tr>
+									</tbody>
+								</table>
+								</div> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>

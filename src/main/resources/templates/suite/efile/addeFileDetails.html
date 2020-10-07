@@ -1,0 +1,265 @@
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i>eFile Details
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+
+<div class="card bg-transparent _mt-3 border-0">
+	<div class="card-body bg-transparent p-0">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card  bg-transparent p-0 border-0 mb-0" id="momContent">
+					<!-- <div class="card border-primary"> -->
+					<!--File Details  -->
+					<div id="accordion" role="tablist" class="d-none">
+						<div class="card bg-warning">
+							<div class="card-header p-0 eFile-accordion-header" role="tab"
+								id="headingOne">
+								<a class="py-1 px-2 btn-link d-block text-white "
+									data-toggle="collapse" href="#collapseOne" role="button"
+									aria-expanded="true" aria-controls="collapseOne">
+									<h5 class="mb-0">File Details</h5>
+								</a>
+							</div>
+							<div id="collapseOne"
+								class="card-body bg-white text-dark collapse show"
+								role="tabpanel" aria-labelledby="headingOne"
+								data-parent="#accordion">
+								<div class="box box-warning box-solid"
+									th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+									<div class="row">
+										<div class="col-3" align="center">
+											<h3 th:text="${notefileDetails.notefileNumber}"></h3>
+										</div>
+										<div class="col-6" align="left">
+											<h3 th:text="${notefileDetails.subject}"></h3>
+										</div>
+									</div>
+									<div class="row">
+										<!-- <div class="col-6">
+										 		<h5> File Initiator: <span th:text="${notefileDetails.presentOwner}"></span></h5>
+										 	</div> -->
+										<div class="col-12">
+											<span class="mailbox-read-time pull-right"> File
+												Initiator: <span th:text="${notefileDetails.presentOwner}"></span>
+											</span> <br /> <span class="mailbox-read-time pull-right"
+												th:text="${#dates.format(notefileDetails.createdDate,'dd/MM/yyyy HH:MM')}">
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!--File Details  Ends -->
+
+					<!-- <span th:text="${notefileAttachmentDetails}"></span> -->
+					<!--Attachments -->
+					<div id="accordionTwo" role="tablist" th:if="${notefileAttachmentDetails} == null "></div>
+					<div id="accordionTwo" role="tablist" class="d-none" th:if="${notefileAttachmentDetails} != null ">
+						<div class="card bg-success">
+							<div class="card-header p-0 eFile-accordion-header" role="tab"
+								id="headingTwo">
+
+								<a class="py-1 px-2 btn-link d-block  text-white"
+									data-toggle="collapse" href="#collapseTwo" role="button"
+									aria-expanded="true" aria-controls="collapseTwo">
+									<h5 class="mb-0">Attachments</h5>
+								</a>
+
+							</div>
+							<div id="collapseTwo" class="collapse show" role="tabpanel"
+								aria-labelledby="headingTwo" data-parent="#accordionTwo">
+								<div class="card-body bg-white">
+									<div class="box box-warning box-solid">
+										<div class="box-body">
+											<div class="row"
+												th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+												<div class="col-6">
+													<h6>
+														<span th:text="${sNo.count}"> </span> ) . <a
+															class="btn btn-link"
+															th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}"
+															style="color: black;"> <i class="fa fa-file"></i>&nbsp;
+															<span th:text="${attachemtnsDetails.attachmentFileName}"></span>
+														</a> <a class="btn btn-link  _btn-outline-primary"
+															th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${attachemtnsDetails.path} , orgFileName=${attachemtnsDetails.attachmentFileName})}"
+															style="color: black;"> <span><i
+																class="fa fa-download"></i>&nbsp; Download</span>
+														</a>
+
+													</h6>
+												</div>
+
+												<div class="col-6">
+													<span class="mailbox-read-time pull-right"
+														th:text="${#dates.format(attachemtnsDetails.createdDate,'dd/MM/yyyy HH:MM')}"></span>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--Attachments  Ends -->
+
+					<!--Notes -->
+					<div id="accordionThree"
+						class="card  card-accent-primary  mb-2  card-shadow"
+						role="tablist">
+
+						<div class="card-header  p-0 eFile-accordion-header collapsed"
+							id="notesHeader" data-toggle="collapse" href="#notesBody"
+							role="button" aria-expanded="true">
+							<a class="py-1 px-2 btn-link d-block mr-auto">
+								<h6 class="mb-0">
+									<i class="icon-docs"></i>&nbsp; Notes
+								</h6>
+							</a>
+
+
+						</div>
+
+						<div id="notesBody" class="collapse hide" role="tabpanel"
+							aria-labelledby="headingThree" data-parent="#accordionThree">
+							<div class="card-body bg-white text-dark p-2">
+								<div id="exampleAccordion" data-children=".item">
+									<div class="item"
+										th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+										<div th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 ">
+										</div>
+										<div th:if="${itrStatee.count} != ${notesSizeMinusOne}+1 ">
+											<a data-toggle="collapse" role="button" aria-expanded="true"
+												th:attr="href=@{#exampleAccordion}+${itrStatee.count} ,data-parent=exampleAccordion+${itrStatee.count} ,aria-controls=exampleAccordion+${itrStatee.count}">
+												Note : <span th:text="${itrStatee.count}"></span>
+											</a>
+										</div>
+										<!-- <span th:text="${itrStatee.count}"></span> == <span th:text="${notesSize}"></span> -->
+
+										<div th:if="${itrStatee.count} != ${notesSize} ">
+											<div th:attr="id=exampleAccordion+${itrStatee.count}"
+												class="collapse hide" role="tabpanel">
+												<p class="mb-3 text-dark"
+													th:text="${movementDetails.content}"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+
+
+					</div>
+					<!--Notes -->
+					<div id="accordionFour"
+						class="card card-accent-primary  mb-2  card-shadow" role="tablist">
+
+						<div class="card-header p-0 eFile-accordion-header"
+							id="latestNotesHeader" data-toggle="collapse"
+							href="#latestNotesBody" role="button" aria-expanded="true"
+							aria-controls="collapseFour">
+							<a class="py-1 px-2 btn-link d-block ">
+								<h6 class="mb-0">
+									<i class="icon-envelope-letter"></i>&nbsp; Latest Note
+								</h6>
+							</a>
+						</div>
+
+
+						<div id="latestNotesBody"
+							class="card-body bg-white collapse show p-2"
+							data-parent="#accordionFour">
+							<div id="exampleAccordion" data-children=".item">
+								<div class="item  text-dark"
+									th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+									<div th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 ">
+										<a data-toggle="collapse" role="button" aria-expanded="true"
+											th:attr="href=@{#exampleAccordion}+${itrStatee.count} ,data-parent=exampleAccordion+${itrStatee.count} ,aria-controls=exampleAccordion+${itrStatee.count}">
+											Notes : <span th:text="${itrStatee.count}"></span>
+										</a>
+										<!-- <span th:text="${itrStatee.count} !=  ${notesSizeMinusOne}+1 "></span> -->
+
+										<div th:attr="id=exampleAccordion+${itrStatee.count}"
+											class="collapse show  text-dark" role="tabpanel">
+											<p class="mb-3  text-dark"
+												th:utext="${movementDetails.content}"></p>
+										</div>
+									</div>
+
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<!--Notes  Ends -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="card-body p-0 bg-white" _style="min-height: calc(100vh - 130px); width: 100%;">
+			<div class="table-responsive _px-3">
+				<div class="card-block bg-white py-4">
+					<div class="form-row" align="center">
+						<div class="col-lg-11 col-md-12" style="margin-left: 3%;">
+								<div style="background-color: #399eb7; padding: .5%;">
+									<h5 align="left" style="color: white;">eFile Detail</h5>
+								</div>
+							<div class="table-responsive _px-3">
+								<table   class=" table compact table-bordered table-hover table-striped table-sm mb-0"
+									cellspacing="0" width="100%">
+
+									<span th:each="inwardMaster : ${notefileDetailsDTO}">
+										 
+									</span>
+
+
+								</table>
+
+								<div style="background-color: #399eb7; padding: .5%;">
+									<h5 align="left" style="color: white;">Current Sheet Track</h5>
+								</div>
+								<table
+									class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+									width="100%">
+
+									<thead>
+										<tr>
+											<th>S.No.</th>
+											<th>From Officer</th>
+											<th>Received Date</th>
+											<th>To Officer</th>
+											<th> status</th>
+											<th>Endorsement</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											th:each="inwardTransactionDetails , sNo: ${inwardTransactionDetailsDatoEntity}">
+											<td th:text="${sNo.count}"></td>
+											<td th:text="${inwardTransactionDetails.inwardFrom}"></td>
+											<td
+												th:text="${#dates.format(inwardTransactionDetails.createdDate,'dd/mm/yyyy')}"></td>
+											<td th:text="${inwardTransactionDetails.inwardTo}"></td>
+											<td th:text="${inwardTransactionDetails.status}"></td>
+											<td th:text="${inwardTransactionDetails.content}"></td>
+										</tr>
+									</tbody>
+								</table>
+								</div> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->

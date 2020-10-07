@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Add eFile</title>
+</th:block>
+
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="col-lg-12 col-xl-10 offset-xl-1">
+						<div class="card  card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+							<div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+								<h5 class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">eFile List</h5>
+								<button class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1" role="button" _value="Print" onclick="goBack()" ><i class="fa fa-chevron-left"></i>&nbsp; Back</button>
+							</div>
+							<div class="card-body p-0 bg-white"
+								_style="min-height: calc(100vh - 130px); width: 100%;">
+								<div class="table-responsive _px-3">
+									<div class="card-block bg-white py-4">
+									<form  method="post" class="custom-form _form-narrow _form-horizontal"
+										th:action="@{/efilesuite/addeFileToInward}"
+									 id="addEfile" >
+										<!-- th:action="@{'/efilesuite/attacheEfile/{notefileNumber}'(notefileNumber=${notefileNumber})}" -->
+										<div class="form-row" align="center">
+
+											<div class="col-lg-11 col-md-12" style="margin-left: 3%;">
+												<div class="table-responsive _px-3">
+													<input type="hidden" name="inwardNumber" th:value="${inwardNumber}">
+
+													<table id="addeFileListTable"
+														class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+														width="100%">
+
+														<thead class="table-primary">
+															<tr>
+																<th>#</th>
+																<th>Select</th>
+																<th>File Number</th>
+																<th>Created Date</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="addeFiles , sNo: ${addeFileLists}">
+																<td th:text="${sNo.count}"></td>
+																<td><input type="radio" autofocus="autofocus"
+																	name="notefileNumber" id="notefileNumber"
+																	th:value="${addeFiles.notefileNumber}"></td>
+																<td><a role="button" _class="btn btn-info"
+																	aria-pressed="false" data-toggle="modal"
+																	data-target="#commonModal" data-placement="top"
+																	th:attr="data-url=@{'/efilesuite/eFileDetails/{notefileNumber}'(notefileNumber=${addeFiles.id})}">
+																		<span th:text="${addeFiles.notefileNumber}"></span>
+																</a></td>
+																<td
+																	th:text="${#dates.format(addeFiles.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<div class="col-lg-11 col-md-12" _style="margin-left: 3%;">
+												<input type="submit" class="btn btn-primary"  value="Attach" onclick="return formValidations();">
+											</div>
+										</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<th:block layout:fragment="scripts">
+	<script>
+		$(document).ready(function() {
+
+			var table = $('#addeFileListTable').DataTable({
+
+				language : {
+
+					search : "_INPUT_",
+
+					searchPlaceholder : "Search..."
+
+				},
+
+				"dom" : "<'row'<'col-sm-4'f><'col-sm-8 text-right'lB>>",
+
+				responsive : false,
+
+				paging : false,
+
+				lengthChange : false,
+
+				columns : [
+
+				{ width : '5%',
+					targets : 0  },
+				{ width : '5%',
+					targets : 1 },
+				{ width : '40%',
+					targets : 2 },
+				{ width : '40%',
+					targets : 3 }
+
+				],
+
+				buttons : [
+
+				{
+
+					extend : 'copyHtml5',
+
+					text : '<i class="fa fa-files-o"></i>',
+
+					titleAttr : 'Copy'
+
+				},
+
+				{
+
+					extend : 'excelHtml5',
+
+					text : '<i class="fa fa-file-excel-o"></i>',
+
+					titleAttr : 'Excel'
+
+				},
+
+				{
+
+					extend : 'csvHtml5',
+
+					text : '<i class="fa fa-file-text-o"></i>',
+
+					titleAttr : 'CSV'
+
+				},
+
+				{
+
+					extend : 'pdfHtml5',
+
+					text : '<i class="fa fa-file-pdf-o"></i>',
+
+					titleAttr : 'PDF'
+
+				}
+
+				],
+
+				fixedHeader : {
+
+					header : true,
+
+					headerOffset : 48
+
+				}
+
+			});
+
+		});
+	</script>
+	<script type="text/javascript">
+	function formValidations(){
+		var isChecked = jQuery("input[name=notefileNumber]:checked").val();
+	     if(!isChecked){
+	         alert('Nothing Selected');
+// 	         jQuery("input[name=notefileNumber]:checked").focus();
+	         return false;
+	     }else{
+	         alert('You have selected :'+isChecked);
+	         return true;
+	     }
+	}
+	</script>
+</th:block>

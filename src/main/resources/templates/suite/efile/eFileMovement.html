@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>eFile Inbox</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+    z-index: 999;
+    border-top: 2px solid #3d70b2 !important;
+    color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+</style>
+</th:block>
+<!--
+<th:block th:fragment="page-head" class="page-head">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item"><a href="#">eFile</a>
+        </li>
+        <li class="breadcrumb-item active">Inbox</li>
+    </ol>
+</th:block> -->
+<body>
+
+	<div layout:fragment="content">
+        <ol class="breadcrumb pr-0 py-0 mb-2">
+            <!--<li class="breadcrumb-item"><i class="icon-home"></i><i class="fa fa-home"></i> </li>-->
+            <li class="breadcrumb-item"><i class="mdi mdi-file-document"></i>&nbsp;eFile </li>
+            <li class="breadcrumb-item active text-primary">Movement</li>
+            <li class="breadcrumb-menu">
+            </li>
+            <li class="breadcrumb-menu pr-3 ">
+                <div class="btn-group " role="group" aria-label="Basic example" th:if="${#authorization.expression('hasRole(''ROLE_EFILE_CREATE_FILE'')')}" >
+
+                    <button style="height: 35px;" type="button" class="btn bg-primary text-white" data-toggle="modal" data-target="#commonModal" _aria-haspopup="true"
+                            _aria-expanded="false"  data-placement="top" title="Create new eFile"
+                            th:attr="data-url=@{/efilesuite/createNoteFile}">
+                        <i class="mdi mdi-file-plus"></i><span class="icon-btn-text">&nbsp; Create</span></button>
+
+                    <!-- <button type="button" class="btn bg-transparent py-1 navbar-toggler aside-menu-toggler"><i class="icon-menu"></i></button>-->
+                </div>
+            </li>
+        </ol>
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="w-100">
+					<th:block th:replace="fragments/layout :: eFileTabs" >
+
+					</th:block>
+						<div class="card  bg-transparent mb-0 card-shadow ">
+                            <form class="custom-form " style="background:  white; border-bottom: 1px solid #3d6fb247;"
+                                method="post"
+								th:action="@{/efilesuite/fileMovementReport}"
+								th:object="${notefileDetailsDTO}" id="notefileDetailsDTO" >
+
+                                <section class="form-row py-1 border-bottom-1">
+
+                                    <div class="col-sm-10">
+                                        <div class="form-group form-row mb-0 ">
+
+                                            <label for="searchWord" class="col-form-label col-form-label-sm col-sm-1 text-center">Search : </label>
+                                            <!-- <div class="w-100"> -->
+                                            <input type="text" name="searchWord" class="form-control col-md-10" _class="form-control form-control-sm"
+												maxlength="100" id="searchWord"
+												placeholder="keywords,content & file number . . " />
+                                            <!-- </div> -->
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 text-left">
+                                        <div class="form-group mb-0">
+                                            <div class="w-100">
+                                                <button type="submit" value="Search" class="btn btn-sm btn-primary d-inline-block ml-auto"  >Search</button>
+                                                <button type="reset" value="Reset" class="btn btn-sm btn-outline-primary d-inline-block ml-auto"  >Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </section>
+                            </form>
+
+
+
+                            <div class="card-body py-0 bg-white">
+
+
+
+									<div class="table-responsive " >
+										<!-- <form method="post" class="custom-form form-horizontal"
+								th:action="@{/efilesuite/fileMovementReport}"
+								th:object="${notefileDetailsDTO}" id="notefileDetailsDTO"> -->
+								<!-- <div class="card-body">
+									<div class="form-group form-row">
+										<div class="col-md-2">
+											<label for="notefileCategoryMasterId"
+												class="col-form-label font-weight-bold">Search <span
+												style="color: red;">*</span></label>
+										</div>
+										<div class="col-md-10">
+											<input type="text" name="searchWord" class="form-control"
+												maxlength="100" id="searchWord"
+												placeholder="keywords,content & file number . . " />
+										</div>
+									</div>
+								</div> -->
+								<!-- <br><center>
+								<div class="form-group  col-md-6 mb-0 ">
+									<div class="form-row">
+									<label for="content" class="col-form-label col-md-2" _class="col-form-label col-form-label-md "><b>Searchssssssssss : </b></label>
+									<div class="w-100">
+										<input type="text" name="searchWord" class="form-control col-md-10" _class="form-control form-control-sm"
+												maxlength="100" id="searchWord"
+												placeholder="keywords,content & file number . . " />
+									</div>
+
+									</div>
+								</div>
+								</center>
+								<div class="form-group col-md-12 mb-0" align="center">
+									<div class="w-100">
+										<input type="submit" value="Search" class="btn btn-md btn-primary d-inline-block ml-auto mt-1"  />
+										<input type="reset" value="Reset" class="btn btn-md btn-outline-primary d-inline-block ml-auto mt-1"  />
+									</div>
+								</div> -->
+								<!-- <div class="card-body">
+												<div class="form-group form-row">
+													<div class="col-md-10" align="center">
+														<input type="submit" value="Search" class="btn btn-info"  />
+														<input type="reset" value="Reset" class="btn" />
+													</div>
+												</div>
+											</div> -->
+
+<!-- 								<div th:if="${noteFileMovementListCount} == false"  class="col-sm-15">-->
+									<th:block th:if="${#lists.size(notefileList) gt 0}">
+									<div class="card-body p-0 bg-white">
+										<div class="table-responsive">
+											<table border="1" id="eFileMovementFileTable"class="table table-bordered table-hover table-striped table-sm"
+											width="100%" cellspacing="0">
+												<thead  class="table-primary">
+													<tr>
+														<th>#</th>
+														<th>File Number</th>
+														<th>Initiator</th>
+														<th>Received By</th>
+														<th>Created Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="movements, iterStat : ${notefileList}">
+
+														<td><span th:text="${iterStat.count}"></span></td>
+														<td><a role="button" aria-pressed="false"
+															data-toggle="modal" data-target="#commonModal"
+															data-placement="top"
+															th:attr="data-url=@{'/efilesuite/filemovementReport/{currentNumber}'(currentNumber=${movements.id})}">
+																<p style="color: blue;" th:text="${movements.notefileNumber}"></p>
+														</a></td>
+														<td>
+															<span  th:text="${movements.efileInitiatorPostMaster.postname}"> </span>
+															<span  th:if="${movements.efileInitiatorPostMaster.employeeMaster}!=null">
+																(<span  th:text="${movements.efileInitiatorPostMaster.employeeMaster.employeefirstname}"> </span>
+																	<span  th:text="${movements.efileInitiatorPostMaster.employeeMaster.employeelastname}"> </span>)
+															</span>
+															<span  th:if="${movements.efileInitiatorPostMaster.employeeMaster} == null">
+															 ()
+															 </span>
+														</td>
+														<td>
+															<span  th:text="${movements.efileOwnerPostMaster.postname}"> </span>
+															<span  th:if="${movements.efileOwnerPostMaster.employeeMaster}!=null">
+																(<span  th:text="${movements.efileOwnerPostMaster.employeeMaster.employeefirstname}"> </span>
+																	<span  th:text="${movements.efileOwnerPostMaster.employeeMaster.employeelastname}"> </span>)
+															</span>
+															<span  th:if="${movements.efileOwnerPostMaster.employeeMaster} == null">
+															 ()
+															 </span>
+														</td>
+														<td th:text="${#dates.format(movements.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+													</tr>
+												</tbody>
+											</table>
+									</div>
+								</div>
+								</th:block>
+							<!-- </form> -->
+									</div>
+								<!-- table-responsive px-3-->
+							</div>
+							<!-- .card-block-->
+
+						</div>
+						<!--  main > .w-100 >.card -->
+
+					</div>
+					<!-- main > .w-100 -->
+				</div>
+				<!-- main > .row -->
+			</div>
+			<!-- main > .animated.fadeIn -->
+		</div>
+		<!-- main > .container-fluid -->
+
+	</div>
+	<!-- FRAGMENT: "content" -->
+
+
+	<th:block layout:fragment="scripts">
+        <script>
+
+			$(document).ready(function() {
+				var table = $('#eFileMovementFileTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+					{ width:'1%', targets: 0 },
+	                    { width: '20%', targets: 1 },
+	                   { width:'30%', targets: 2 },
+	                   { width: '30%', targets: 3, className: "px-1" },
+	                     { width: '20%', targets: 4, className: "px-1" }
+
+
+
+					],
+					order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+
+                $('table').on('click','.actionSwitch', function(e){
+                    var $this = $(this);
+                    var $input = $this.find('.switch-input');
+                    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+                    e.preventDefault();
+                    e.stopPropagation();
+                    bootbox.confirm({
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-outline-primary'
+                            }
+                        },
+                        callback: function (result) {
+                            var context = "[[@{/}]]";
+                            var isChecked = $input.prop("checked")
+                            var url = isChecked ? "disableEmployee" : "enableEmployee";
+                            var id = $this.data('id');
+                            console.log('This was logged in the callback: ' + result);
+                            if(result){
+                                $.get(context + url + '/' + id + '/' , function(){
+                                    $input.prop('checked',!isChecked);
+                                });
+                            }
+                        }
+                    });
+                });
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+			});
+
+			$("#eFileFileMovementboxLink").addClass("active");
+		</script>
+    </th:block>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<th:block layout:fragment="styles">
+
+	<style>
+@media ( min-width : 768px) {
+	.modal-lg {
+		max-width: 1200px;
+	}
+}
+</style>
+</th:block>
+
+
+<div class="modal-header">
+	<h5 class="modal-title">
+		<!-- <i class="fa fa-tasks"></i> -->
+		File Movement Details
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="col-sm modal-body">
+	<div class="row">
+		<div class="tab-content" style="width: 100%">
+			<div class="tab-pane active" id="info-tab" role="tabpanel">
+				<div
+					class="d-flex callout m-0 py-12 text-muted_ text-primary bg-light text-uppercase">
+					<small><b><i class="fa fa-file-o"></i>&nbsp; File
+							Details</b></small>
+				</div>
+				<div class="card p-2 pl-3 mb-0"
+					th:each="notefileDetails : ${notefileDetails}">
+					<div class="row">
+						<h5 class="font-weight-bold col-3"
+							th:text="${notefileDetails.notefileNumber}">
+							<!--1/GEN///2017-18 - AMC for 500KVA and 250KVA Generators-->
+						</h5>
+						<p th:text="${notefileDetails.subject}"></p>
+					</div>
+					<!-- <div class="row"> -->
+					<p>
+						<span class="avatar "> <img
+							src="../../../resources/img/avatars/8.jpg"
+							th:src="@{'/organizationIcon/{profilePicturePath1}'(profilePicturePath1=${postMaster.employeeMaster.photopath})}"
+							class="img-avatar" alt="">
+						</span>
+						<!--File Initiator:-->
+						<span th:if="${postMaster.employeeMaster} != null "> <span
+							th:text="${postMaster.employeeMaster.employeefirstname}"></span>&nbsp;&nbsp;
+							<span th:text="${postMaster.employeeMaster.employeelastname}"></span>&nbsp;
+						</span> <span th:if="${postMaster.employeeMaster} == null "> <span
+							class="redText">N/A</span>
+						</span> <span class="badge badge-info badge-pill  text-white"
+							th:text="${postMaster.postname}"> </span>
+					</p>
+					<!-- <span th:text="${postMasters.postname}"></span> (<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  <span th:text="${postMasters.employeeMaster.employeelastname}"></span> )&nbsp; <span class="badge badge-info badge-pill  text-white">Manager</span></p> -->
+
+					<small class="pull-right"><i
+						class="mdi mdi-18px mdi-calendar-clock "></i>&nbsp; <span
+						class="mailbox-read-time"
+						th:text="${#dates.format(notefileDetails.createdDate,'dd/MM/yyyy hh:mm a')}">
+					</span> </small>
+					<!-- </div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="tab-content" style="width: 100%">
+			<div class="tab-pane active" id="info-tab" role="tabpanel">
+				<div
+					class="d-flex callout m-0 py-12 text-muted_ text-primary bg-light text-uppercase">
+					<small><b><i class="mdi mdi-swap-horizontal"></i>&nbsp; Movement
+							Details </b></small>
+				</div>
+				<table border="1"
+					class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+					width="100%">
+					<thead>
+						<tr>
+
+							<th>#</th>
+							<th>From</th>
+							<th>To</th>
+							<th>Received on</th>
+							<th>Sent on</th>
+							<th>Duration</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr th:each="movements , sNo : ${fileMovementDetails}">
+
+							<td th:text="${sNo.count}"></td>
+
+							<td><span
+								th:text="${movements.fileMovementPostMasterFrom.postname}"></span>
+								<span
+								th:if="${movements.fileMovementPostMasterFrom.employeeMaster}!=null">
+									(<span
+									th:text="${movements.fileMovementPostMasterFrom.employeeMaster.employeefirstname}"></span>
+									<span
+									th:text="${movements.fileMovementPostMasterFrom.employeeMaster.employeelastname}"></span>)
+							</span> <span
+								th:if="${movements.fileMovementPostMasterFrom.employeeMaster}==null">()</span>
+							</td>
+
+							<td><span
+								th:text="${movements.fileMovementPostMasterTo.postname}"></span>
+								<span
+								th:if="${movements.fileMovementPostMasterTo.employeeMaster}!=null">
+									(<span
+									th:text="${movements.fileMovementPostMasterTo.employeeMaster.employeefirstname}"></span>
+									<span
+									th:text="${movements.fileMovementPostMasterTo.employeeMaster.employeelastname}"></span>)
+							</span> <span
+								th:if="${movements.fileMovementPostMasterTo.employeeMaster}==null">()</span>
+							</td>
+							<td th:text="${#dates.format(movements.entryDate,'dd/MM/yyyy hh:mm a')}"></td>
+							
+							<td th:text="${#dates.format(movements.lastModifiedDate,'dd/MM/yyyy hh:mm a')}"></td>
+							<td>
+							<!-- <h1 th:text="${days}"></h1> -->
+								<th:block th:each="duration, itrState: ${days}">
+									<th:block th:if="${sNo.count} == ${itrState.count}">
+										<span  th:text="${duration}"> </span>
+									</th:block>
+								</th:block>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>

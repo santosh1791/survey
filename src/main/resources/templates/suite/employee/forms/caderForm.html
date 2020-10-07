@@ -1,0 +1,33 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> Add Cadre</h5>
+	<font color="red"><p th:text="${fMessage}" ></p></font>
+	<font color="green"><p th:text="${sMessage}"  ></p></font>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="caderForm" method="POST"  class="custom-form" th:action="@{/caderForm}" th:object="${caderForm}"  autocomplete="off">
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		<div class="form-row">
+			<div class="form-group col-sm-12">
+				<label for="cadername" class="col-form-label col-form-label-sm">Cadre Name<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="cadername" id="cadername"
+					 maxlength="100" placeholder="Enter cadre name" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);"  required="required" >
+				<div class="text-danger" th:if="${#fields.hasErrors('cadername')}" th:errors="*{cadername}">cadreName Error</div>
+			</div>
+
+		</div>
+	</form>
+</div>

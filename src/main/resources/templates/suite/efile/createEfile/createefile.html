@@ -1,0 +1,427 @@
+<th:block layout:fragment="styles">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+</th:block>
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Create eFile
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+
+<style>
+.redText {
+	color: red;
+}
+
+#commonModal .modal-footer {
+	display: none;
+}
+
+.mce-wordcount {
+	padding: 0 35px;
+}
+
+.mce-flow-layout-item, .mce-path {
+	margin: 0 1rem;
+	padding: 0;
+}
+</style>
+<div class="card card-accent-primary modal-form mb-0">
+
+
+	<!-- <form    enctype="multipart/form-data" method="get"> -->
+	<form method="post" class="custom-form" name="notefileDetailsDTO"
+		th:action="@{/efilesuite/creatingEfile}"
+		th:object="${notefileDetailsDTO}" enctype="multipart/form-data"
+		id="notefileDetailsDTO">
+		<!-- <form method="post" th:action="@{/efilesuite/creatingEfile}" th:object="${notefileDetailsDTO}" enctype="multipart/form-data" id="notefileDetailsDTO"> -->
+		<div class="card-header">
+
+
+			<h5 class="mb-0  " style="font-weight: 400 !important;"
+				align="center">
+				Create eFile ( Inward Number : <span th:text="${inwardNumber}"></span>
+				)
+			</h5>
+			<input type="hidden" name="notefileNumber" value="null"> <input
+				type="hidden" name="inwardNumber" th:value="${inwardNumber}">
+
+
+		</div>
+
+		<div class="card-body">
+			<div class="form-group form-row">
+				<div class="col-md-2">
+					<label for="notefileCategoryMasterId"
+						class="col-form-label font-weight-bold">Category <span
+						style="color: red;">*</span></label>
+				</div>
+				<div class="col-md-10">
+					<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+					<select class="custom-select" name="notefileCategoryMasterId"
+						id="notefileCategoryMasterId" required>
+						<option value="0">select category</option>
+						<option th:each="category: ${categoryList}"
+							th:value="${category.id}" th:text="${category.categoryName}"></option>
+					</select>
+					<!-- <div class="text-danger"
+														th:if="${#fields.hasErrors('notefileCategoryMasterId')}"
+														th:errors="*{notefileCategoryMasterId}">Current Type Error</div> -->
+				</div>
+			</div>
+
+			<div class="form-group form-row">
+				<div class="col-md-2">
+					<label for="subject" class="col-form-label font-weight-bold">Subject
+						<span style="color: red;">*</span>
+					</label>
+				</div>
+
+				<div class="col-md-10">
+					<input type="text" name="subject" class="form-control" id="subject"
+						placeholder="Enter Subject " required />
+				</div>
+				<!-- <div class="text-danger"
+                                                            th:if="${#fields.hasErrors('subject')}"
+                                                            th:errors="*{subject}">Current Type Error</div> -->
+
+			</div>
+
+			<div class="form-group form-row">
+				<div class="col-md-2">
+					<label for="keywords" class="col-form-label font-weight-bold">Keywords
+						<span style="color: red;">*</span>
+					</label>
+				</div>
+				<div class="col-md-10">
+					<input type="text" name="keywords" class="form-control"
+						id="keywords" placeholder="Enter Keywords " />
+				</div>
+			</div>
+
+			<div class="form-group form-row">
+
+				<div class="form-group col-md-12 mb-0">
+					<label for="content" class="col-form-label font-weight-bold">Description<span
+						style="color: red;">*</span></label>
+					<!--</div>
+                                            <div class="form-group col-md-12 mb-0">-->
+					<div class="w-100">
+						<textarea rows="5" cols="51" class="form-control" id="content"
+							name="content" placeholder="Enter description"></textarea>
+
+					</div>
+				</div>
+			</div>
+
+			<!-- <div class="form-group form-row">
+				<div class="col-lg-2 ">
+					<label for="attachments" class="col-form-label font-weight-bold">Attachments
+						<span style="color: red;">*</span>
+					</label>
+				</div>
+				<div class="col-md-10">
+
+					<input type="file" class="form-control-file" id="attachments"
+						multiple="multiple" name="attachments" required  onchange="javascript:validateFiles();"/>
+					<figcaption class="figure-caption" style="color: #fd1414;">
+						<b>You can select multiple files</b>
+					</figcaption>
+					<strong class="help-text text-muted d-inline-block"><span
+						class="text-info">You can select multiple files. (Supported Formats :jpg, jpeg, png, pdf, doc, docx, xls, xlsx )</span> </strong>
+
+				</div>
+			</div> -->
+			<div class="form-group form-row">
+				<div class="col-lg-2 ">
+					<label class="col-form-label col-form-label-sm"
+						for="uploadFile"> Attachments <span
+						class="red">*</span>
+					</label>
+				</div>
+				<div class="col-md-10">
+				 	<input type="file" name="attachments"  value=""  onchange="javascript:validateFiles();"
+						id="attachments" class="form-control form-control-sm"
+						style="height: 65px;" multiple="multiple" required> <small
+						style="position: absolute; bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"
+						class="help-text text-muted d-inline-block">You can select multiple files.(Supported Formats :jpg, jpeg, png, pdf, doc, docx, xls, xlsx )</small>
+				</div>
+			</div>
+
+
+
+
+			<div class="form-group form-row">
+				<div class="col-lg-2 ">
+					<label for="attachments" class="col-form-label"
+						style="text-align: left;">Send To <span
+						style="color: red;">*</span></label>
+				</div>
+				<div class="col-lg-10" align="center">
+					<div id="sendto">
+						<select class="custom-select auto-cmoplte-select"
+							name="efileOwnerPostMaster" id="posts" required>
+							<!--<option value="0">--Select--</option>
+							 <option th:each="postsList : ${postsMasterList}"
+								th:text="${postsList.postname}" th:value="${postsList.id}"></option> -->
+							<option value="0">--Select--</option>
+							<span th:each="postsList : ${postsMasterList}"> <span
+								th:if="${postsList.employeeMaster} != null">
+									<option th:value="${postsList.id}"><span
+											th:text="${postsList.employeeMaster.employeefirstname}"></span>
+										<span th:text="${postsList.employeeMaster.employeelastname}"></span>
+										<span th:text="${postsList.postname}"></span> <span
+											th:if="${postsList.sectionMaster}!=null"> <span
+											th:text="${postsList.sectionMaster.sectionname}"></span>
+										</span> <span th:if="${postsList.sectionMaster}==null"> </span> <span
+											th:text="${postsList.officeMaster.officename}"></span>
+									</option>
+							</span> <span th:if="${postsList.employeeMaster} == null">
+									<option class="redText" th:value="${postsList.id}"><span
+											th:text="${postsList.postname}"></span> <span
+											th:if="${postsList.sectionMaster}!=null"> <span
+											th:text="${postsList.sectionMaster.sectionname}"></span>
+										</span> <span th:if="${postsList.sectionMaster}==null"> </span> <span
+											th:text="${postsList.officeMaster.officename}"></span>
+									</option>
+							</span>
+						</span>
+						</select> <small class="help-text text-muted d-inline-block">
+							<span class="text-info">EmployeeName &nbsp; Post &nbsp; Section &nbsp; Office</span></small>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- card-body -->
+		<!-- <div class="card-footer py-3">
+			<div class="form-group row mb-0">
+				<div class="col-lg-12" align="center">
+					<button type="submit" name="save" value="Save"
+						class="btn btn-primary"
+						onclick="javascript:return formValidation();">Save</button>
+
+					<input type="submit" name="send" value="Send"
+												class="btn btn-info" />
+				</div>
+			</div>
+		</div> -->
+		<div class="card-footer">
+			<div class="form-group row mb-0">
+				<div class="col-md-12 text-right">
+					<button type="submit" name="save" value="Save"
+						class="btn btn-outline-primary mr-2"
+						onclick="javascript:return formValidationSave();">
+						<i class="fa fa-save"></i>&nbsp; Save
+					</button>
+
+					<button type="submit" name="send" value="Send"
+						class="btn btn-primary"
+						onclick="javascript:return formValidation();">
+						<i class="icon-paper-plane"></i>&nbsp; Send
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<!--<style>
+        #modal-blank .modal-footer{
+            display: none;
+        }
+    </style>-->
+    
+   <th:block layout:fragment="script-links">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>  
+    
+<script type="text/javascript">
+
+//In your Javascript (external .js resource or <script> tag)
+$(document).ready(function() {
+    $('.auto-cmoplte-select').select2({
+    	dropdownParent: $('#sendto'),
+        templateResult: function(state) {
+            return state.text;
+        }
+    });
+});
+
+
+	function formValidation() {
+		if ($("#notefileCategoryMasterId").val() == 0) {
+			alert("please select category");
+			$("#notefileCategoryMasterId").focus();
+			return false;
+		} else if ($("#subject").val() == "") {
+			alert("Please enter subject");
+			$("#subject").focus();
+			return false;
+		} else if ($("#keywords").val() == "") {
+			alert("Please enter keywords");
+			$("#keywords").focus();
+			return false;
+		} /*else if (tinyMCE.activeEditor.getContent() == ""
+				|| tinyMCE.activeEditor.getContent() == null) {
+			alert("Please enter content");
+			//$("#content").focus();
+			return false;
+		}  else if ($("#attachments").val() == ""
+				|| $("#attachments").val() == null) {
+			alert("Please select file");
+			$("#attachments").focus();
+			return false;
+		} */ else if ($("#posts").val() == 0) {
+			alert("Please select Recipient");
+			$("#posts").focus();
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+	function formValidationSave() {
+		if ($("#notefileCategoryMasterId").val() == 0) {
+			alert("please select category");
+			$("#notefileCategoryMasterId").focus();
+			return false;
+		} else if ($("#subject").val() == "") {
+			alert("Please enter subject");
+			$("#subject").focus();
+			return false;
+		} else if ($("#keywords").val() == "") {
+			alert("Please enter keywords");
+			$("#keywords").focus();
+			return false;
+		}else {
+			return true;
+		}
+
+	}
+</script>
+<script>
+	jQuery(document).ready(function() {
+						//File Validation
+						/* $('#attachments')
+								.change(
+										function() {
+											var originalfiles = $("#attachments");
+											var fileLength = originalfiles[0].files.length; // get length
+											var file = originalfiles[0].files;
+
+											var exts = [ 'jpg' , 'png' , 'jpeg' , 'pdf', 'doc', 'docx', 'txt', "xls", "xlsx" ];
+											// first check if file field has any value
+											if (fileLength > 0) {
+												for (var i = 0; i < fileLength; i++) {
+													// split file name at dot
+													var get_ext = file[i].name
+															.split('.');
+													// reverse name to check extension
+													get_ext = get_ext.reverse();
+													// check file type is valid as given in 'exts' array
+													if ($.inArray(get_ext[0]
+															.toLowerCase(),
+															exts) > -1) {
+														$("#filaNames")
+																.html(
+																		"<li>"
+																				+ file[i].name
+																				+ "</li>");
+													} else {
+														alert("Please Upload .jpg , .png , .jpeg , .pdf, doc, docx, xls, xlsx files only");
+														$("#attachments").val(
+																'');
+													}
+												}
+											}
+
+										}); */
+										
+										
+				
+					});
+	
+	function validateFiles() {
+		//alert("4444");
+        //var modelname=$("#inputmodelname").val();
+        for (var i = 0; i < $("#attachments").get(0).files.length; ++i) {
+            var file1=$("#attachments").get(0).files[i].name;
+			//alert("File NAme : "+file1);
+            if(file1){                        
+                var file_size=$("#attachments").get(0).files[i].size;
+                if(file_size<5242880){
+                    var ext = file1.split('.').pop().toLowerCase();                            
+                    if($.inArray(ext,["pdf","PDF","png","jpg","jpeg","gif","xls","xlsx", "doc","docx"])===-1){
+                        alert("Invalid file extension. File Name : "+file1);
+                        $("#attachments").val('');
+                        return false;
+                    }
+
+                }else{
+                    alert("File size should be less than 5 MB. File Name : "+file1);
+                    $("#attachments").val('');
+                    return false;
+                }                        
+            }else{
+                alert("Please upload file");         
+                return false;
+            }
+        }
+    };		
+	
+	
+	//jQuery(document).ready(function() {
+	tinymce.init({
+
+		selector: '#content',
+                    menubar: false,
+		branding: false,
+
+		height: 100,
+
+		max_height: 400,
+
+		theme: 'modern',
+
+		toolbar: false,
+                    toolbar_items_size: 'small',
+                    plugins: ['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace wordcount visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality','emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'],
+
+                    toolbar1: 'insert | undo redo |  styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons | fullscreen | table',
+
+		image_advtab: true,
+
+		templates: [{
+
+				title: 'Test template 1',
+
+				content: 'Test 1'
+
+			},
+
+			{
+
+				title: 'Test template 2',
+
+				content: 'Test 2'
+
+			}
+
+		],
+
+		content_css: [
+
+
+		]
+
+	});
+
+
+</script>
+
+
+
+</th:block>

@@ -1,0 +1,309 @@
+// JDL definition for application 'pms' generated with command 'jhipster export-jdl'
+
+entity UserExtra (user_extra) {
+  notificationsEnabled Boolean,
+  notificationsFilter Integer,
+  language String maxlength(5),
+  token String maxlength(255),
+  lockExpirationDate ZonedDateTime,
+  failedLoginAttempts Integer,
+  projectAdmin Boolean,
+  role String maxlength(50),
+  apiaccesstoken String maxlength(255)
+}
+entity UserNotification (user_notification)
+entity Options (options) {
+  name String required maxlength(100),
+  value String
+}
+entity Swimlane (swimlane) {
+  name String maxlength(255),
+  description String,
+  position Integer,
+  active Boolean
+}
+entity Project (project) {
+  identifier String maxlength(50),
+  name String maxlength(255),
+  description String,
+  active Boolean,
+  accessPublic Boolean,
+  accessPrivate Boolean,
+  everybodyAllowed Boolean,
+  token String maxlength(255),
+  startDate ZonedDateTime,
+  endDate ZonedDateTime,
+  priorityDefault Integer,
+  priorityStart Integer,
+  priorityEnd Integer
+}
+entity ProjectFile (project_file) {
+  name String maxlength(255),
+  path String maxlength(255),
+  image Boolean,
+  size Integer
+}
+entity ProjectUser (project_user) {
+  role String maxlength(50)
+}
+entity ProjectCategory (project_category) {
+  name String maxlength(255),
+  description String
+}
+entity ProjectActivity (project_activity)
+entity ProjectDailyStats (project_daily_stats) {
+  day String maxlength(10),
+  averageLeadTime Integer,
+  averageCycleTime Integer
+}
+entity ProjectDailyQueueStats (project_daily_queue_stats) {
+  day String maxlength(10),
+  total Integer,
+  score Integer
+}
+entity Queue (queue) {
+  title String maxlength(255),
+  description String,
+  position Integer,
+  taskLimit Integer,
+  hideInDashboard Boolean
+}
+entity Task (task) {
+  title String maxlength(255),
+  description String,
+  priority Integer,
+  color String,
+  position Integer,
+  active Boolean,
+  score Integer,
+  reference String maxlength(255),
+  dateCompleted ZonedDateTime,
+  dateDue ZonedDateTime,
+  dateStarted ZonedDateTime,
+  dateMoved ZonedDateTime,
+  timeEstimated Float,
+  timeSpent Float
+}
+entity Subtask (subtask) {
+  title String maxlength(255),
+  status Integer,
+  position Integer,
+  timeEstimated Float,
+  timeSpent Float
+}
+entity SubtaskTimeTracking (subtask_time_tracking) {
+  start Integer,
+  end Integer,
+  timeSpent Float
+}
+entity TaskFile (task_file) {
+  name String maxlength(255),
+  path String maxlength(255),
+  image Boolean,
+  size Integer
+}
+entity TaskTransition (task_transition)
+entity Comment (comment) {
+  comment String,
+  reference String maxlength(255)
+}
+entity Link (link)
+entity TaskLink (task_link)
+entity Action (action)
+entity ActionParam (action_param)
+
+relationship OneToOne {
+  UserExtra{user} to User,
+  EmployeeMaster{postMaster} to PostMaster{employeeMaster},
+  EmployeeMaster{rolesMaster} to RolesMaster{employeeMaster},
+  EmployeeMaster{user} to User{employeeMaster}
+  
+}
+relationship ManyToOne {
+  UserNotification{user} to User,
+  UserNotification{project} to Project,
+  Swimlane{project} to Project,
+  Project{owner} to User,
+  ProjectFile{project} to Project,
+  ProjectUser{user} to User,
+  ProjectUser{project} to Project,
+  ProjectCategory{project} to Project,
+  ProjectDailyStats{project} to Project,
+  ProjectDailyQueueStats{project} to Project,
+  ProjectDailyQueueStats{queue} to Queue,
+  Queue{project} to Project,
+  Task{project} to Project,
+  Task{queue} to Queue,
+  Task{owner} to User,
+  Task{creator} to User,
+  Task{category} to ProjectCategory,
+  Task{swimlane} to Swimlane,
+  Subtask{task} to Task,
+  Subtask{user} to User,
+  SubtaskTimeTracking{subTask} to Subtask,
+  SubtaskTimeTracking{user} to User,
+  TaskFile{task} to Task,
+  TaskFile{user} to User,
+  Comment{task} to Task,
+  Comment{user} to User
+   
+}
+relationship ManyToMany{
+	
+	RolesMaster{serviceMaster} to ServiceMaster{rolesMaster}
+	
+	
+}
+relationship OneToMany{
+    OfficeMaster{postMaster} to PostMaster{officeMaster},
+	OfficeMaster{employeeMaster} to EmployeeMaster{officeMaster},
+	
+	RolesMaster{postMaster} to PostMaster{rolesMaster},
+	
+	StateMaster{districtMaster} to DistrictMaster{stateMaster},
+	StateMaster{mandalMaster} to MandalMaster{stateMaster},
+	StateMaster{VillageMaster} to VillageMaster{stateMaster},
+	DistrictMaster{mandalMaster} to MandalMaster{districtMaster},
+	DistrictMaster{villageMaster} to VillageMaster{districtMaster},
+	MandalMaster{villageMaster} to VillageMaster{mandalMaster},
+	
+	StateMaster{departmentMaster} to DepartmentMaster{stateMaster},
+	DepartmentMaster{hODMaster} to HODMaster{departmentMaster},
+	
+	
+	StateMaster{officeMaster} to OfficeMaster{stateMaster},
+	DepartmentMaster{officeMaster} to OfficeMaster{DepartmentMaster},
+	
+	HODMaster {officeMaster} to OfficeMaster{hODMaster},
+	DistrictMaster{officeMaster} to OfficeMaster{districtMaster},
+	MandalMaster{officeMaster} to OfficeMaster{mandalMaster},
+	VillageMaster{officeMaster} to OfficeMaster{villageMaster},
+	
+	CaderMaster {postMaster} to  PostMaster{caderMaster}
+}
+
+entity  CaderMaster(cader_mst) {
+  cader_name String maxlength(255)  
+}
+
+entity  RolesMaster(role_mst) {
+  role_name String maxlength(255),
+  is_active Boolean
+  
+}
+
+entity PostMaster(post_mst){
+  post_name String maxlength(255),
+  superior_post_id Integer
+}
+entity ServiceMaster(service_mst){
+  service_name String maxlength(255),
+  service_url String maxlength(255),
+  is_active Boolean,
+  parent_service_id Integer,
+  display_order Integer,
+  service_description String maxlength(255)
+}
+entity OfficeMaster(office_mst){
+  
+  
+  office_name  String maxlength(255),
+  office_short_name String maxlength(255),
+  office_address String maxlength(500),
+  office_phno Integer,
+  office_fax Integer,
+  office_email String maxlength(255)
+}
+
+
+entity EmployeeMaster(employee_mst)
+{
+  employee_id Integer,
+  employee_first_name  String maxlength(255),
+  employee_last_name  String maxlength(255),
+  employee_middle_name  String maxlength(255),
+  father_name  String maxlength(255),
+  mother_name  String maxlength(255),
+  gender  String maxlength(255),
+  dob Instant,
+  phone_number Long,
+  alternate_phone_number Long,
+  employee_email String maxlength(255),
+  employee_present_address String maxlength(500),
+  employee_permanent_address String maxlength(500),
+  photo_path String maxlength(255),
+  is_married Boolean,
+  aadhar_number Long,
+  pan_number String maxlength(10),
+  passport String maxlength(50),
+  mother_tongue String maxlength(255),
+  bloog_group String maxlength(50),
+  identity_mark_one String maxlength(255),
+  identity_mark_two String maxlength(255),
+  physically_handicapped Boolean,
+  doj Instant,
+  gross_salary Double,
+  previous_experience Float,
+  suspension_date Instant,
+  is_active Boolean,
+  contract_type String maxlength(255)
+}
+
+
+
+entity StateMaster(state_mst)
+{
+ state_id Integer,
+ state_name String,
+ state_short_name String,
+ is_active Boolean
+}
+entity DepartmentMaster(department_mst)
+{
+ department_id Integer,
+ department_name String,
+ department_short_name String,
+ is_active Boolean
+}
+entity HODMaster(hod_mst)
+{
+ hod_id Integer,
+ hod_name String,
+ hod_short_name String,
+ is_active Boolean
+}
+entity DistrictMaster(district_mst)
+{
+ district_id Integer,
+ district_name String,
+ district_short_name String,
+ is_active Boolean
+}
+
+entity MandalMaster(mandal_mst)
+{
+ mandal_id Integer,
+ mandal_name String,
+ mandal_short_name String,
+ is_active Boolean
+}
+
+entity CityMaster(city_mst)
+{
+ city_id Integer,
+ city_name String,
+ city_short_name String,
+ is_active Boolean
+}
+
+entity VillageMaster(village_mst)
+{
+ village_id Integer,
+ village_name String,
+ village_short_name String,
+ is_active Boolean
+}
+
+entity  DesignationMaster(designation_mst) {
+  designation_name String maxlength(255)  
+}

@@ -1,0 +1,76 @@
+body {
+   /*background-color: rgba(86, 61, 124, 0.11);*/
+	background: #B85BA6;
+	/*background: -moz-linear-gradient(246.32deg, #f3ab86 0, #b85ba6 100%);
+	background: -webkit-linear-gradient(246.32deg, #f3ab86 0, #b85ba6 100%);*/
+	background: linear-gradient(246.32deg, rgba(94, 94, 174, 0.1) 0, rgba(184, 91, 166, 0.1) 100%);
+}
+
+.app-header.navbar, .app-header.navbar .navbar-brand {
+        /*background-color: #563d7c;!important;*/
+
+	    background: #B85BA6;
+    background: linear-gradient(67deg, #5e5eae 0, #b85ba6 97%);
+
+
+}
+
+.ogr_name span {
+    font-weight: bold;
+    color: #fff;
+    font-size: 20px;
+}
+
+.sidebar {
+    /*background: #006824;*/
+}
+
+.logger-name {
+    color:  #fff;
+}
+footer.app-footer   {
+    /*background-color: rgb(1, 81, 28)!important;*/
+}
+
+footer.app-footer  h6.text-primary, footer.app-footer .text-primary  {
+   /* color: #fff!important;*/
+        font-weight: 500!important;
+}
+
+.btn.btn-primary {
+    color: rgba(255,255,255,0.9)!important;
+    background-color: #7e57c2!important;
+    border-color: #7e57c2!important;
+}
+.btn.bg-primary {
+background-color: #7e57c2!important;
+}
+
+.card-accent-primary {
+    border-top-width: 2px;
+    border-top-color: #7e57c2!important;
+}
+
+.table-primary, .table-primary>td, .table-primary>th {
+    background-color: #755dac36;
+}
+
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active, .border-top-warning.active {
+    font-weight: bold;
+    position: relative;
+    z-index: 999;
+    border-top: 2px solid #7d57c2 !important;
+    color: #7d57c2 !important;
+}
+
+.eFile-tabs .nav-link.active .badge.badge-secondary {
+    background: #7d57c2;
+}
+.app-header.navbar, .app-header.navbar .navbar-brand {
+    border-bottom: 0px solid #c2cfd6;
+}
+
+.login-info-wrapper:parent {
+    border-left: 0px solid white!important;
+}

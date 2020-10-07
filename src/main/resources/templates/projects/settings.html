@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="../../../resources/css/virtuoMain.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/virtuoMain.min.css}" />
+
+	<!--<link rel="stylesheet" type="text/css" href="../../../resources/vendors/ganttView/lib/jquery-ui-1.8.4.css" th:href="@{/resources/vendors/ganttView/lib/jquery-ui-1.8.4.css}" />-->
+
+
+
+
+	<link href="../../../resources/css/shubCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/shubCustom.css}" />
+</head>
+<style>
+	body {
+		font-family: 'Roboto'!important;
+		font-weight: 300!important;
+		overflow: hidden;
+	}
+	
+	a {
+		font-weight: 300;
+	}
+	/*
+	.app-body .main {
+		flex: 1;
+		overflow: auto;
+	}
+*/
+	
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 300;
+	}
+	
+	label.form-control-label.bmd-label-static {
+		position: static;
+	}
+	
+	.bmd-form-group.is-filled label.bmd-label-floating,
+	{
+		opacity: 1;
+		color: #757575;
+	}
+	
+	.bmd-form-group.is-focused label.bmd-label-floating,
+	{
+		opacity: 1;
+		color: #009688;
+	}
+	
+	.bmd-form-group.is-filled label.bmd-label-floating {
+		/* .bmd-form-group.is-focused label.bmd-label-floating*/
+		opacity: 0.9;
+		color: #757575!important;
+	}
+	
+	.form-control-label.bmd-label-static {
+		color: #757575;
+	}
+	
+	.opt-color {
+		color: #757575!important;
+	}
+	
+	.breadcrumb {
+		padding: 0.3rem 1rem;
+	}
+</style>
+
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div th:replace="fragments/layout :: header"></div>
+
+	<div class="app-body">
+		<div th:replace="fragments/layout :: sidebar_left"></div>
+
+		<main class="main">
+
+			<!-- Breadcrumb : thymeleaf -->
+			<!--<div th:replace="fragments/layout :: breadcrumb"></div>-->
+			<!-- Breadcrumb -->
+			<ol class="breadcrumb mb-3">
+				<li class="breadcrumb-item">Home</li>
+				<li class="breadcrumb-item"><a href="#">Admin</a>
+				</li>
+				<li class="breadcrumb-item active">Project</li>
+
+			</ol>
+
+
+			<!--			<h1 class="tab_title text-muted"><i class="icon-speedometer"></i> Dashboard</h1>-->
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+					<div class="row">
+					<div class="col-sm-3">
+					<div class="card w-100">
+							<div class="card-header">
+								<p class="mb-0"> Setting Menu</p>
+							</div>
+							<div class="card-block p-0">
+								<ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Summary</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Edit Project</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Notifications</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Columns</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Categories</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Custom roles</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Close this project</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Delete this project</a>
+  </li>
+</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-9">
+					<div class="card w-100" style="min-height: 400px;">
+							
+						<div class="card-block p-0"></div>
+						</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<!-- /.conainer-fluid -->
+
+
+		</main>
+		<!-- .main -->
+	</div>
+	<!-- .app-body-->
+	<footer th:replace="fragments/layout :: footer">&copy; 2016 The Static Templates</footer>
+
+
+	<script type="text/javascript" src="../../../resources/js/virtuoMain.min.js" th:href="@{/resources/js/virtuoMain.min.js}"></script>
+
+	<script type="text/javascript" src="../../../resources/js/app.js" th:href="@{/resources/js/app.js}"></script>
+	<script>
+		$(document).ready(function() {
+			$(".js-example-basic-single").select2({
+				allowClear: true,
+				placeholder: {
+					id: "-1",
+					text: "Display another project"
+				}
+			});
+			$("#cggProjectTaskTags").select2({
+			  	tags: true,
+				multiple:"multiple",
+				placeholder: {					
+					text: "Enter Tags"
+				}
+			});
+			
+
+		function formatColor (state) {
+			if (!state.id) { 
+				return state.text; 
+			}
+			var $state = $(		
+					'<div class="color-picker-option"><div class="color-picker-square color-'+ state.element.value.toLowerCase() + '"></div><div class="color-picker-label">' + state.text + '</div></div>'				
+			);
+			return $state;
+		  };
+      
+
+		  $('select#cggProjectTaskColorSelect').select2({
+			   	dropdownCssClass : 'no-search',
+				width: "100%",
+				templateResult: formatColor,
+				templateSelection: formatColor
+		  });  
+			/*
+			'<div class="color-picker-option"><div class="color-picker-square color-'+ state.element.value.toLowerCase() + '"></div><div class="color-picker-label">' + state.text + '</div></div>'
+			*/
+			
+			$("#cggProjectTaskDueDate , #cggProjectTaskStartDate ").datetimepicker({format: 'dd-mm-yyyy hh:ii'});
+
+		});
+	</script>
+
+</body>
+
+</html>

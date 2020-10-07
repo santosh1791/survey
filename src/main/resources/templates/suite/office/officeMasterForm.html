@@ -1,0 +1,288 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 700px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-plus-square-o"></i> Create Office</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="officeMasterForm" class="custom-form"  method="post" th:action="@{/officeForm}"  th:object="${officeMasterForm}"  autocomplete="off" >
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		<div class="form-row">
+				
+				<div class="form-group col-sm-6" >
+					<label for="stateMaster" class="col-form-label col-form-label-sm">State<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select   name="stateMaster" id="stateMaster" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${statesList}">
+						<p th:each="anItem : ${statesList}">
+						<option 
+								th:value="${anItem.id}"  th:selected="(${statesId} == ${anItem.id})"><span th:text="${anItem.statename}"></span></option>
+						</p>
+					</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('stateMaster')}" th:errors="*{stateMaster}">state Master Error</div>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="departmentMaster" class="col-form-label col-form-label-sm">Department</label>
+					<select  name="departmentMaster" id="departmentMaster" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${deptList}">
+						<p th:each="anItem : ${deptList}">
+						<option 
+								th:value="${anItem.id}"  th:selected="(${deptId} == ${anItem.id})"><span th:text="${anItem.departmentname}"></span></option>
+
+						</p>
+					</th:block>
+					</select>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="hODMaster" class="col-form-label col-form-label-sm">Sub Department / HOD </label>
+					<select  name="hODMaster" id="hODMaster" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${hodList}">
+										<p th:each="anItem : ${hodList}">
+										<option 
+												th:value="${anItem.id}"  th:selected="(${hodId} == ${anItem.id})"><span th:text="${anItem.hodname}"></span></option>
+
+										</p>
+					</th:block>
+					</select>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="districtMaster" class="col-form-label col-form-label-sm">District</label>
+					<select  name="districtMaster" id="districtMaster" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${districtList}">
+										<p th:each="anItem : ${districtList}">
+										<option 
+												th:value="${anItem.id}"  th:selected="(${districtId} == ${anItem.id})"><span th:text="${anItem.districtname}"></span></option>
+
+										</p>
+					</th:block>
+					</select>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="mandalMaster" class="col-form-label col-form-label-sm">Mandal</label>
+					<select   id="mandalMaster" name="mandalMaster" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${mandalList}">
+										<p th:each="anItem : ${mandalList}">
+										<option 
+												th:value="${anItem.id}" th:selected="(${mandalId} == ${anItem.id})"><span th:text="${anItem.mandalname}"></span></option>
+
+										</p>
+					</th:block>
+					</select>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="villageMaster" class="col-form-label col-form-label-sm">Village</label>
+					<select name="villageMaster" id="villageMaster" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${villageList}">
+										<p th:each="anItem : ${villageList}">
+										<option 
+												th:value="${anItem.id}" th:selected="(${villageId} == ${anItem.id})"><span th:text="${anItem.villagename}"></span></option>
+
+										</p>
+					</th:block>
+					</select>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="officename" class="col-form-label col-form-label-sm">Office Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="officename" id="officename" placeholder="Office Name"  th:field="*{officename}" >
+					<div class="text-danger" th:if="${#fields.hasErrors('officename')}" th:errors="*{officename}">office Name Error</div>
+													
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="officeshortname" class="col-form-label col-form-label-sm">Office Short Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="officeshortname" id="officeshortname" placeholder="Short Name"  th:field="*{officeshortname}" >
+					<div class="text-danger" th:if="${#fields.hasErrors('officeshortname')}" th:errors="*{officeshortname}">officeshortname Error</div>
+				</div>
+				
+				<div class="form-group col-sm-6">
+					<label for="officeaddress" class="col-form-label col-form-label-sm">Address<span class="text-danger">*</span></label>
+					<textarea class="form-control form-control-sm" name="officeaddress" id="officeaddress" placeholder="Address"  th:field="*{officeaddress}"  ></textarea>
+					<div class="text-danger" th:if="${#fields.hasErrors('officeaddress')}" th:errors="*{officeaddress}">officeaddress Error</div>
+				</div>
+				<!-- <div class="form-group">
+					<label for="cggProjectTaskTitle">PIN code<span class="text-danger">*</span></label>
+					<input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="PIN Code">
+				</div> -->
+				<div class="form-group col-sm-6">
+					<label for="officephno" class="col-form-label col-form-label-sm">Phone<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="officephno" id="officephno" placeholder="Phone Number"  th:field="*{officephno}" >
+					<div class="text-danger" th:if="${#fields.hasErrors('officephno')}" th:errors="*{officephno}">officephno Error</div>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="officeemail" class="col-form-label col-form-label-sm">Email<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="officeemail" id="officeemail" placeholder="Email"  th:field="*{officeemail}" >
+					<div class="text-danger" th:if="${#fields.hasErrors('officeemail')}" th:errors="*{officeemail}">Email Error</div>
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="officefax" class="col-form-label col-form-label-sm">Fax</label>
+					<input type="text" class="form-control form-control-sm" name="officefax" id="officefax" placeholder="Fax"  th:field="*{officefax}" >
+					<div class="text-danger" th:if="${#fields.hasErrors('officefax')}" th:errors="*{officefax}">Fax Error</div>
+				</div>
+				
+			
+
+		</div>
+	</form>
+</div>
+
+<script>
+	var max_chars = 10;
+
+	$("#officephno").keyup(function() {
+
+		$("#officephno").val(this.value.match(/[0-9]*/)); 
+
+		if ($(this).val().length >= max_chars) { 
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+	});
+	$("#officefax").keyup(function() {
+
+		$("#officefax").val(this.value.match(/[0-9]*/)); 
+
+		if ($(this).val().length >= max_chars) { 
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+	});
+</script>
+
+
+<meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script>
+		var context = "[[@{/}]]";		
+		$( "#stateMaster" ).change(function() {
+			 
+			var stateVal = $( "#stateMaster" ).val();
+			if(stateVal ==null || stateVal == "" || stateVal =="0" )
+				return false; 
+			
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 $.ajax ({
+						type: "POST",
+						url: context + "getAllDistrictsUnderStateAJAX/"+$( "#stateMaster" ).val(),
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+							html = "<option value='0'>-- Select --</option>"+html;
+							$("#districtMaster").html(html);
+						} 
+			}); 
+		
+		});
+		
+		
+		
+		$( "#districtMaster" ).change(function() {
+			
+			var distVal = $( "#districtMaster" ).val();
+			if(distVal ==null || distVal == "" || distVal =="0" )
+				return false; 
+			
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 $.ajax ({
+						type: "POST",
+						url: context + "getMandalsUnderDistrictAJAX",
+						data:{ distID: $("#districtMaster" ).val(), stateID: $( "#stateMaster" ).val() },
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+							
+							html = "<option value='0'>-- Select --</option>"+html;
+							$("#mandalMaster").html(html);
+							
+						} 
+			}); 
+		
+		});
+		
+		
+		 $( "#mandalMaster" ).change(function() {
+					
+					var mandalVal = $( "#mandalMaster" ).val();
+					if(mandalVal ==null || mandalVal == "" || mandalVal =="0" )
+						return false; 
+					
+					 var token = $("meta[name='_csrf']").attr("content");
+					 var header = $("meta[name='_csrf_header']").attr("content");
+					 $.ajax ({
+								type: "POST",
+								url: context + "getVillagesUnderDistrictAJAX",
+								data:{ mandalId: $("#mandalMaster" ).val(), distID: $("#districtMaster" ).val(), stateID: $( "#stateMaster" ).val() },
+								beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+								success: function(html) {
+									
+									html = "<option value='0'>-- Select --</option>"+html;
+									$("#villageMaster").html(html);
+									
+								} 
+					}); 
+				
+				});
+		 
+		 
+		  $( "#departmentMaster" ).change(function() {
+					var deptID = $( "#departmentMaster" ).val();
+					if(deptID ==null || deptID == "" || deptID =="0" )
+						return false; 
+					 var token = $("meta[name='_csrf']").attr("content");
+					 var header = $("meta[name='_csrf_header']").attr("content");
+					 $.ajax ({
+								type: "POST",
+								url: context + "getHODsUnderDepartmentAJAX",
+								data:{ dept: $("#departmentMaster" ).val()},
+								beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+								success: function(html) {
+									html = "<option value='0'>-- Select --</option>"+html;
+									$("#hODMaster").html(html);
+									
+								} 
+					}); 
+				
+				});
+		  
+		  
+		   $( "#stateMaster" ).change(function() {
+					var stateId = $( "#stateMaster" ).val();
+					if(stateId ==null || stateId == "" || stateId =="0" )
+						return false; 
+					 var token = $("meta[name='_csrf']").attr("content");
+					 var header = $("meta[name='_csrf_header']").attr("content");
+					 $.ajax ({
+								type: "POST",
+								url: context + "getDepartmentsUnderStateAJAX",
+								data:{ state: $("#stateMaster" ).val()},
+								beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+								success: function(html) {
+									html = "<option value='0'>-- Select --</option>"+html;
+									$("#departmentMaster").html(html);
+									
+								} 
+					}); 
+				
+				});
+				 
+				 
+		
+	</script>

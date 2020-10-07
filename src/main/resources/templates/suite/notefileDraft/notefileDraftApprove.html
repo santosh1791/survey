@@ -1,0 +1,133 @@
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Create Draft
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+
+<style>
+.redText {
+	color: red;
+}
+
+#commonModal .modal-footer {
+	display: none;
+}
+
+.mce-wordcount {
+	padding: 0 35px;
+}
+
+.mce-flow-layout-item, .mce-path {
+	margin: 0 1rem;
+	padding: 0;
+}
+</style>
+<div class="card card-accent-primary modal-form mb-0">
+
+
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+
+	<!-- <form    enctype="multipart/form-data" method="get"> -->
+	<form method="post" class="custom-form" name="notefileDraftForm"
+		th:action="@{/efilesuite/notefileDraftApproval}"
+		th:object="${notefileDraftForm}" enctype="multipart/form-data"
+		id="notefileDraftForm">
+		 
+<!-- <h1 th:text="${draftMaster}"></h1> -->
+		<div class="card-body" th:object="${draftMaster}">
+		<!-- <h1 th:text="${status}"></h1>
+ <th:block th:if="${status}   == '1'"> -->
+			<input type="hidden" name="draftId" th:field="*{id}">	 
+		 	<input type="hidden" name="notefileId" th:field="*{notefileDetails.id}">
+
+			<div class="form-group form-row">
+				<div class="col-md-2">
+					<label for="subject" class="col-form-label font-weight-bold">Draft Name : 
+						<span style="color: red;">*</span>
+					</label>
+				</div>
+
+				<div class="col-md-10">
+					<input type="text" name="draftSubject" class="form-control" id="draftSubject"
+						placeholder="Enter draft name " th:field="*{draftSubject}" required />
+				</div>
+				<div class="text-danger"  th:if="${#fields.hasErrors('draftSubject')}"
+                 th:errors="*{draftSubject}">Draft name Should not be empty</div>
+
+			</div>
+
+			 
+
+			<div class="form-group form-row" >
+
+				<div class="form-group col-md-12 mb-0">
+					<label for="content" class="col-form-label font-weight-bold">Description : <span
+						style="color: red;">*</span></label>
+					<!--</div>
+                                            <div class="form-group col-md-12 mb-0">-->
+					<div class="w-100">
+						<textarea _rows="25" _cols="25" class="form-control" id="content" th:field="*{content}"
+							name="content" placeholder="Enter description"></textarea>
+						
+						<div class="text-danger"  th:if="${#fields.hasErrors('content')}"
+                 th:errors="*{content}">Content Should not be empty</div>
+
+					</div>
+				</div>
+			</div>
+		 
+	<!-- </th:block>
+	<th:block th:if="${status} != '1' ">
+	
+		<p th:text="${draftSubject}" ></p>
+		<p th:text="${content}" ></p>
+	
+	</th:block> -->
+		</div>
+	</form>
+</div>
+ 
+<script>
+	jQuery(document).ready(function() {
+	//jQuery(document).ready(function() {
+	tinymce.init({
+
+		selector: '#content',
+        menubar: false,
+		branding: false,
+		height: 100,
+		max_height: 400,
+		theme: 'modern',
+		toolbar: false,
+                    toolbar_items_size: 'small',
+                    plugins: ['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace wordcount visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality','emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'],
+                    toolbar1: 'insert | undo redo |  styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons | fullscreen | table',
+
+		image_advtab: true,
+		templates: [{
+				title: 'Test template 1',
+				content: 'Test 1'
+			},
+			{
+				title: 'Test template 2',
+				content: 'Test 2'
+			}
+		],
+		content_css: [
+
+		]
+	});
+	
+});
+
+
+</script>
+
+
+

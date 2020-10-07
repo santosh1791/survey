@@ -1,0 +1,93 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Edit Performance Indicator Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="performanceIndicatorForm" class="custom-form" method="POST" th:action="@{'/performanceIndicatorEdit/{id}/'(id=${id})}"  th:object="${performanceIndicatorForm}"  autocomplete="off">
+
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        <th:block th:if="${failureMessage != null}">
+            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+        </th:block>
+
+		<div class="form-row">
+
+			<div class="form-group col-md-12">
+			    <label for="rolesMaster" class="col-form-label col-form-label-sm">Role<span class="text-danger">*</span></label>
+			    <select   name="rolesMaster"  id="roleID" class="custom-select custom-select-sm">
+			    	<option value="0">--Select Role--</option>
+						<th:block th:object="${roleList}">
+												<p th:each="anItem : ${roleList}">
+												<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${roleID1} )"><span th:text="${anItem.rolename}"></span></option>
+
+												</p>
+							</th:block>
+			    </select>
+			    <div class="text-danger" th:if="${#fields.hasErrors('rolesMaster')}" th:errors="*{rolesMaster}">rolesMaster Error</div>
+			  </div>
+
+			  <div class="form-group col-md-12">
+			    <label for="keyareaMaster" class="col-form-label col-form-label-sm">KeyArea<span class="text-danger">*</span></label>
+			    <select name="keyareaMaster"  id="keyID" class="custom-select custom-select-sm">
+			    	<option value="0">--Select KeyArea--</option>
+						<th:block th:object="${keyareaList}">
+												<p th:each="anItem : ${keyareaList}">
+												<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${keyID1} )"><span th:text="${anItem.keyArea}"></span></option>
+
+												</p>
+							</th:block>
+			    </select>
+			    <div class="text-danger" th:if="${#fields.hasErrors('keyareaMaster')}" th:errors="*{keyareaMaster}">Keyarea Error</div>
+			  </div>
+
+			<div class="form-group col-sm-12">
+				<label for="performanceIndicator" class="col-form-label col-form-label-sm">Performance Indicator Name<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="performanceIndicator" id="performanceIndicator" th:field="*{performanceIndicator}">
+				<div class="text-danger" th:if="${#fields.hasErrors('performanceIndicator')}" th:errors="*{performanceIndicator}">performance Indicator Error</div>
+			</div>
+
+			<div class="form-group col-sm-12">
+				<label for="marks" class="col-form-label col-form-label-sm">Marks<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="marks" id="marks" maxlength="2"   th:field="*{marks}">
+				<div class="text-danger" th:if="${#fields.hasErrors('marks')}" th:errors="*{marks}">marks Error</div>
+			</div>
+
+		</div>
+	</form>
+</div>
+<head>
+	<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script>
+		var context = "[[@{/}]]";
+		$( "#roleID" ).change(function() {
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 //alert("html ajax call")
+			 $.ajax ({
+						type: "POST",
+						url: context + "getAllKeyAreasUnderRoleAJAX/"+$( "#roleID" ).val(),
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+
+							html = "<option value='0'>-- Select KeyArea--</option>"+html;
+							$("#keyID").html(html);
+						}
+			});
+
+		});
+
+	</script>
+</head>

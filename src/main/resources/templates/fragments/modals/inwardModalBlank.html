@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+	<link rel="stylesheet" type="text/css" href="../../../resources/vendors/jkanban/dist/jkanban.css" th:href="@{/resources/vendors/jkanban/dist/jkanban.css}" />
+	<style>
+		body {
+			font-family: 'Roboto'!important;
+			font-weight: 300!important;
+		}
+
+		.ui-state-highlight {
+			height: 300px;
+			width: 33%;
+			background: rgba(8, 8, 8, 0.24);
+		}
+	</style>
+</head>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+
+	<!-- .projectNewTask modal-popups-->
+
+	<div th:fragment="inwardModalBlank" class="modal fade" id="inwardModalBlank" tabindex="-1" role="dialog" aria-labelledby="inwardModalBlank" aria-hidden="true">
+		<div class="modal-dialog modal-lg _modal-info" role="document">
+			<div class="modal-content">
+			<div class="modal-insert">
+
+			</div>
+				<div class="modal-footer" style="background: rgba(207, 216, 220, 0.51);">
+					<!-- <button type="button" class="btn btn-outline-primary" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp; Cancel</button> -->
+					<button type="button" class="btn btn-primary" onclick="javascript:return submitData();"><i class="fa fa-save"></i>&nbsp; Save</button>
+					<!-- <button type="button" class="btn btn-primary" value="Send" ><i class="fa fa-save"></i>&nbsp; Send</button> -->
+
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+
+	<!-- .projectNewTask modal-popups-->
+
+
+	<div layout:fragment="content">
+
+
+	</div>
+	<!-- main-fragment-->
+
+	<th:block layout:fragment="scripts">
+	<script type="text/javascript">
+/* Normal Validation */
+function submitData(){
+
+	var sEmail = $('#email').val();
+	// console.log($("#currentTypeMaster").val());
+	 if($("#currentTypeMaster").val()==0){
+		 console.log("Select Current Type ");
+		 $("#currentTypeMaster").focus();
+		 return false;
+	 }else if($("#currentNUmber").val()==""){
+		 console.log("Enter Current Number   ");
+		 $("#currentNUmber").focus();
+		 return false;
+	 }else if($("#currentDate").val()==""){
+		 console.log("Select Current Date   ");
+		 $("#currentDate").focus();
+		 return false;
+	 }else if($("#departmentMaster").val()==0){
+		 console.log("Select Department   ");
+		 $("#departmentMaster").focus();
+		 return false;
+	 }else if($("#recievedDate").val()==""){
+		 console.log("Select Received Date  ");
+		 $("#recievedDate").focus();
+		 return false;
+	 }else if($("#recievedMode").val()==0){
+		 console.log("Select Received Mode  ");
+		 $("#recievedMode").focus();
+		 return false;
+	 }else if($("#inwardRecievedFrom").val()==""){
+		 console.log("Select Recieved From Officer   ");
+		 $("#inwardRecievedFrom").focus();
+		 return false;
+	 }/*  else if($("#currentSubject").val()==""){
+    	 console.log("Enter Subject Number   ");
+		 $("#currentSubject").focus();
+		 return false;
+     }  else if($("#sectionId").val()==0){
+		 console.log("Select Concerned Section");
+		 $("#sectionId").focus();
+		 return false;
+	 }*/else if($("#postMaster").val()==0){
+		 console.log("Select Concerned Officer ");
+		 $("#postMaster").focus();
+		 return false;
+	 }else{
+		 return true;
+	 }
+}
+</script>
+	</th:block>
+</body>
+
+</html>

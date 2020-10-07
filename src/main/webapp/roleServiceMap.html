@@ -1,0 +1,75 @@
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Role - Service Form
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<head>
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container">
+			<form name="roleServiceForm" id="roleServiceForm" method="post"
+				th:action="@{/efilesuite/roleServiceForm}"
+				th:object="${roleServiceForm}" autocomplete="off">
+				
+				 <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+				<div class="row">
+					<div class="col-md-5">
+						<div class="form-group">
+							<div class="subject-info-box-1">
+								<select multiple="multiple" _id="assignee" id="unassigned"
+									name="unassigned" data-placeholder=""
+									_style="min-width: 200px; 
+							text-align: left!important;"
+									class="text-left form-control _mt-1 js-example-basic-single">
+									<th:block
+										th:object="${#session.getAttribute('unassignedEmpList')}">
+										<p
+											th:each="employee : ${#session.getAttribute('unassignedEmpList')}">
+											<option _th:value="${employee.id}" th:value="${employee.id}"
+												th:text="${employee.employeeName}"></option>
+										</p>
+									</th:block>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-2">
+						<a class="btn btn-secondary" onclick="moveRight()"> >>> </a> <a
+							class="btn btn-secondary" onclick="moveLeft()"> <<< </a>
+					</div>
+					<div class="col-md-5">
+						<div class="form-group">
+							<div class="subject-info-box-2">
+								<select multiple="multiple" _id="assignee" id="assigned"
+									name="assigned" data-placeholder=""
+									_style="min-width: 200px; 
+							text-align: left!important;"
+									class="text-left form-control _mt-1 js-example-basic-single">
+									<th:block
+										th:object="${#session.getAttribute('assignedEmpList')}">
+										<p
+											th:each="employee : ${#session.getAttribute('assignedEmpList')}">
+											<option _th:value="${employee.id}" th:value="${employee.id}"
+												th:text="${employee.employeeName}"></option>
+										</p>
+									</th:block>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 	  <button type="submit" class="btn btn-primary"  id="submit">Submit</button> -->
+			</form>
+		</div>
+	</div>

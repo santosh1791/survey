@@ -1,0 +1,30 @@
+body {
+        background: rgba(61, 112, 178, 0.04);
+}
+
+.app-header.navbar, .app-header.navbar .navbar-brand {
+    background-color: #3d70b2!important;
+}
+
+.ogr_name span {
+    font-weight: bold;
+    color: #fff;
+    font-size: 20px;
+}
+
+.logger-name {
+    color:  #fff;
+}
+
+.sidebar {
+    /*background: #006824;*/
+}
+
+footer.app-footer   {
+    /*background-color: rgb(1, 81, 28)!important;*/
+}
+
+footer.app-footer  h6.text-primary, footer.app-footer .text-primary  {
+   /* color: #fff!important;*/
+        font-weight: 500!important;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head>
+<title th:text="#{view.index.title}">KPI Report</title>
+
+
+<style>
+.details-header {
+	width: 100%;
+	background-color: #198C8C;
+}
+</style>
+
+</head>
+<body onload="return findSum();">
+	<div layout:fragment="content">
+		<!-- <br />
+		<h5 class="tab_title text-muted">
+			<i class="icon-pencil"></i>&nbsp;Appraiser KPI Report
+		</h5>
+		<div class="container" align="right">
+			<input type="button" class="btn btn-primary" value="Back"
+				onclick="goBack()">
+		</div>
+		<div class="container" style="border: 1px solid black;">
+			<h5 class="modal-title">
+				<i class="fa fa-user"></i> Appraiser Key Performance Indicators
+				Report
+			</h5>
+			<br /> -->
+
+
+		<div class="container-fluid">
+
+			<div class="animated fadeIn">
+
+				<div class="row">
+
+					<div class="col-lg-12 col-xl-10 offset-xl-1">
+
+						<div
+							class="card  card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+
+							<div
+								class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+
+								<h5
+									class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">
+									Appraiser KPI Report</h5>
+									<button
+										class="btn btn-sm btn-primary d-inline-block ml-auto mt-1"
+										role="button" onclick="goBack()">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+							</div>
+							<div class="col-offset-4">
+								<form id="kpiForm" method="post" enctype="multipart/form-data"
+									th:action="@{'/kpiReportForm/{initId}/'(initId=${appraiseeEmpID})}"
+									th:object="${kpiForm}" autocomplete="off">
+
+									<th:block th:if="${statusMessage != null}">
+										<div
+											th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+									</th:block>
+									<th:block th:if="${failureMessage != null}">
+										<div
+											th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+									</th:block>
+
+									<div class="card-block p-0 ">
+										<div class="container" align="right">
+											<h6 class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-success">
+												Report of-<span th:text="${appraiseeEmpName}"></span>
+											</h6>
+										</div>
+
+										<div class="card-body py-0 bg-white" _style="min-height: calc(100vh - 130px); width: 100%;">
+
+											<div class="table-responsive _px-3">
+
+												<table id="reportKpiTable"
+													class=" table compact table-bordered table-hover table-striped table-sm mb-0"
+													cellspacing="0" width="100%">
+
+													<thead class="table-primary">
+														<tr>
+															<th>#</th>
+															<th>Key Area</th>
+															<th>Performance Indicator</th>
+															<th>Marks</th>
+															<th>BreakUp</th>
+															<th>Self Ratings</th>
+															<th>Self Remarks</th>
+
+															<p th:each="anItem : ${levelList}">
+																<span th:if="${anItem} != 1">
+																	<th>Appraiser Ratings</th>
+																	<th>Appraiser Remarks</th>
+
+																</span>
+															</p>
+
+
+														</tr>
+													</thead>
+													<tbody>
+
+
+
+														<div th:each="anItem, iterStat : ${formMapper}">
+
+															<tr th:if="${anItem.performanceIndicator} == null">
+																<td><span th:text="${anItem.outerIndex}"></span></td>
+																<td><span th:text="${anItem.keyArea}"></span></td>
+																<td></td>
+																<td><input type="hidden" th:attr="id='totalMarks_'+ ${anItem.outerIndex}, class='totalMarks'" th:value="${anItem.totalMarks}"><span th:text="${anItem.totalMarks}"></span></td>
+																<td></td>
+
+																<p th:each="anItem : ${levelList}">
+																<td></td>
+																<td></td>
+																</p>
+															</tr>
+															<tr th:if="${anItem.performanceIndicator} != null">
+																<td></td>
+
+																<td><input type="hidden"
+																	th:value="${anItem.keyAreaId}"
+																	th:attr="name='kpiFormDTO[' + ${anItem.index} + '].keyAreaId'"></td>
+																<td><input type="hidden"
+																	th:attr="name='kpiFormDTO[' + ${anItem.index} + '].performanceIndicatorId'"
+																	th:value="${anItem.performanceIndicatorId}"> <input
+																	type="hidden"
+																	th:attr="name='kpiFormDTO[' + ${anItem.index} + '].performanceAppraisalId'"
+																	th:value="${anItem.performanceAppraisalId}"> <span
+																	th:text="${anItem.performanceIndicator}"></span></td>
+
+																<td></td>
+																<td><input type="hidden" th:attr="id='marks_'+ ${anItem.index}, class='breakupMarks'" th:value="${anItem.marks}"><span th:text="${anItem.marks}"></span></td>
+																<p th:each="anItem1,iterStat1 : ${anItem.previousRatings}">
+																<td><input type="hidden" th:attr="id='ratings_'+ ${iterStat1.count}, class='ratings_'+${iterStat1.count}" th:value="${anItem1.ratings}"><span th:text="${anItem1.ratings}"></span></td>
+																<td><span th:text="${anItem1.remarks}"></span></td>
+																</p>
+															</tr>
+
+														</div>
+
+														<tr>
+															<td></td>
+															<td></td>
+															<td><b>Grand Total</b></td>
+															<td><b><span id="totalMarks"></span></b></td>
+															<td><b><span id="breakupTotal"></span></b></td>
+															<p th:each="anItem, itr : ${levelList}">
+															<td><b><span th:attr="id='total_ratings_'+${itr.count}"></span></b></td>
+															<td></td>
+															</p>
+														</tr>
+
+
+													</tbody>
+												</table>
+												<div align="right">
+													<b class="text-primary">Submitted to Your Superior Authority:-<span
+														th:text="${superiorEmpName}"></span></b>
+												</div>
+											</div>
+										</div>
+									</div>
+									<input type="hidden" name="level" id="level" th:value="${level}">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<th:block layout:fragment="scripts">
+<script type="text/javascript">
+
+function findSum(){
+
+	//Calculating totalMarks
+	var total = 0;
+	$(".totalMarks").each(function(){
+		var marks = $(this).val();
+		if(marks !=null && marks !="" ){
+			total += parseInt(marks);
+		}
+	});
+	$("#totalMarks").text(total);
+
+
+	//Calculating breakups
+	total = 0;
+	$(".breakupMarks").each(function(){
+		var marks = $(this).val();
+		if(marks !=null && marks !="" ){
+			total += parseInt(marks);
+		}
+	});
+	$("#breakupTotal").text(total);
+
+	//Calculating level wise rating's total
+	var levels = $("#level").val();
+	for(var i=1;i<=levels; i++){
+
+		total = 0;
+		$(".ratings_"+i).each(function(){
+			var marks = $(this).val();
+			if(marks !=null && marks !="" ){
+				total += parseInt(marks);
+			}
+		});
+
+		$("#total_ratings_"+i).text(total);
+
+
+	}
+
+}
+</script>
+</th:block>

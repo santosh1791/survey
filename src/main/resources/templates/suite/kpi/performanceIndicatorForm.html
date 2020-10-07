@@ -1,0 +1,66 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Add Performance Indicator</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="performanceIndicatorForm" class="custom-form" method="POST" th:action="@{/performanceIndicatorForm}"  th:object="${performanceIndicatorForm}"  autocomplete="off">
+
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        <th:block th:if="${failureMessage != null}">
+            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+        </th:block>
+
+		<div class="form-row">
+
+			<div class="form-group col-md-12">
+			    <label for="rolesMaster" class="col-form-label col-form-label-sm">Role<span class="text-danger">*</span></label>
+			    <select  name="rolesMaster"  id="roleID" class="custom-select custom-select-sm">
+			    	<option value="0">--Select Role--</option>
+						<th:block th:object="${roleList}">
+												<p th:each="anItem : ${roleList}">
+												<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${roleID1} )"><span th:text="${anItem.rolename}"></span></option>
+												</p>
+							</th:block>
+			    </select>
+			    <div class="text-danger" th:if="${#fields.hasErrors('rolesMaster')}" th:errors="*{rolesMaster}">rolesMaster Error</div>
+			  </div>
+
+			  <div class="form-group col-md-12">
+			    <label for="keyareaMaster" class="col-form-label col-form-label-sm">Key Area<span class="text-danger">*</span></label>
+			    <select name="keyareaMaster"  id="keyID" class="custom-select custom-select-sm">
+			    	<option value="0">--Select KeyArea--</option>
+						<th:block th:object="${keyareaList}">
+												<p th:each="anItem : ${keyareaList}">
+												<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${keyID1} )"><span th:text="${anItem.keyArea}"></span></option>
+												</p>
+							</th:block>
+			    </select>
+			    <div class="text-danger" th:if="${#fields.hasErrors('keyareaMaster')}" th:errors="*{keyareaMaster}">Keyarea Error</div>
+			  </div>
+
+			<div class="form-group col-sm-12">
+				<label for="performanceIndicator" class="col-form-label col-form-label-sm">Performance Indicator Name<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="performanceIndicator" id="performanceIndicator" maxlength="100" placeholder="Enter performance Indicator">
+				<div class="text-danger" th:if="${#fields.hasErrors('performanceIndicator')}" th:errors="*{performanceIndicator}">performance Indicator Error</div>
+			</div>
+
+			<div class="form-group col-sm-12">
+				<label for="marks" class="col-form-label col-form-label-sm">Marks<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="marks" id="marks" maxlength="2" placeholder="Enter marks">
+				<div class="text-danger" th:if="${#fields.hasErrors('marks')}" th:errors="*{marks}">marks Error</div>
+			</div>
+
+		</div>
+	</form>
+</div>

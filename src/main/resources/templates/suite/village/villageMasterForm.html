@@ -1,0 +1,175 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 700px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Add Village</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="villageMasterForm" class="custom-form" method="post" th:action="@{/villageMstForm}"  th:object="${villageMasterForm}"  autocomplete="off" >
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		<div class="form-row">
+				
+				<div class="form-group col-md-4">
+					<label for="stateIDTitle" class="col-form-label col-form-label-sm">State<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select  name="stateMaster" id="stateID"  class="custom-select custom-select-sm">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${statesList}">
+							<p th:each="anItem : ${statesList}">
+								<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${stateID1} )"><span th:text="${anItem.statename}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('stateMaster')}" th:errors="*{stateMaster}">stateID Error</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="stateIDTitle" class="col-form-label col-form-label-sm">District<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select   name="districtMaster"  id="districtID" class="custom-select custom-select-sm">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${districtsList}">
+							<p th:each="anItem : ${districtsList}">
+								<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${districtID1})"><span th:text="${anItem.districtname}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('districtMaster')}" th:errors="*{districtMaster}">districtMaster ID Error</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="stateIDTitle" class="col-form-label col-form-label-sm">Mandal<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select  name="mandalMaster"  id="mandalID" class="custom-select custom-select-sm">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${mandalsList}">
+							<p th:each="anItem : ${mandalsList}">
+								<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${mandalID1})"><span th:text="${anItem.mandalname}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('mandalMaster')}" th:errors="*{mandalMaster}">mandalMaster ID Error</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="villageid" class="col-form-label col-form-label-sm">Village ID<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="villageid" id="villageid" placeholder="Village ID" th:field="*{villageid}"  onkeypress="javascript:return integersOnly(event);">
+					<span class="text-danger" id="villageSpanID"></span>
+					<div class="text-danger" th:if="${#fields.hasErrors('villageid')}" th:errors="*{villageid}">villageID Error</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="villageNameTitle" class="col-form-label col-form-label-sm">Village Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="villagename" id="villageNameTitle" placeholder="Village Name"  th:field="*{villagename}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('villagename')}" th:errors="*{villagename}">villageName Error</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="villageShortNameTitle"  class="col-form-label col-form-label-sm">Village Short Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="villageshortname" id="villageShortNameTitle" placeholder="Village Short Name" th:field="*{villageshortname}" onkeypress="javascript:return alphabetsOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('villageshortname')}" th:errors="*{villageshortname}">villageShortName Error</div>
+				</div>
+		</div>
+	</form>
+</div>
+<script>
+	var max_chars = 6;
+
+	$("#villageid").keyup(function() {
+
+		$("#villageid").val(this.value.match(/[0-9]*/)); 
+
+		if ($(this).val().length >= max_chars) { 
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+	});
+	var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	var context = "[[@{/}]]";
+	$( "#villageid" ).on('input' ,function() {
+		$("#villageSpanID").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var villageVal = $( "#villageid" ).val();
+		var stateVal = $( "#stateID" ).val();
+		var districtVal = $( "#districtID" ).val();
+		var mandalVal = $( "#mandalID" ).val();
+		if(stateVal==null || stateVal =="0" || districtVal== null || districtVal =="0" || mandalVal == null || mandalVal == "0")
+			return false;
+		if(villageVal ==null || villageVal == "" || parseInt(villageVal) == 0 ){
+			$( "#villageid" ).val("");
+			return false; 
+		}
+		
+		
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkVillageIDExist/"+villageVal+"/"+mandalVal+"/"+"/"+districtVal+"/"+stateVal+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#villageSpanID").html("Village ID: "+villageVal+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					} 
+		}); 
+	
+	});
+</script>
+<head>
+	<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script>
+		var context = "[[@{/}]]";		
+		$( "#stateID" ).change(function() {
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 
+			 $.ajax ({
+						type: "POST",
+						url: context + "getAllDistrictsUnderStateAJAX/"+$( "#stateID" ).val(),
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+
+							html = "<option value='0'>-- Select --</option>"+html;
+							$("#districtID").html(html);
+						} 
+			}); 
+		
+		});
+		
+		 $( "#districtID" ).change(function() {
+			
+			var distVal = $( "#districtID" ).val();
+			if(distVal ==null || distVal == "" || distVal =="0" )
+				return false; 
+			
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 $.ajax ({
+						type: "POST",
+						url: context + "getMandalsUnderDistrictAJAX",
+						data:{ distID: $("#districtID" ).val(), stateID: $( "#stateID" ).val() },
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+							
+							html = "<option value='0'>-- Select --</option>"+html;
+							$("#mandalID").html(html);
+							
+						} 
+			}); 
+		
+		}); 
+		
+	</script>
+</head>

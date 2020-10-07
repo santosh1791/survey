@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+  
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js">
+</script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	// Datepicker Popups calender to Choose date.
+	$(function() {
+	$("#recievedDate" ).datepicker();
+	// Pass the user selected date format.
+	//$("#format").change(function() {
+	//$("#datepicker").datepicker("option", "dateFormat", $(this).val());
+	//});
+	});
+});
+
+
+        /*  $(document).ready(function() {
+            $( "#recievedDate,#currentDate" ).datepicker({ 
+	    		changeMonth: true,
+	         	changeYear: true,
+	         	dateFormat: "dd/mm/yy",
+	         	maxDate: new Date()
+	    	});  
+	    	$("#recievedDate,#currentDate").attr("placeholder","DD-MM-YYYY");
+        });
+         */
+        
+         
+         function TextToTrim(obj){
+        	    obj.value = obj.value.trim();
+        	}
+         
+         function chkOnlySplChars(obj,msg){
+        		var txtValue = obj.value.trim();
+        		if(txtValue==""){
+        			return false;
+        		}
+        		var flag = true;
+        		var _x = 0;
+        		for(var x=0;x<txtValue.length;x++ ){
+        			var _charCode = txtValue.charCodeAt(x);
+        			if( !((_charCode>=33 && _charCode<=64) || (_charCode>=91 && _charCode<=96) 
+        					|| (_charCode>=123 && _charCode<=126) )){
+        				_x++;
+        			}
+        		}
+        		if(_x==0){
+        			alert("Only Special Charaters are not allowed "+msg);
+        			obj.value="";
+        			return false;
+        		}else{
+        			return true;
+        		}
+        	}
+         
+         
+         function submitData(){
+        	 if($("#currentType").val()==0){
+        		 
+        		 alert("Select Current Type ");
+        		 $("#currentType").focus();
+        		 return false;
+        	 }else if($("#recievedMode").val()==0){
+        		 alert("Select Received Mode  ");
+        		 $("#recievedMode").focus();
+        		 return false;
+        	 }else if($("#recievedDate").val()==""){
+        		 
+        		 alert("Select Received Date  ");
+        		 $("#recievedDate").focus();
+        		 return false;
+        	 }else if($("#departmentId").val()==0){
+        		 alert("Select Department   ");
+        		 $("#departmentId").focus();
+        		 return false;
+        	 }else if($("#recievedFromOfficer").val()==" "){
+        		 alert("Select Recieved From Officer   ");
+        		 $("#recievedFromOfficer").focus();
+        		 return false;
+        	 }else if($("#fromAddress").val()==""){
+        		 alert("Select From Address   ");
+        		 $("#fromAddress").focus();
+        		 return false;
+        	 }else if($("#currentNUmber").val()==""){
+        		 alert("Select Current Number   ");
+        		 $("#currentNUmber").focus();
+        		 return false;
+        	 }else if($("#currentDate").val()==""){
+        		 alert("Select Current Date   ");
+        		 $("#currentDate").focus();
+        		 return false;
+        	 }/* else if($("#currentSubject").val()==""){
+        		 alert("Select Current Subject ");
+        		 $("#currentSubject").focus();
+        		 return false;
+        	 } */ else if($("#concernedSectionId").val()==0){
+        		 alert("Select Concerned Section Id ");
+        		 $("#concernedSectionId").focus();
+        		 return false;
+        	 }/*  else if($("#concernedOfficer").val()==0){
+        		 alert("Select Concerned Officer Id ");
+        		 $("#concernedOfficer").focus();
+        		 return false;
+        	 }  else if($("#endorsement").val()==""){
+        		 alert("Select Endorsement");
+        		 $("#endorsement").focus();
+        		 return false;
+        	 }*/else{
+        		 return true;
+        	 }
+        	 
+        	/* alert($("#currentType").val());
+        	return false; */
+         }
+        
+        
+    </script>
+<style type="text/css">
+.tblSubHead {
+    background-color: #1f618d !important;
+    color: #FFFFFF !important;
+}
+</style>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<ol class="tab_title breadcrumb mb-3">
+			<li class="breadcrumb-item active">Inward Current Entry</li>
+		</ol>
+		<form method="post" th:action="@{/efilesuite/inwardregister}"
+			th:object="${efileInwardMasterdto}" enctype="multipart/form-data"
+			id="efileInwardMasterdto">
+			<div>
+				<input type="hidden" name="org.apache.struts.taglib.html.TOKEN"
+					value="f04ae4fa6d250990ad506e6349f0f48c">
+			</div>
+			<input type="hidden" name="method" value="" id="method">
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+					<div class="card card-block " style="padding: 0.5rem 1rem 1.2rem">
+						<div
+							class="d-flex flex-row flex-wrap justify-content-around  no-gutters">
+							<div style="overflow: auto; width: 100%;">
+
+							<div align="center">
+								<font color="red" size="5" th:text="${msg}"></font>
+							</div>
+									
+
+								<table
+									class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+									cellspacing="0" width="100%">
+									<tbody>
+
+
+
+										<tr>
+											<td align="right" colspan="2"><!-- <input type="button" th:href="@{/efilesuite/inwardreport}"
+												name="viewregisCurrents" value="View Registered Currents"
+												class="btn btn-primary"> --><a class="btn btn-primary" th:href="@{/efilesuite/inwardreport}" >View Registered Currents </a></td>
+										</tr>
+										<tr>
+											<td  valign="top">
+												<table width="100%">
+													<tr height="35">
+														<td colspan="4" style="border-bottom: 1px solid #ddd;"
+															class="tblSubHead"><b> Current Details  </b></td>
+													</tr>
+													<tr>
+														<td><label>Type </label>  <font color="red">*</font>
+														</td>
+														<td><select name="currentType"
+															id="currentType" class="form-control"><option
+																	value="0">-- Select --</option>
+
+
+																<option value="1">Affidavit</option>
+																<option value="2">Appeal</option>
+																<option value="3">Application</option>
+																<option value="4">Arising</option>
+																<option value="5">Circular</option>
+																<option value="6">D.O. Letter</option>
+																<option value="7">Electronic Message</option>
+																<option value="8">Fax Message</option>
+																<option value="9">Government Order (G.O.)</option>
+																<option value="10">Judgment</option>
+																<option value="11">Letter</option>
+																<option value="12">Memo</option>
+																<option value="13">Note</option>
+																<option value="14">Notice</option>
+																<option value="15">Orders</option>
+																<option value="16">Others</option>
+																<option value="17">Petition</option>
+																<option value="18">Print Message</option>
+																<option value="19">Proceedings</option>
+																<option value="20">Representation</option>
+																<option value="21">Revision Petition</option>
+																<option value="22">Suit</option>
+																<option value="23">Telegram</option>
+																<option value="24">Writ petition</option></select></td>
+														<td> Received Mode <font color="red">*</font>
+														</td>
+														<td><select name="recievedMode"
+															id="recievedMode" class="form-control"><option
+																	value="0">-- Select --</option>
+
+
+																<option value="3">By Email</option>
+																<option value="1">By Hand</option>
+																<option value="2">By Post</option></select></td>
+													</tr>
+													<tr>
+														<td> Received Date <font color="red">*</font>
+														</td>
+														<td><input type="text"
+															name="recievedDate" value=""
+															  id="recievedDate"
+															class="calendarBg form-control"></td>
+
+														<td>Department <font color="red">*</font>
+														</td>
+														<td><select name="departmentId" onchange="showOthersDiv(this.value)" id="departmentId"  class="form-control">
+															<option value="0" selected="selected">--Select--</option>
+																	<th:block th:object="${departmentList}">
+																		<p th:each="anItem : ${departmentList}">
+																	<option th:value="${anItem.departmentid}"><a th:text="${anItem.departmentname}" ></a>
+																	</option></p>
+																</th:block>
+																	
+														</select></td>
+													</tr>
+
+													<tr id="othersDiv" style="display: none;">
+														<td>Others <font color="red">*</font>
+														</td>
+														<td><input type="text" name="recievedFromOfficer"
+															value=""
+															id="recievedFromOfficer" class="form-control"></td>
+													</tr>
+													<!-- <script type="text/javascript">
+															showOthersDiv($(
+																	"#department")
+																	.val());
+														</script> -->
+													<tr>
+														<td>Received from Officer <font color="red">*</font>
+														</td>
+														<td><input type="text" name="recievedFromOfficer"
+															value="" id="recievedFromOfficer" class="form-control"></td><!-- onblur="TextToTrim(this);chkOnlySplChars(this,'in Designation');"
+																															onblur="TextToTrim(this);chkOnlySplChars(this,'in Current No.');"	
+																															onblur="TextToTrim(this);chkOnlySplChars(this,'in Current Subject');"
+																															
+																															onblur="TextToTrim(this);chkOnlySplChars(this,'in Others');"			 -->
+
+														<td>From Address</td>
+														<td><input type="text" name="fromAddress"
+															value=""
+															onblur="TextToTrim(this);chkOnlySplChars(this,'in From Address');"
+															id="fromAddress" class="form-control"></td>
+													</tr>
+													
+													<tr>
+														<td>email</td>
+													</tr>
+													<tr>
+														<td>Number <font color="red">*</font>
+														</td>
+														<td><input type="text" name="currentNUmber"
+															value=""
+															
+															id="currentNUmber" class="form-control"></td>
+														<td> Date <font color="red">*</font>
+														</td>
+														<td><input type="text" name="currentDate"
+															value=""  id="currentDate"
+															class="calendarBg form-control"></td>
+													</tr>
+													<tr>
+														<td> Subject <font color="red">*</font>
+														</td>
+														<td><textarea name="currentSubject"
+																
+																id="currentSubject" class="form-control form-control "></textarea></td>
+
+														<td>Attach Current <font color="red">*</font><br />
+															<sub style='font-weight: normal;'>( Supported
+																Formats : .pdf, .png, .jpg, .jpeg )</sub>
+														</td>
+														<td><input type="file" name="uploadFile"
+															value="" id="uploadFile" 
+															class="form-control"></td>
+													</tr>
+													<tr>
+														<td colspan="4" style="border-bottom: 1px solid #ddd;"
+															class="tblSubHead"><b> Concerned Officer Details </b></td>
+													</tr>
+
+													<tr>
+														<td colspan="1">Concerned Section<font color="red">*</font>
+														</td>
+														<td colspan="3"><select name="concernedSectionId"
+															onchange="getData('getSectionOfficers','officer')"
+															id="concernedSectionId" class="form-control"><option
+																	value="0" selected="selected">--Select--</option>
+																<option th:each="sections: ${sectionList}" th:text="${sections.sectionname}" th:value="${sections.id}" />
+															</select>
+																
+													</tr>
+													<tr>
+														<td colspan="1">Concerned Officer <font color="red">*</font>
+														</td>
+														<td colspan="3"><select name="concernedOfficer"
+															id="concernedOfficer" class="form-control"><option
+																	value="0" selected="selected">--Select--</option></select></td>
+													</tr>
+													<tr>
+														<td colspan="1">Endorsement</td>
+														<td colspan="3"><textarea
+																name="endorsement" 
+																id="endorsement"  
+																class="form-control"></textarea></td>
+													</tr>
+
+												</table>
+											</td>
+
+										</tr>
+										<tr>
+											<td align="center" colspan="4"><!-- <input type="submit"
+												name="save" value="Save" id="savebttn"
+												onclick="return submitData();" class="btn btn-primary"> -->  <input type="submit"
+												name="send" value="Send" id="sendbttn"
+												onclick="return submitData();" class="btn btn-primary"><!--  <input
+												type="reset" name="rButton" value="Back"
+												onclick="javascript: history.go(-1)" class="btn btn-primary"> --></td>
+										</tr>
+
+
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</form>
+		<!-- <script>
+	$(".nav-item.iw-entry .nav-link").addClass("active");
+</script> -->
+	</div>
+</body>
+</html>
+
+

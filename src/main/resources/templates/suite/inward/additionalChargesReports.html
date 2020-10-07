@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Additional Charges Revoke</title>
+</th:block>
+<th:block layout:fragment="styles">
+    <style>
+ /*       .table-sm td, .table-sm th {
+    padding: .5rem .5rem .5rem .5rem!important;
+}
+*/
+.table-sm td, .table-sm th {
+    padding: .3rem .5rem .3rem.5rem!important;
+	}
+    </style>
+</th:block>
+<body>
+
+	<div layout:fragment="content">
+		<!-- <div class="container">
+			<div class="row"> -->
+		<div class="container-fluid">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 _offset-md-1">
+                        <div class="card  card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+                            <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                                <h5 class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">Revoke Report </h5>
+							
+								<a class="btn btn-sm btn-primary d-inline-block ml-auto mt-1" role="button" th:href="@{/efilesuite/additinalCharges}">
+									Additional Charges</a>
+							</div>
+						<div class="card-body py-0 bg-white" _style="min-height: calc(100vh - 130px); width: 100%;">
+						
+						<div class="table-responsive _px-3" _width="100%">
+						
+							<table id="additionalCharges" class="table table-bordered table-hover table-striped table-sm mb-0" cellspacing="0" width="100%">
+							<thead class="table-primary">
+								<tr>
+									<th>#</th>
+									<th>Reason</th>
+									<th>Additional Charge Taken by</th>
+									<th>Additional Charge Taken From</th>
+									<th>Additional Charge From Date</th>
+									<th>Remarks</th>
+									<th>Revoke</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="additionalChargesRevokeList , sNo : ${additionalChargesRevoke}">
+									<td th:text="${sNo.count}"></td>
+									<td th:text="${additionalChargesRevokeList.reasonType}"></td>
+									<td th:text="${additionalChargesRevokeList.additionalChargePostId}"></td>
+									<td th:text="${additionalChargesRevokeList.additionalChargesTakenPostId}"></td>
+									<td th:text="${additionalChargesRevokeList.additionalChargesFromDate}"></td>
+									<td th:text="${additionalChargesRevokeList.remarks}"></td>
+									<!-- <td> <a  class="btn btn-info" aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+										data-placement="top"  th:attr="data-url=@{'/efilesuite/chargesRevoke/{revokeId}'}(revokeId=${additionalChargesRevokeList.id})"> Revoke</a>
+									 </td> -->
+									 <td>
+									 	<button class="btn btn-sm  _btn-link btn-outline-primary d-inline-block ml-auto _mt-1" role="button"
+									 	aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+											data-placement="top" th:attr="data-url=@{'/efilesuite/chargesRevoke/{revokeId}'(revokeId=${additionalChargesRevokeList.id})}"><i class="mdi mdi-undo-variant"></i> <!-- Revoke--></button>
+										<!-- <a  class="btn btn-primary" role="button" aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+											data-placement="top" th:attr="data-url=@{'/efilesuite/createEfile/{currentNumber}'(currentNumber=${inwardReport.inwardFileNumber})}">Create e-File</a> -->
+									 </td>
+								</tr>
+							</tbody>
+						</table>
+					</div></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<th:block layout:fragment="scripts">
+        <script>
+			$(document).ready(function() {
+				var table = $('#additionalCharges').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                        paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                     },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: true,
+					scrollResize: false,
+					//scrollY:         'calc( 100vh - 330px )',
+                    scrollCollapse: false,
+                    paging:         true,
+					"pagingType": "simple_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					columns: [
+                       { width:'40px;', targets: 0, className: "pl-2 text-center" },
+                        { _width: '10%', targets: 1,  },
+                        { _width:'90%', targets: 2 },
+                        { _width:'90%', targets: 3 },
+                        { _width:'90%', targets: 4 },
+                        { width: '1%', targets: 5, "orderable": false, className: "px-1" },
+                        { width: '1%', targets: 6, "orderable": false ,className: "text-center px-1" }
+					],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ],
+					fixedHeader: {
+						header: true,
+						headerOffset: $('.app-header.navbar').height()
+					}
+				});
+				 $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+			});
+			</script>
+			</th:block>
+	
+</body>
+</html>

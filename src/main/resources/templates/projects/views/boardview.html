@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+	<link rel="stylesheet" type="text/css" href="../../../resources/vendors/jkanban/dist/jkanban.css" th:href="@{/resources/vendors/jkanban/dist/jkanban.min.css}" />
+	<style>
+		body {
+		font-family: 'Roboto'!important;
+		font-weight: 300!important;
+		overflow: hidden;
+		background: white;
+	}
+	#myKanban {
+			overflow-x: scroll;
+			padding: 0px 0;
+			position: absolute;
+			left: 50px;
+			top: 82px;
+			bottom: 50px;
+			/*			border: 1px solid;*/
+			right: 0;
+		}
+
+		.kanban-board {
+			min-height: calc( 100vh - 150px);
+		}
+
+		.kanban-board header {
+			font-size: 16px;
+			padding: 0 15px;
+			height: 50px;
+			line-height: 50px;
+		}
+
+		.success {
+			background: #00B961;
+			color: white;
+		}
+
+		.info {
+			background: #2A92BF;
+			color: white;
+		}
+
+		.warning {
+			background: #F4CE46;
+			color: white;
+		}
+
+		.error {
+			background: #FB7D44;
+		}
+
+		.breadcrumb-menu .btn {
+			padding-top: .4rem;
+			padding-bottom: .4rem;
+		}
+		.breadcrumb-menu {
+			position: absolute;
+			top: 0;
+			 right: unset;
+		}
+	</style>
+</head>
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+			<div layout:fragment="content">
+			<!-- Breadcrumb -->
+			<ol class="breadcrumb mb-0">
+				<!--<li class="breadcrumb-item">Home</li>
+				<li class="breadcrumb-item"><a href="#">Admin</a>
+				</li>
+				<li class="breadcrumb-item active">Board view</li>-->
+				<li class="breadcrumb-menu float-left d-md-down-none">
+								<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+									<button class="btn btn-ouline-primary btn-secondary" id="addDefault"><i class="fa fa-plus"></i> Add "Default" board</button>
+<!--									<button class="btn btn-primary" id="addToDo"> Add element in "To Do" Board</button>-->
+									<button class="btn btn-secondary" id="addToDo" href="#" data-toggle="modal" data-target="#newTaskFormModal"><i class="fa fa-plus"></i> Add element in "To Do" Board</button>
+									<button class="btn btn-secondary" id="removeBoard">Remove "Done" Board</button>
+								</div>
+							</li>
+							<li class="breadcrumb-icons float-right">
+                                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+
+                                    <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'overview' ? 'active' : ''}" th:href="@{/pms/overview}"><i class="fa fa-eye"></i><span class="d-xs-down-none"> &nbsp; Overview</span></a>
+
+                                    <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'listview' ? 'active' : ''}" th:href="@{/pms/listview}"><i class="icon-list"></i><span class="d-xs-down-none"> &nbsp; List</span></a>
+
+                                    <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'boardview' ? 'active' : ''}" th:href="@{/pms/boardview}"><i class="icon-grid"></i><span class="d-xs-down-none"> &nbsp; Board</span></a>
+
+                                    <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'calenderview' ? 'active' : ''}" th:href="@{/pms/calenderview}"><i class="icon-calendar"></i> <span class="d-xs-down-none">&nbsp; Calender</span></a>
+
+                                    <a class="btn btn-secondary" href="#" th:classappend="${module == 'ganttview' ? 'active' : ''}" th:href="@{/pms/ganttview}"><i class="icon-directions"></i> <span class="d-xs-down-none">&nbsp; Gantt</span></a>
+                                </div>
+
+				</li>
+
+			</ol>
+
+
+			<!--			<h1 class="tab_title text-muted"><i class="icon-speedometer"></i> Dashboard</h1>-->
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+
+							<div id="myKanban"></div>
+
+
+				</div>
+
+			</div>
+			<!-- /.conainer-fluid -->
+
+			</div>	<!-- main-fragment-->
+
+<th:block layout:fragment="scripts">
+<script type="text/javascript" src="../../../resources/vendors/jkanban/dist/jkanban.js" th:href="@{/resources/vendors/jkanban/dist/jkanban.min.js}"></script>
+<script>
+		$(document).ready(function() {
+		var KanbanTest = new jKanban({
+						element: '#myKanban',
+						gutter: '1px',
+						widthBoard: '300px',
+						click: function(el) {
+							console.log(el);
+						},
+						boards: [{
+								"id": "_todo",
+								"title": "To Do",
+								"class": "bg-info",
+								"item": [{
+										"id": "_test_delete",
+										"title": "My Task Test",
+										"addtask": "<a class='addDefault' href=''><i class='fa fa-plus'></i></a>",
+										"click": function(el) {
+											//alert("click");
+										},
+										"drag": function(el, source) {
+											//alert("drag");
+										},
+										"dragend": function(el) {
+											//alert("dragend");
+										}
+									},
+									{
+										"title": "Task 3",
+									}
+								]
+							},
+							{
+								"id": "_progress",
+								"title": "Work in Progress",
+								"class": "bg-warning",
+								"item": [{
+										"title": "Task 2",
+									},
+									{
+										"title": "Task 1",
+									}
+								]
+							},
+							{
+								"id": "_working",
+								"title": "Testing",
+								"class": "bg-danger",
+								"item": [{
+										"title": "Task 4",
+									},
+									{
+										"title": "Task 3",
+									}
+								]
+							},
+							{
+								"id": "_done",
+								"title": "Done",
+								"class": "bg-success",
+								"item": [{
+										"title": "Task 2",
+									},
+									{
+										"title": "Task 1",
+									}
+								]
+							},
+							{
+								"id": "_archive",
+								"title": "Archive",
+								"class": "bg-success",
+								"item": [{
+										"title": "Task 2",
+									},
+									{
+										"title": "Task 1",
+									}
+								]
+							}
+
+						]
+					});
+
+					var toDoButton = document.getElementById('addToDo');
+
+					toDoButton.addEventListener('click', function() {
+						KanbanTest.addElement(
+							"_todo", {
+								"title": "New Task",
+							}
+						);
+					});
+
+					var addBoardDefault = document.getElementById('addDefault');
+					addBoardDefault.addEventListener('click', function() {
+						KanbanTest.addBoards(
+							[{
+								"id": "_default",
+								"class": "bg-info",
+								"title": "Default Board ",
+								"item": [{
+										"title": "Default Item",
+									},
+									{
+										"title": "Default Item 2",
+									},
+									{
+										"title": "Default Item 3",
+									}
+								]
+							}]
+						)
+					});
+
+					var removeBoard = document.getElementById('removeBoard');
+					removeBoard.addEventListener('click', function() {
+						KanbanTest.removeBoard('_done');
+					});
+
+					var removeElement = document.getElementById('removeElement');
+					removeElement.addEventListener('click', function() {
+						KanbanTest.removeElement('_test_delete');
+					});
+
+					var allEle = KanbanTest.getBoardElements('_todo');
+					allEle.forEach(function(item, index) {
+						console.log(item);
+					});
+
+				});
+
+
+	</script>
+
+</th:block>
+</body>
+
+</html>

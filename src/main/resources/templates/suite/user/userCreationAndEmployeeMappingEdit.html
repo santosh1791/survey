@@ -1,0 +1,92 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> User Details</h5>
+	<font color="red"><p th:text="${fMessage}" ></p></font>
+	<font color="green"><p th:text="${sMessage}"  ></p></font>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="employeeUserMappingMasterForm" class="custom-form" method="post" th:action="@{'/editUserEmpMapForm/{initId}/'(initId=${id})}"  th:object="${employeeUserMappingMasterForm}"  autocomplete="off" >
+		
+		<div class="form-row">
+		 <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        <th:block th:if="${failureMessage != null}">
+            <div th:replace="fragments/components :: alert (type='warning', message=${statusMessage})">Alert</div>
+        </th:block>
+		</div>
+		
+		<div class="form-row">
+				
+				<div class="form-group col-md-12">
+					<label for="employeeID" class="col-form-label col-form-label-sm">Employee<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<input type="text" class="form-control form-control-sm"  th:field="*{employeeName}"  readonly="readonly">
+				</div>
+				
+				<div class="form-group col-md-12">
+					<label for="username" class="col-form-label col-form-label-sm">User Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="username" id="username" placeholder="User Name" th:field="*{username}"  readonly="readonly">
+				</div>
+				<div class="form-group col-md-12">
+					<span class="text-danger">Note: If you want to change password, use below password fields.</span>
+				</div>
+				<div class="form-group col-md-12">
+					<label for="password" class="col-form-label col-form-label-sm">Password</label>
+					<input type="password" class="form-control form-control-sm" name="password" id="password" placeholder="Password" th:field="*{password}" onchange="trimValue(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</div>
+				</div>
+				
+				<div class="form-group col-md-12">
+					<label for="cofirmPassword" class="col-form-label col-form-label-sm">Confirm Password</label>
+					<input type="password" class="form-control form-control-sm" name="cofirmPassword" id="cofirmPassword" placeholder="Confirm Password" th:field="*{cofirmPassword}" onchange="trimValue(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('cofirmPassword')}" th:errors="*{cofirmPassword}">cofirmPassword Error</div>
+				</div>
+				
+				<div class="form-group col-md-12">
+					<label for="roleID" class="col-form-label col-form-label-sm">Role<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select id="roleID" name="rolesMaster" class="custom-select custom-select-sm">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${rolesList}">
+							<p th:each="anItem : ${rolesList}">
+								<option  th:value="${anItem.id}"  th:selected="(${anItem.id} == ${roleId})"><span th:text="${anItem.rolename}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('rolesMaster')}" th:errors="*{rolesMaster}">rolesMaster Error</div>
+				</div>
+
+			
+		</div>
+	</form>
+</div>
+<script>
+var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	 var context = "[[@{/}]]";
+	$( "#username" ).on('input' ,function() {
+		$("#userSpanID").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var usernameVal = $( "#username" ).val();
+		if(usernameVal ==null || usernameVal == ""  ){
+			return false; 
+		}
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkUsernameExist/"+usernameVal+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#userSpanID").html("Username: "+usernameVal+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					} 
+		}); 
+	
+	});
+	</script>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+
+</head>
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+			<div layout:fragment="content">
+					<!-- Breadcrumb -->
+			<ol class="breadcrumb mb-2">
+
+				<li class="breadcrumb-item">List View</li>
+				<li class="breadcrumb-icons float-right">
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'overview' ? 'active' : ''}" th:href="@{/pms/overview}"><i class="fa fa-eye"></i><span class="d-xs-down-none"> &nbsp; Overview</span></a>
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'listview' ? 'active' : ''}" th:href="@{/pms/listview}"><i class="icon-list"></i><span class="d-xs-down-none"> &nbsp; List</span></a>
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'boardview' ? 'active' : ''}" th:href="@{/pms/boardview}"><i class="icon-grid"></i><span class="d-xs-down-none"> &nbsp; Board</span></a>
+
+                        <a class="btn btn-secondary" href="#index.jsp" th:classappend="${module == 'calenderview' ? 'active' : ''}" th:href="@{/pms/calenderview}"><i class="icon-calendar"></i> <span class="d-xs-down-none">&nbsp; Calender</span></a>
+
+                        <a class="btn btn-secondary" href="#" th:classappend="${module == 'ganttview' ? 'active' : ''}" th:href="@{/pms/ganttview}"><i class="icon-directions"></i> <span class="d-xs-down-none">&nbsp; Gantt</span></a>
+                    </div>
+
+				</li>
+
+			</ol>
+
+
+			<!--			<h1 class="tab_title text-muted"><i class="icon-speedometer"></i> Dashboard</h1>-->
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+
+				<div class="row">
+
+
+						<div class="card w-100">
+							<div class="card-header">
+								<h6 class="mb-0"> <span class="badge badge-default badge-pill">2</span> Projects</h6>
+							</div>
+							<div class="card-block p-0">
+								<table class="table table-sm table-hover table-bordered table-responsive mb-0">
+									<thead>
+										<tr>
+											<th style="width: 40px;">#</th>
+											<th>Name</th>
+											<th  style="max-width: 140px;">Creator</th>
+											<th  style="max-width: 140px;">Users</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th scope="row">
+												<div class="dropdown">
+													<a class="dropdown-toggle text-gray-dark" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												1
+											  </a>
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+														<a class="dropdown-item" href="#">Action</a>
+														<a class="dropdown-item" href="#">Another action</a>
+														<a class="dropdown-item" href="#">Something else here</a>
+													</div>
+												</div>
+											</th>
+											<td>Mark</td>
+											<td>Otto</td>
+											<td>@mdo</td>
+										</tr>
+										<tr>
+											<th scope="row">2</th>
+											<td>Jacob</td>
+											<td>Thornton</td>
+											<td>@fat</td>
+										</tr>
+										<tr>
+											<th scope="row">3</th>
+											<td>Larry the Bird</td>
+											<td>Larry the Bird</td>
+											<td>@twitter<div th:value="${one}"></div>
+											<span class="hidden-md-down" th:text="${#session.getAttribute('two')}"></span>
+											<span class="hidden-md-down" th:text="${#session.getAttribute('projectsList')}"></span>
+											</td>
+										</tr>
+
+
+									<th:block th:object="${#session.getAttribute('projectsList')}">
+										<p th:each="anItem : ${#session.getAttribute('projectsList')}">
+										<tr>
+
+											<td><a th:text="${anItem.name}"
+												th:value="${anItem.name}"></a></td>
+
+										</tr>
+										</p>
+									</th:block>
+
+
+								</tbody>
+								</table>
+							</div>
+						</div>
+
+				</div>
+
+
+
+
+				</div>
+
+			</div>
+			<!-- /.conainer-fluid -->
+
+
+
+
+			</div>	<!-- main-fragment-->
+
+<th:block layout:fragment="scripts">
+
+
+</th:block>
+
+</body>
+
+</html>

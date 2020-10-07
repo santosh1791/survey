@@ -1,0 +1,57 @@
+@CHARSET "ISO-8859-1";
+
+
+.callout{
+     background: white;
+}
+
+.bg-cgg-warning{
+	background: #f1711c!important;
+
+
+}
+
+.bg-cgg-warning.btn-sm{
+	padding:.25rem .30rem .25rem .35rem !important;
+	border-color : #f1711c!important;
+}
+
+
+.table-sm td, .table-sm th {
+    padding: .3rem!important;
+
+}
+
+.app-header.navbar .navbar-brand{
+    width: 100%;
+    max-width: 300px;
+    /* background-color: #fff; */
+    background-image: url(../img/logo.png);
+    background-size: contain;
+    border-right: 1px solid #c2cfd6;
+    background-position: 10px 50%;
+}
+
+.pace-running > *:not(.pace) {
+          opacity:0;
+          pointer-events: none!important;
+        }
+
+.pace.pace-active {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%;
+    background: #f5f5f5 url(../img/loading.gif) no-repeat center center;
+    background-size: 50px 50px;
+    z-index: 99999999!important;
+    pointer-events: none!important;
+    cursor: not-allowed!important;
+}
+.pace.pace-active:hover{
+    pointer-events: none!important;
+        cursor: not-allowed!important;
+}

@@ -1,0 +1,92 @@
+<script>
+//alert("aaaaa");
+var img = new Image();
+img.src = "${pageContext.request.contextPath}" + "/src/favicon.png";
+document.getElementById('logo').appendChild(img);
+
+</script>
+
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Create Office
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+
+
+	<form class="custom-form" id="organizationDetailsForm" enctype="multipart/form-data"
+                                        th:modelAttribute="logo" method="POST"
+                                        th:action="@{/organizationDetails}"
+                                        th:object="${organizationDetailsForm}">
+
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-form-label col-form-label-sm" for="organizationName">Organization Name<span
+                                                        class="text-danger">*</span></label>
+                                                    <input type="text"
+                                                        class="form-control form-control-sm " name="organizationName"
+                                                        id="organizationName" placeholder="Name"
+                                                        th:field="*{organizationName}">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Current Image : <span class="text-danger">*</span></label>
+                                                    <div class="">
+                                                        <img  th:src="@{'/organizationIcon/{logoPath}'(logoPath=${logoPathImg})}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                        <label for="logo">File input</label>
+                                                    <input type="file"
+                                                            class="form-control-file" name="logo" id="logo"
+                                                            accept="image/*" aria-describedby="fileHelp">
+                                                </div>
+                                            </div>
+
+
+                                        <div class="row" align="center">
+                                            <div class="form-group col-md-12 text-center mb-0 mt-3">
+                                                <button id="validate" class="btn btn-raised btn-primary" type="submit"> Submit</button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+</div>
+<script>
+
+$(document).ready(function ($) {
+	
+	$("#checkfields").click(function (){
+		//alert("4444");
+        //var modelname=$("#inputmodelname").val();
+        for (var i = 0; i < $("#logo").get(0).files.length; ++i) {
+            var file1=$("#logo").get(0).files[i].name;
+			//alert("File NAme : "+file1);
+            if(file1){                        
+                var file_size=$("#logo").get(0).files[i].size;
+                if(file_size<2097152){
+                    var ext = file1.split('.').pop().toLowerCase();                            
+                    if($.inArray(ext,["png","jpg","jpeg","gif"])===-1){
+                        alert("Invalid file extension. File Name : "+file1);
+                        return false;
+                    }
+
+                }else{
+                    alert("File size is too large. File Name : "+file1);
+                    return false;
+                }                        
+            }else{
+                alert("fill all fields..");         
+                return false;
+            }
+        }
+    });
+	
+	});
+
+</script>

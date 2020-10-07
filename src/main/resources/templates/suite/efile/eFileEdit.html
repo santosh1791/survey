@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/eFileMain">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Edit eFile </title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+	<style>
+.redText{color:red;}
+body {
+	overflow: hidden;
+}
+
+.main.nischal {
+	overflow: auto;
+	max-height: calc(100vh - 50px);
+}
+
+.eFile_tabs .border-top-success.active, .eFile_tabs .border-top-danger.active,
+	.eFile_tabs .border-top-info.active, .border-top-warning.active {
+	font-weight: bold;
+}
+
+.eFile_tabs .border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.eFile_tabs .border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.eFile_tabs .border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.eFile_tabs .border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.eFile_tabs .border-top-success.active, .eFile_tabs .border-top-danger.active,
+	.eFile_tabs .border-top-info.active, .border-top-warning.active {
+	font-weight: bold;
+}
+
+.eFile_tabs .tab-content .tab-pane {
+	padding: 1px;
+}
+
+.btn {
+
+}
+
+h6[role="button"] {
+	cursor: pointer;
+}
+
+.text-muted {
+	color: #901127 !important;
+}
+
+.aside-menu.eFile-aside-menu li.list-group-item.d-flex.justify-content-between.align-items-center
+	{
+	font-size: 12px;
+	padding: .1rem .2rem;
+}
+
+.aside-menu.eFile-aside-menu .nav-tabs .nav-link.active {
+	background: #3d70b2;
+	color: white;
+}
+/*@media (min-width: 992px){
+    .sidebar-minimized.sidebar-fixed .app-footer {
+        margin-left: 0px;
+        margin-right: 0px;
+        height: 50px;
+        padding: .5rem;
+    }
+}*/
+.eFile-accordion-header a:hover, .eFile-accordion-header a:active,
+	.eFile-accordion-header a:focus {
+	text-decoration: none !important;
+}
+
+div.mce-tinymce.mce-container {
+	border: 0px solid transparent !important;
+}
+
+.mce-container, .mce-container-body {
+	display: block;
+	overflow: hidden;
+}
+
+.aside-menu.eFile-aside-menu .nav-tabs .nav-item .nav-link {
+    width: auto !important;
+    min-width: 50px !important;
+    padding: .3rem 1rem;
+}
+
+.mce-path, .mce-wordcount {
+	padding: 0 1.25rem !important;
+}
+/*.mce-container *, .mce-widget *{
+    background: white!important;
+    color: #333!important;
+}*/
+.mce-menu-item:hover, .mce-menu-item:focus {
+	background: #999999 !important;
+	color: #000 !important;
+}
+.eFile-accordion-note-header{
+    position: relative;
+}
+
+.eFile-accordion-header > a:before, .eFile-accordion-note-header:before {
+	content: "\f068";
+	font-family: FontAwesome;
+	position: absolute;
+	    top: 0;
+	right: 10px;
+	line-height: 28px;
+	color: #3d6fb2;
+}
+
+
+.eFile-accordion-header > a.collapsed:before, .eFile-accordion-note-header.collapsed:before {
+	content: "\f067";
+	font-family: FontAwesome;
+	position: absolute;
+	    top: 0;
+	right: 10px;
+	line-height: 28px;
+	color: #3d6fb2;
+}
+
+.mce-statusbar .mce-container-body {
+	/*background: white;*/
+
+}
+
+.aside-menu-fixed .aside-menu.eFile-aside-menu {
+	top: 50px;
+}
+
+/*
+.collapse-btn i.fa{
+    display: none;
+}
+*/
+.collapse-btn.collapsed[aria-expanded="false"] i.fa.fa-chevron-down{
+    display: none;
+}
+.collapse-btn.collapsed[aria-expanded="false"] i.fa.fa-chevron-up{
+    display: block;
+}
+.collapse-btn[aria-expanded="true"] i.fa.fa-chevron-up, .collapse-btn[aria-expanded="false"] i.fa.fa-chevron-down {
+    display: none;
+}
+.collapse-btn[aria-expanded="true"] i.fa.fa-chevron-down {
+    display: block;
+}
+
+.collapse-btn.expand-all i.mdi.mdi-download ,
+.collapse-btn.expand-all i.mdi.mdi-upload.rotate-180 {
+    display: block;
+    transition: .1s all ease-in-out;
+}
+.collapse-btn.expand-all i.mdi.mdi-upload {
+    display: none;
+}
+.collapse-btn:not(expand-all) i.mdi.mdi-upload{
+    display: block;
+    transition: .1s all ease-in-out;
+}
+.collapse-btn:not(expand-all) i.mdi.mdi-download,
+.collapse-btn:not(expand-all) i.mdi.mdi-upload.rotate-180{
+     display: none; 
+}
+
+.main.nischal {
+    overflow-y: scroll!important;
+}
+
+.eFile-accordion-note-header {
+       /* border-top: 2px solid #3d6fb2;
+        background: #ffffff;*/
+        border-left: 2px solid #3d6fb2;
+    background: #ffffff;
+    border-top: 1px solid #c2cfd6;
+        cursor: pointer;
+}
+.item .card-body {
+    border-left: 0px solid #3d6fb2;
+}
+.eFile-accordion-note-header > a{
+   text-decoration: none;
+   color: #3d6fb2!important;
+   padding-right: 5px;
+   border-right: 0px solid grey;
+   font-weight: 500;
+       cursor: pointer;
+}
+.eFile-accordion-header {
+   /* background: #ffffff!important;*/
+    border-bottom: 1px solid #f6f2f2;
+       cursor: pointer;
+
+    }
+    .eFile-accordion-header:hover {
+            cursor: pointer;
+    }
+/* .item .eFile-accordion-note-header{
+    border-bottom: 1px solid #ffffff;
+    background: #3d6fb2;
+    color: white;
+}
+*/
+
+.mailbox-read-info{
+    color: #999;
+    font-size: 14px;
+}
+.sender-name{
+    font-weight: bold;
+}
+
+.eFile-accordion-note-header[aria-expanded="false"] .truncate-text {
+    display: inline!important;
+        width: 80%;
+        border-left: 1px solid #00000012;
+        padding-left: 10px;
+            cursor: pointer;
+}
+.eFile-accordion-note-header[aria-expanded="true"] .truncate-text {
+    display: none!important;
+}
+
+.truncate-text * {
+    display: inline;
+}
+.rotate-180 {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.eFile-accordion-note-header{
+    position: relative;
+    padding-left: 25px!important;
+    /*background: #3d6fb21c;*/
+}
+
+.eFile-accordion-header > a:before {
+	content: "\f068";
+	font-family: FontAwesome;
+	position: absolute;
+	    top: 0;
+	right: 10px;
+	line-height: 28px;
+	color: #3d6fb2;
+}
+.eFile-accordion-header > a.collapsed:before {
+	content: "\f067";
+	font-family: FontAwesome;
+	position: absolute;
+	    top: 0;
+	right: 10px;
+	line-height: 28px;
+	color: #3d6fb2;
+}
+.eFile-accordion-note-header:before {
+    content: "\f078";
+    font-family: FontAwesome;
+    position: absolute;
+    top: -1px;
+    left: 6px;
+    line-height: 28px;
+    color: #3d6fb2;
+    font-size: 13px;
+}
+.eFile-accordion-note-header.collapsed:before {
+    content: "\f054";
+    font-family: FontAwesome;
+    position: absolute;
+    top: -1px;
+    left: 8px;
+    line-height: 28px;
+    color: #3d6fb2;
+    font-size: 13px;
+}
+/*
+div#notesHeader a.collapsed + button.collapse-btn {
+    display: none;
+}
+*/
+.eFile-accordion-note-header.collapsed {
+    border-left: 2px solid #3d6fb275;
+ }
+
+body.aside-menu-fixed #writeNoteBody div.mce-fullscreen {
+position: fixed;
+top: 50px !important;
+left: 50px !important;
+width: calc(100% - ( 40% - 27px)) !important;
+right: 0;
+bottom: 49px;
+}
+
+body.aside-menu-fixed.aside-menu-hidden #writeNoteBody div.mce-fullscreen {
+position: fixed;
+top: 50px !important;
+left: 50px !important;
+width: 100% !important;
+right: 0;
+bottom: 49px;
+}
+
+
+ body.aside-menu-fixed.mce-fullscreen #writeNoteBody .form-group.row.text-right.px-3.pt-3.eFile-button-footer {
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - ( 40% - 27px)) !important;
+    background: #ffffff;
+    margin-right: 0;
+    padding: .5rem!important;
+    margin: 0;
+    left: 50px;
+    height: 50px;
+    z-index: 99999999;
+    border-top: 1px solid grey;
+}
+ body.aside-menu-fixed.aside-menu-hidden.mce-fullscreen #writeNoteBody .form-group.row.text-right.px-3.pt-3.eFile-button-footer{
+    width: calc(100%) !important;
+ }
+ .eFile-accordion-header{
+    background: #fff!important;
+ }
+ .eFile-accordion-note-header {
+    background: #f1f5fa!important;
+}
+body.aside-menu-hidden .aside-menu-toggler {
+    transform: rotate(0deg);
+    transition: 1s all ease-in-out;
+}
+body:not(.aside-menu-hidden) .aside-menu-toggler {
+    transform: rotate(-180deg);
+    transition: 1s all ease-in-out;
+}
+
+</style>
+</th:block>
+
+<body
+	class="app header-fixed sidebar-fixed sidebar-minimized brand-minimized  aside-menu-fixed">
+
+
+
+	<th:block layout:fragment="content">
+
+		<!-- Breadcrumb -->
+		<ol class="breadcrumb px-2">
+			<li class="breadcrumb-item active pt-0"><a class="btn btn-link"
+				style="" href="#" onclick="goBack();"> <i
+					class="fa fa-chevron-left"></i>&nbsp; <b>eFile</b></a></li>
+
+			<!-- Breadcrumb Menu-->
+			<li class="breadcrumb-menu">
+				<div style="margin-top: 4px;" class="btn-group" role="group"
+					aria-label="Button group with nested dropdown">
+					<a  class="btn btn-lg btn-secondary bg-transparent" target="_blank" th:href="@{'/efilesuite/printeFiles/{currentNumber}'(currentNumber=${notefileNumber})}">
+						<i class="icon-printer"></i> &nbsp;print
+					</a>
+					<button class="btn btn-lg btn-primary bg-transparent navbar-toggler aside-menu-toggler" href="#">
+                        <i class="mdi mdi-18px mdi-backburger"></i></button>
+				</div>
+			</li>
+		</ol>
+
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+                <!--/*
+                  <th:block  th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+                      <h3 th:text="|${notefileDetails.notefileNumber}, ${notefileDetails.presentOwner}, ${notefileDetails.pressentStatus}|"></h3>
+                      <th:block th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+                          <h1 th:text="|${itrStatee.count}, ${movementDetails.movementId}, ${movementDetails.status}|"></h1>
+                          <p  th:utext="${movementDetails.content}"></p>
+                          <hr>
+                      </th:block>
+                  </th:block>
+               */-->
+
+								<div class="row">
+									<div class="w-100">
+										<form method="post"
+											class="custom-form _form-narrow _form-horizontal"
+											th:action="@{/efilesuite/updatingEfile}"
+											th:object="${notefileDetailsDTO}" enctype="multipart/form-data"
+											id="notefileDetailsDTO">
+											<input type="hidden" th:value="${notefileNumber}"
+												name="notefileNumber" id="notefileNumber" />
+											<div class="card bg-transparent _mt-3 border-0">
+												<div class="card-body bg-transparent p-0">
+													<div class="row">
+														<div class="col-md-12">
+															<div class="card  bg-transparent p-0 border-0 mb-0"
+																id="momContent">
+																<!-- <div class="card border-primary"> -->
+
+
+												<!--File Details  -->
+												<!--/*
+												<div id="accordion" role="tablist" class="d-none">
+													<div class="card bg-warning">
+
+														<div class="card-header p-0 eFile-accordion-header"
+															role="tab" id="headingOne">
+
+															<a class="py-1 px-2 btn-link d-block text-white "
+																data-toggle="collapse" href="#collapseOne" role="button"
+																aria-expanded="true" aria-controls="collapseOne">
+																<h5 class="mb-0">File Details</h5>
+															</a>
+
+														</div>
+														<div id="collapseOne"
+															class="card-body bg-white text-dark collapse show"
+															role="tabpanel" aria-labelledby="headingOne"
+															data-parent="#accordion">
+															<div class="box box-warning box-solid"
+																th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+																<div class="row">
+																	<div class="col-3" align="center">
+																		<h3 th:text="${notefileDetails.notefileNumber}">
+																		</h3>
+																	</div>
+																	<div class="col-6" align="left">
+																		<h3 th:text="${notefileDetails.subject}"></h3>
+																	</div>
+																</div>
+																<div class="row">
+																<div class="col-6">
+										 		<h5> File Initiator: <span th:text="${notefileDetails.presentOwner}"></span></h5>
+										 	</div>
+																	<div class="col-12">
+																		<span class="mailbox-read-time pull-right">
+																			File Initiator:
+																			<span th:if="${postMaster.employeeMaster}!=null">
+																			 	<span th:text="${postMaster.employeeMaster.employeefirstname}"></span>&nbsp;&nbsp;
+																			 	<span th:text="${postMaster.employeeMaster.employeelastname}"></span>
+																			 </span>
+																			 <span th:if="${postMaster.employeeMaster}==null">
+																			 	<span> N/A </span>
+																			 </span>
+																		</span> <br/> <span class="mailbox-read-time pull-right" th:text="${#dates.format(notefileDetails.createdDate,'dd/MM/yyyy HH:MM')}">
+																		</span>
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+												*/-->
+												<!--File Details  Ends -->
+
+
+
+
+
+
+
+
+
+												<!-- <span th:text="${notefileAttachmentDetails}"></span> -->
+												<!--Attachments -->
+												<!--/*
+												<div id="accordionTwo" role="tablist"
+													th:if="${notefileAttachmentDetails} == null "></div>
+												<div id="accordionTwo" role="tablist" class="d-none"
+													th:if="${notefileAttachmentDetails} != null ">
+													<div class="card bg-success">
+														<div class="card-header p-0 eFile-accordion-header"
+															role="tab" id="headingTwo">
+
+															<a class="py-1 px-2 btn-link d-block  text-white"
+																data-toggle="collapse" href="#collapseTwo" role="button"
+																aria-expanded="true" aria-controls="collapseTwo">
+																<h5 class="mb-0">Attachments</h5>
+															</a>
+
+														</div>
+														<div id="collapseTwo" class="collapse show"
+															role="tabpanel" aria-labelledby="headingTwo"
+															data-parent="#accordionTwo">
+															<div class="card-body bg-white">
+																<div class="box box-warning box-solid">
+																	<div class="box-body">
+																		<div class="row"
+																			th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+																			<div class="col-6">
+																				<h6>
+																					<span th:text="${sNo.count}"> </span> ) . <a
+																						class="btn btn-link"
+																						th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}"
+																						style="color: black;"> <i class="fa fa-file"></i>&nbsp;
+																						<span
+																						th:text="${attachemtnsDetails.attachmentFileName}"></span>
+																					</a> <a class="btn btn-link  _btn-outline-primary"
+																						th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${attachemtnsDetails.path} , orgFileName=${attachemtnsDetails.attachmentFileName})}"
+																						style="color: black;"> <span><i
+																							class="fa fa-download"></i>&nbsp; Download </span>
+																					</a>
+
+																				</h6>
+																			</div>
+
+																			<div class="col-6">
+																				<span class="mailbox-read-time pull-right"
+																					th:text="${#dates.format(attachemtnsDetails.createdDate,'dd/MM/yyyy hh:mm a')}"></span>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												*/-->
+												<!--Attachments  Ends -->
+
+
+
+
+
+
+
+
+													<!--Notes -->
+													<div id="accordionThree"
+														class="card  card-accent-primary  mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header "
+															id="notesHeader" >
+															<a  class="py-1 px-2 btn-link d-block mr-auto collapsed" _data-toggle="collapse" href="#notesBody"
+                                                                role="button" aria-expanded="false">
+																<h6 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Notes
+																</h6>
+															</a>
+
+                                                            <button style="position:absolute; top: 4.5px; width: 25px; height: 25px; padding: 0; line-height: 1; right: 30px;" type="button" class="btn btn-sm btn-outline-primary border-0 collapse-btn expand-all " _data-toggle="tooltip" data-placement="top" data-trigger="hover" _title="Expand all">
+                                                               <i class="mdi mdi-18px mdi-upload rotate-180" data-toggle="tooltip" data-placement="top" title="Expand all"></i>
+                                                                <i class="mdi mdi-18px mdi-upload"  data-toggle="tooltip" data-placement="top" title="Collapse all"></i>
+                                                                <!--<i class="mdi mdi-18px mdi-download"></i>-->
+
+                                                            </button>
+
+
+														</div>
+
+														<div id="notesBody" class="collapse _hide" role="tabpanel"
+															aria-labelledby="headingThree"
+															_data-parent="#accordionThree">
+															<div class="card-body bg-white text-dark p-0 _pt-1">
+																<div id="exampleAccordion" data-children=".item">
+                                                                    <div class="card mb-0">
+                                                                        <th:block  th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+                                                                        <th:block
+																		th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+																	    <div class="item" th:if="(${itrStatee.count} le ${itrStatee.size}-2 and ${notefileDetails.pressentStatus}!=3) or (${itrStatee.count} le ${itrStatee.size}-1 and ${notefileDetails.pressentStatus}==3) ">
+
+																		<div
+																			 class="card-header py-0 px-1 eFile-accordion-note-header collapsed" data-toggle="collapse" role="button"
+                                                                            aria-expanded="false"
+                                                                            th:attr="href=@{#exampleAccordion}+${itrStatee.count} ,_data-parent=exampleAccordion+${itrStatee.count} ,aria-controls=exampleAccordion+${itrStatee.count}">
+																			<a class="d-inline -block no-pointer " >
+																				Note : <span th:text="${itrStatee.count}"></span>
+																			</a>
+
+                                                                            <div class="truncate-text ml-2">
+
+                                                                                <span class="mb-0"
+                                                                                      _th:utext="${#strings.abbreviate(movementDetails.content, 99)}"
+                                                                                >Accepting as per Human welfare and economic development in Asia depends...  </span>
+                                                                                    >
+                                                                            </div>
+
+                                                                        </div>
+																			<div th:attr="id=exampleAccordion+${itrStatee.count}"
+																				class="card-body collapse hide multi-collapse p-0" role="tabpanel">
+                                                                                <div class="p-3">
+																				<span class="mb-3 text-dark note-content"
+																					th:utext="${movementDetails.content}"></span>
+                                                                                </div>
+                                                                                <div class="note-sender-info mailbox-read-info text-right w-100 px-2">
+																				    <small class=" d-block text-bold sender-name" th:if="${movementDetails.fileMovementPostMasterFrom.employeeMaster}!=null" th:text="${movementDetails.fileMovementPostMasterFrom.employeeMaster.employeefirstname}"></small>
+																				    <small class=" d-block text-bold sender-name" th:if="${movementDetails.fileMovementPostMasterFrom.employeeMaster}!=null" th:text="${movementDetails.fileMovementPostMasterFrom.employeeMaster.employeelastname}"></small>
+																				     &nbsp; - &nbsp;  <small class=" d-block text-bold sender-name" th:if="${movementDetails.fileMovementPostMasterFrom}!=null" th:text="${movementDetails.fileMovementPostMasterFrom.postname}"></small>
+																				    
+																				    <small class="" th:text="${#dates.format(movementDetails.entryDate,'dd/MM/yyy hh:mm a')}"></small>
+                                                                                </div>
+																			</div>
+
+																	</div>
+                                                                        </th:block>
+                                                                        </th:block>
+																    </div>
+																</div>
+
+															</div>
+														</div>
+
+
+
+													</div>
+													<!--Notes -->
+
+																<th:block th:if="${notefileMovementDetails} != null  ">
+                                                                <div th:if="${#lists.size(notefileMovementDetails) gt 0}" id="exampleAccordion" class="card mb-2 card-shadow  text-dark">
+
+																    <th:block th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+
+																    <th:block   th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+																		<th:block th:if="((${itrStatee.count} == ${itrStatee.size}) and (${notefileDetails.pressentStatus}==3)) or ((${itrStatee.count} == ${itrStatee.size}-1) and (${notefileDetails.pressentStatus} lt 3)) ">
+                                                                            <div class="item">
+	                                                                        <div class="card-header py-0 px-1 eFile-accordion-note-header" data-toggle="collapse" role="button"
+	                                                                             aria-expanded="true"
+	                                                                             th:attr="href=@{#exampleAccordion}+${itrStatee.count} ,data-parent=exampleAccordion+${itrStatee.count} ,aria-controls=exampleAccordion+${itrStatee.count}">
+																			<a class="d-inline" >
+																				Note : <span th:text="${itrStatee.count}"></span>
+																			</a>
+
+	                                                                            <div class="truncate-text ml-2">
+	                                                                                <!--<h1 th:utext="${#strings.length(movementDetails.content)}">0</h1>-->
+	                                                                                <span class="mb-0"
+	                                                                                      _th:utext="${#strings.abbreviate(movementDetails.content, 99)}"
+	                                                                                >Accepting as per Human welfare and economic development in Asia depends...  </span>
+
+	                                                                            </div>
+
+	                                                                        </div>
+																			<div th:attr="id=exampleAccordion+${itrStatee.count}"
+																				class="collapse show  text-dark card-body p-0" role="tabpanel">
+	                                                                            <div class="p-3 pt-2">
+																				<span class="mb-3  text-dark note-content"
+																					th:utext="${movementDetails.content}"></span>
+	                                                                            </div>
+	                                                                            <div class="note-sender-info mailbox-read-info text-right w-100 px-2">
+	                                                                            	<small class=" d-block text-bold sender-name" th:if="${movementDetails.fileMovementPostMasterFrom.employeeMaster}!=null" th:text="${movementDetails.fileMovementPostMasterFrom.employeeMaster.employeefirstname}"></small>
+																				    <small class=" d-block text-bold sender-name" th:if="${movementDetails.fileMovementPostMasterFrom.employeeMaster}!=null" th:text="${movementDetails.fileMovementPostMasterFrom.employeeMaster.employeelastname}"></small>
+																				     &nbsp; - &nbsp;  
+	                                                                                <small class="d-block text-bold sender-name" th:text="${movementDetails.fileMovementPostMasterFrom.postname}"></small>
+	                                                                                <small class="sender-sent-date" th:text="${#dates.format(movementDetails.entryDate,'dd/MM/yyy hh:mm a')}"></small>
+
+	                                                                            </div>
+																			</div>
+                                                                            </div>
+																		</th:block>
+																	</th:block>
+																</th:block>
+															</div>
+															</th:block>
+
+														<!--</div>-->
+													<!--</div>-->
+													<!--Notes  Ends -->
+
+													<div
+														class="card _card-accent-primary text-dark mb-3  card-shadow"
+														th:if="${#session.getAttribute('sentFlag')} == false">
+
+														<div class="card-header py-0 px-1 eFile-accordion-note-header"
+															data-toggle="collapse" href="#writeNoteBody"
+															role="button" aria-expanded="true"
+															aria-controls="writeNoteBody">
+                                                            <!-- <th:block class="item  text-dark"
+                                                                      _th:each="movementDetails,itrStatee : ${notefileMovementDetails}"> -->
+                                                                <!-- <th:block
+                                                                    th:if="${itrStatee.count} gt ${notesSizeMinusOne} "> -->
+                                                                    <!-- <th:block th:if="${notefileMovementDetails} != null  "> -->
+                                                                    <th:block th:if="${notefileMovementDetails} != null  ">
+                                                                    <th:block th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+															 			<th:block th:if="${notefileDetails.pressentStatus} == 3 " >
+		                                                                    <a class=" btn-link d-inline">
+		                                                                        Note : <span th:text="${#lists.size(notefileMovementDetails)+1}"></span>
+
+		                                                                    </a>
+
+		                                                                    </th:block>
+		                                                                    <th:block th:if="${notefileDetails.pressentStatus} lt 3 " >
+																					<a class=" btn-link d-inline">
+		                                                                        Note : <span th:text="${#lists.size(notefileMovementDetails)}"></span>
+
+		                                                                    </a>
+
+		                                                                    </th:block>
+		                                                                </th:block>
+		                                                                </th:block>
+                                                               <!--  </th:block> -->
+                                                            <!-- </th:block> -->
+														</div>
+
+														<div class="card-body p-0 collapse show bg-white"
+															id="writeNoteBody">
+															<div class="form-group mb-3">
+															<!-- <h1 th:text="${notefileDetails.pressentStatus}"></h1> -->
+															 <!-- th:each="notefileDetails : ${responseNotefileDetailsEntity}" -->
+															 <th:block th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+															 			<!-- ==<h1 th:text="${notefileDetails.pressentStatus}"></h1> -->
+
+															 	<th:block th:if="${notefileDetails.pressentStatus} == 3 " >
+															 		<textarea  class="form-control" name="content" id="content"
+																				 required="required">
+																	</textarea>
+															 	</th:block>
+															 	<th:block th:if="${notefileDetails.pressentStatus} lt 3 " >
+															 		<th:block th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+
+															 			<th:block th:if="${itrStatee.count} == ${itrStatee.size} ">
+																 			<input type="hidden" th:value="${movementDetails.id}" name="id" >
+																	 		<textarea  th:text="${movementDetails.content}"  class="form-control" name="content" id="content"
+																						 required="required">
+																			</textarea>
+																		</th:block>
+																	</th:block>
+															 	</th:block>
+															 </th:block>
+
+																<!-- <span
+																	th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+																	<span
+																	th:if="${itrStatee.count} == ${notesSizeMinusOne}+1">
+																		<span th:if="${movementDetails.status}==1">
+																		<span th:if="${movementDetails.status}==1">
+																			<textarea class="form-control" name="content" id="content"
+																				th:text="${movementDetails.content}"  required="required">
+																			 </textarea>
+																		</span>
+																			<textarea  th:if="${movementDetails.status}==3" class="form-control" name="content" id="content"
+																				 required="required">
+																			 </textarea>
+																			<textarea th:if="${movementDetails.status}!=3" class="form-control" th:text="${movementDetails.content}"
+																						name="content" id="content"
+																				 required="required">
+																			 </textarea>
+																		<span th:if="${movementDetails.status}!=1">
+																			<textarea class="form-control" name="content" id="content"
+																				required="required">
+																			</textarea>
+																		</span>
+																</span>
+
+																</span> -->
+
+															</div>
+
+															<div class="col-sm-12">
+
+
+																<!-- <div class="form-group row  mb-0" th:if="${#session.getAttribute('sentFlag')} == false">
+																	<div class="col-sm-12">
+																		<div class="row">
+																			<label class="col-form-label col-form-label-sm col-sm-3 col-md-2"
+																				for="attachments"> Attachment<span class="text-danger">*</span>
+																			</label>
+																			<div class="col-sm-7 col-md-7">
+																				<input type="file" class="form-control mb-1"
+																					id="attachments" multiple="multiple" onchange="javascript:validateFiles();"
+																					name="attachments" /> <small
+																					class="help-text text-muted d-inline-block">
+						 															You can select multiple files.
+																					(Supported Formats :jpg, jpeg, png, pdf, doc, docx, xls, xlsx ) </small>
+																				<ul id="filaNames">
+
+																				</ul>
+																			</div>
+																			<div class=" col-sm-3 col-md-3 d-none">
+																				<ul id="fileList">
+																					<li>No Files Selected</li>
+																				</ul>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+
+																<div class="form-group form-row" th:if="${#session.getAttribute('sentFlag')} == false" >
+																	<div class="col-lg-2 ">
+																		<label class="col-form-label col-form-label-sm"
+																			for="attachments"> Attachments   </label>
+																	</div>
+																	<div class="col-md-10">
+																	 	<input type="file" name="attachments"  value=""  onchange="javascript:validateFiles();"
+																			id="attachments" class="form-control form-control-sm"
+																			style="height: 65px;" multiple="multiple"  > <small
+																			style="position: absolute; bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"
+																			class="help-text text-muted d-inline-block">You can select multiple files.(Supported Formats :jpg, jpeg, png, pdf, doc, docx, xls, xlsx )</small>
+																	</div>
+																</div>
+
+																<div class="form-group  form-row">
+																	<div class="col-lg-2 ">
+																		<label for="attachments"
+																			class="col-form-label col-form-label-sm">Send To<!-- Officers --></label>
+																	</div>
+
+																			<div class="col-md-10 col-sm-9" align="center">
+																				<div id="sendto">
+																					<select multiple="multiple" class="custom-select auto-complete-select w-100" name="efileOwnerPostMaster"
+																						id="posts" size="1" _required >
+																						<!-- <option value="0">--Select--</option>
+																						<option th:each="postsList : ${postsMasterList}"
+																							th:value="${postsList.id}"><span
+																								th:text="${postsList.postname}"></span>
+																							 (<span th:text="${postsList.employeeMaster.employeefirstname}"></span>
+																							  <span th:text="${postsList.employeeMaster.employeelastname}"></span> )
+																						</option> -->
+																						<option value="0" >--Select--</option>
+																						<span th:each="postsList : ${postsMasterList}"  >
+																							<span  th:if="${postsList.employeeMaster} != null" >
+																								<option  th:value="${postsList.id}" >
+																									<!-- <span class="avatar "> <img
+																										src="../../../resources/img/avatars/8.jpg"
+																										th:src="@{'/organizationIcon/{profilePicturePath1}'(profilePicturePath1=${postsList.employeeMaster.photopath})}" class="img-avatar"
+																										alt="">
+																									</span> -->
+																									<span  th:text="${postsList.employeeMaster.employeefirstname}" ></span> <span  th:text="${postsList.employeeMaster.employeelastname}" ></span>
+																									<span  th:text="${postsList.postname}"></span>
+																									<span th:if="${postsList.sectionMaster}!=null">
+																										 <span th:text="${postsList.sectionMaster.sectionname}"></span>
+																									</span>
+																									<span th:if="${postsList.sectionMaster}==null">
+
+																									</span>
+																									<span th:text="${postsList.officeMaster.officename}"></span>
+																								</option>
+																							</span>
+																							<span  th:if="${postsList.employeeMaster} == null" >
+																								<option  class="redText"  th:value="${postsList.id}" >
+																									<span th:text="${postsList.postname}"></span>
+																									<span th:if="${postsList.sectionMaster}!=null">
+																										 <span th:text="${postsList.sectionMaster.sectionname}"></span>
+																									</span>
+																									<span th:if="${postsList.sectionMaster}==null">
+																									</span>
+																									<span th:text="${postsList.officeMaster.officename}"></span>
+																								</option>
+																							</span>
+																						</span>
+																					</select>
+																					<small class="help-text text-muted d-inline-block">
+																						<span class="text-info">EmployeeName &nbsp; Post &nbsp; Section &nbsp; Office</span></small>
+																					<!-- <figcaption class="figure-caption" style="color: #fd1414;">
+																						<strong class="help-text text-muted d-inline-block"><span
+																							class="text-info help-text text-muted d-inline-block">
+																							(Display Format :EmployeeName PostName SectionName OfficeName )</span> </strong>
+																					</figcaption> -->
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<!-- </div> -->
+                                                                    <div class="form-group row text-right px-3 pt-3 eFile-button-footer">
+                                                                        <div class="col-md-12">
+                                                                            <button type="submit" name="save" value="Save"
+                                                                                    class="btn btn-outline-primary"
+                                                                                    onclick="javascript:return formValidations(this.value);" >
+                                                                                <i class="fa fa-save"></i>&nbsp; Save
+                                                                            </button>
+
+                                                                            <button type="submit" name="send" value="Send"
+                                                                                    class="btn btn-primary ml-3"
+                                                                                    onclick="javascript:return formValidations(this.value);" >
+                                                                                <i class="icon-paper-plane"></i>&nbsp; Send
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+																</div>
+
+
+
+
+
+															</div>
+
+
+
+													<!--Drafts -->
+													<div id="accordionFive"
+														class="card  card-accent-primary  mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header "
+															id="draftsHeader" >
+															<a  class="py-1 px-2 btn-link d-block mr-auto collapsed" _data-toggle="collapse" href="#draftsBody"
+                                                                role="button" aria-expanded="false">
+																<h6 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Drafts
+																</h6>
+															</a>
+
+                                                            <button style="position:absolute; top: 4.5px; width: 25px; height: 25px; padding: 0; line-height: 1; right: 30px;" type="button" class="btn btn-sm btn-outline-primary border-0 collapse-btn expand-all " _data-toggle="tooltip" data-placement="top" data-trigger="hover" _title="Expand all">
+                                                               <i class="mdi mdi-18px mdi-download" data-toggle="tooltip" data-placement="top" title="Expand all"></i>
+                                                                <i class="mdi mdi-18px mdi-upload"  data-toggle="tooltip" data-placement="top" title="Collapse all"></i>
+
+
+                                                            </button>
+
+
+														</div>
+														
+														<div class="form-group row text-right px-3">
+															<div class="col-md-12" th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+																<a class="btn btn-outline-primary btn-sm " role="button" aria-pressed="false"
+																	data-toggle="modal" data-target="#modalBlank"
+																	data-placement="top" 
+																	th:attr="data-url=@{'/efilesuite/notefileDraft/{notefileNumber}'(notefileNumber=${notefileDetails.id})}">
+																	Drafts 
+																</a>		
+															</div>
+														</div>
+														
+														
+														<div id="draftsBody" class="collapse _hide" role="tabpanel"
+															aria-labelledby="headingFive"
+															_data-parent="#accordionThree">
+															<div class="card-body bg-white text-dark p-0 _pt-1">
+																<div id="exampleAccordionDrafts" data-children=".item">
+                                                                    <div class="card mb-0">
+                                                                    
+																	    <div class="item" th:each="draftDetails, itrStatee : ${draftMasters}">
+
+																		<th:block th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 ">
+																			
+																		</th:block>
+																		<div
+																			_th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 " class="card-header py-0 px-1 eFile-accordion-note-header collapsed" data-toggle="collapse" role="button"
+                                                                            aria-expanded="false"
+                                                                            th:attr="href=@{#exampleAccordionDrafts}+${itrStatee.count} ,_data-parent=exampleAccordionDrafts+${itrStatee.count} ,aria-controls=exampleAccordionDrafts+${itrStatee.count}">
+																			<a class="d-inline -block no-pointer " >
+																				Draft : <span th:text="${itrStatee.count}"></span>
+																			</a>
+
+                                                                            <div class="truncate-text ml-2">
+                                                                                <!--<h1 th:utext="${#strings.length(movementDetails.content)}">0</h1>-->
+                                                                                <span class="mb-0"
+                                                                                      th:utext="${#strings.abbreviate(draftDetails.draftSubject, 99)}"
+                                                                                >Accepting as per Human welfare and economic development in Asia depends...  </span>
+                                                                                <!--<span class="mb-0"-->
+                                                                                      <!--th:utext="${#strings.substring(movementDetails.content, 0, #strings.length(movementDetails.content) < 99 ? #strings.length(movementDetails.content) : 99 )}"-->
+                                                                                <!--&gt;Accepting as per Human welfare and economic development in Asia depends...  </span>-->
+
+                                                                            </div>
+
+                                                                        </div>
+																		<!-- <span th:text="${itrStatee.count}"></span> == <span th:text="${notesSize}"></span> -->
+
+																		<!-- <th:block th:if="${itrStatee.count} == ${notesSize} "> -->
+																			<div th:attr="id=exampleAccordionDrafts+${itrStatee.count}"
+																				class="card-body collapse hide multi-collapse p-0" role="tabpanel">
+                                                                                <div class="p-3">
+																				<span class="mb-3 text-dark"
+																					th:utext="${draftDetails.content}"></span>
+                                                                                </div>
+                                                                                <div class="note-sender-info mailbox-read-info text-right w-100 px-2">
+																				    <small class=" d-block text-bold sender-name" th:text="${draftDetails.initiatorPostMaster.postname}"></small>
+																				    <!-- <small class="" th:text="${#dates.format(draftDetails.entryDate,'dd/MM/yyy')}"></small> -->
+																				    <small class="" th:text="${draftDetails.entryDate}"></small>
+                                                                                </div>
+                                                                                <th:block th:if="${draftDetails.status}!='2'"> <!-- If Status == 2 Draft Approved -->
+	                                                                                <a class="btn btn-outline-primary btn-sm " role="button" aria-pressed="false"
+																						data-toggle="modal" data-target="#modalBlank"
+																						data-placement="top" 
+																						th:attr="data-url=@{'/efilesuite/notefileDraftUpdate/{draftId}'(draftId=${draftDetails.id})}">
+																						Edit 
+																					</a>
+																					<a  th:if="${#authorization.expression('hasRole(''ROLE_DRAFT_APPROVAL'')')}"
+																					 class="btn btn-primary btn-sm text-white" role="button" aria-pressed="false"
+																						data-toggle="modal" data-target="#modalBlank"
+																						data-placement="top" 
+																						th:attr="data-url=@{'/efilesuite/notefileDraftApproval/{draftId}'(draftId=${draftDetails.id})}">
+																						Approve  
+																					</a>
+																				</th:block>
+                                                                                
+																			</div>
+																		<!-- </th:block> -->
+																	</div>
+																    </div>
+																</div>
+
+															</div>
+														</div>
+
+
+
+													</div>
+
+														</div>
+													</div>
+												</div>
+
+											</div>
+									</div>
+								</div>
+							</div>
+							<!-- .card-body -->
+					</div>
+					</form>
+
+				</div>
+				<!-- .w-100 -->
+
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.animated.fadeIn -->
+		</div>
+		<!--/.main .container-fluid -->
+
+	</th:block>
+
+
+
+	<th:block layout:fragment="aside-menu">
+		<aside class="aside-menu eFile-aside-menu" style="max-width: 35%;">
+
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item"  data-toggle="tooltip" data-placement="top" data-trigger="hover" title="eFile Info">
+					<a class="nav-link info-tab-link "
+					data-toggle="tab" href="#info-tab" role="tab"><i
+						class="icon-info"></i><!--<span class="d-md-none d-lg-inline-block">&nbsp;
+							Info</span>--></a></li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="top" data-trigger="hover" title="eFile Attachment"><a class="nav-link attachments-tab-link"
+                                        data-toggle="tab" href="#attachments-tab" role="tab"><i
+                    class="icon-paper-clip"  ></i><!--<span
+						class="d-md-none d-lg-inline-block">&nbsp; Attachments</span>--></a></li>
+				<li class="nav-item"  data-toggle="tooltip" data-placement="top" data-trigger="hover" title="Previous Notes">
+					<a class="nav-link previousNote-tab-link active"
+					data-toggle="tab" href="#previousNote-tab" role="tab"><i
+						class="icon-layers"></i><!--<span
+						class="d-md-none d-lg-inline-block">&nbsp; Latest Note</span>--></a></li>
+                <li class="nav-item"  data-toggle="tooltip" data-placement="top" data-trigger="hover" title="Search"><a class="nav-link search-tab-link"
+                                                                                                                                data-toggle="tab" href="#search-tab" role="tab"><i
+                    class="icon-magnifier"></i><!--<span
+						class="d-md-none d-lg-inline-block">&nbsp; Latest Note</span>--></a></li>
+
+				<th:block th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+					<th:block th:if="${sNo.count == 1 }"  >
+
+						<!-- <span th:if="${#strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+							<li class="nav-item"><a class="nav-link preview-tab-link"
+								data-toggle="tab" href="#preview-tab" role="tab"><i
+									class="icon-eye"></i><span class="d-md-none d-lg-inline-block">&nbsp;
+										Preview</span></a></li>
+						</span>
+						 or '.jpg' or '.jpeg' or '.png'
+						-->
+
+						<th:block th:if="${#strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+							<li class="nav-item"  data-toggle="tooltip" data-placement="top" data-trigger="hover" title="PDF Preview"><a class="nav-link preview-tab-link"
+								data-toggle="tab" href="#preview-tab" role="tab"><i
+									class="icon-eye"></i><!--<span class="d-md-none d-lg-inline-block">&nbsp; Preview</span>-->
+								</a>
+							</li>
+						</th:block>
+						<span th:if="${not #strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+
+						</span>
+					</th:block>
+				</th:block>
+
+
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane " id="info-tab" role="tabpanel">
+					<div
+						class="d-flex callout m-0 py-2 text-muted_ text-primary bg-light text-uppercase">
+						<small><b><i class="fa fa-file-o"></i>&nbsp; File
+								Details</b></small> <!-- <span class="ml-auto badge text-danger"><span
+							class="eFile-status">Pending</span>&nbsp; <i class="fa fa-circle"></i></span> -->
+					</div>
+					<div class="card p-2 pl-3 mb-0"
+						th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+						<h5 class="font-weight-bold"
+							th:text="${notefileDetails.notefileNumber}">
+							<!--1/GEN///2017-18 - AMC for 500KVA and 250KVA Generators-->
+						</h5>
+						<p th:text="${notefileDetails.subject}"></p>
+						<p>File Initiator:
+							<!--<i class="mdi mdi-18px mdi-account-edit"></i>&nbsp; /organizationIcon/photopath-->
+							<!-- <span class="avatar "> <img
+								src="../../../resources/img/avatars/8.jpg"
+								th:src="@{/resources/img/avatars/8.jpg}" class="img-avatar"
+								alt="">
+							</span> -->
+							<span th:if="${notefileDetails.efileInitiatorPostMaster.employeeMaster} != null ">
+							<span class="avatar "  data-toggle="tooltip" data-placement="top" th:title="${notefileDetails.efileInitiatorPostMaster.employeeMaster.employeefirstname} + ' ' +
+							${notefileDetails.efileInitiatorPostMaster.employeeMaster.employeelastname}"> <img
+								src="../../../resources/img/avatars/8.jpg"
+								th:src="@{'/organizationIcon/{profilePicturePath1}'(profilePicturePath1=${notefileDetails.efileInitiatorPostMaster.employeeMaster.photopath})}" class="img-avatar"
+								alt="">
+							</span>
+							</span>
+							<!--File Initiator:-->
+							<!-- <span th:if="${postMaster.employeeMaster} != null ">
+								<span th:text="${postMaster.employeeMaster.employeefirstname}"></span>&nbsp;&nbsp;
+								<span th:text="${postMaster.employeeMaster.employeelastname}"></span>&nbsp;
+							</span> -->
+							<span th:if="${notefileDetails.efileInitiatorPostMaster.employeeMaster} == null ">
+								<span class="redText">N/A</span>
+							</span>
+								<span class="badge badge-info badge-pill  text-white" th:text="${notefileDetails.efileInitiatorPostMaster.postname}" > </span>
+						</p>
+						<!-- <span th:text="${postMasters.postname}"></span> (<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  <span th:text="${postMasters.employeeMaster.employeelastname}"></span> )&nbsp; <span class="badge badge-info badge-pill  text-white">Manager</span></p> -->
+
+						<small><i class="mdi mdi-18px mdi-calendar-clock"></i>&nbsp;
+							<span class="mailbox-read-time"
+							th:text="${#dates.format(notefileDetails.createdDate,'dd/MM/yyyy hh:mm a')}">
+						</span></small>
+
+					</div>
+
+
+
+
+
+					<!--Inward Details  Start Here-->
+												<div class="box box-warning box-solid" th:if="${efileInwardMasters} != null">
+													<div id="accordionInward"
+														class="card  card-accent-primary  mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header collapsed"
+															id="notesHeader" data-toggle="collapse"
+															href="#inwardBody" role="button" aria-expanded="true">
+															<a class="py-1 px-2 btn-link d-block mr-auto">
+																<h6 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Current Details
+																</h6>
+															</a>
+														</div>
+														<div id="inwardBody" class="collapse hide" role="tabpanel"
+															aria-labelledby="headingInward"
+															data-parent="#accordionInward">
+															<div class="card-body bg-white text-dark p-2">
+																<div id="exampleAccordion" data-children=".item">
+																	<div class="box-header with-border">
+																		<div class="card p-2 pl-3 mb-0">
+
+																			<h4 class="font-weight-bold text-primary">
+
+																			<a class="btn btn-outline-default " role="button" aria-pressed="false"
+																				data-toggle="modal" data-target="#commonModal"
+																				data-placement="top"
+																				th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${efileInwardMasters.id})}">
+																					<p  th:text="${efileInwardMasters.inwardFileNumber}"></p>
+																			</a>
+
+																				<!--1/GEN///2017-18 - AMC for 500KVA and 250KVA Generators-->
+																			</h4>
+																			<p th:text="${efileInwardMasters.subject}"></p>
+																			<p>
+																				<!--<i class="mdi mdi-18px mdi-account-edit"></i>&nbsp;-->
+																				<span th:if="${efileInwardMasters.postMaster.employeeMaster}!=null">
+																				<span class="avatar "  data-toggle="tooltip" data-placement="top"
+																				th:title="${efileInwardMasters.postMaster.employeeMaster.employeefirstname} + ' '+
+																				${efileInwardMasters.postMaster.employeeMaster.employeelastname} "
+																				> <img
+																					src="../../../resources/img/avatars/8.jpg"
+																					th:src="@{/resources/img/avatars/8.jpg}"
+																					class="img-avatar" alt="">
+																				</span>
+																				</span>
+																				<!--File Initiator:-->
+																				<!-- <span th:if="${efileInwardMasters.postMaster.employeeMaster}!=null">
+																					<span th:text="${efileInwardMasters.postMaster.employeeMaster.employeefirstname}"></span>&nbsp;&nbsp;
+																					<span th:text="${efileInwardMasters.postMaster.employeeMaster.employeelastname}"></span>&nbsp;
+																				</span> -->
+																				<span th:if="${efileInwardMasters.postMaster.employeeMaster}==null">
+																					<span class="redText">N/A</span>
+																				</span>
+																				<span
+																					class="badge badge-info badge-pill  text-white"
+																					th:text="${efileInwardMasters.postMaster.postname}">
+																					<!-- Manager -->
+																				</span>
+																			</p>
+																			<!-- <span th:text="${postMasters.postname}"></span> (<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  <span th:text="${postMasters.employeeMaster.employeelastname}"></span> )&nbsp; <span class="badge badge-info badge-pill  text-white">Manager</span></p> -->
+
+																			<small><i
+																				class="mdi mdi-18px mdi-calendar-clock"></i>&nbsp; <span
+																				class="mailbox-read-time"
+																				th:text="${#dates.format(efileInwardMasters.createdDate,'dd/MM/yyyy HH:MM')}">
+																			</span></small>
+
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+												<!--Inward Details  Ends Here-->
+
+												 
+												<!--eFile Added Inward Details  Start Here -->
+												<div class="box box-warning box-solid" th:if="${inwardAddedToeFile} != null">
+													<div id="accordionInwardAdd"
+														class="card  card-accent-primary  mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header collapsed"
+															id="notesHeader" data-toggle="collapse"
+															href="#inwardBodyAdd" role="button" aria-expanded="true">
+															<a class="py-1 px-2 btn-link d-block mr-auto">
+																<h6 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Inward Added to eFile<!--  =<span th:text="${inwardAddedToeFile}"></span> -->
+																</h6>
+															</a>
+														</div>
+														<div id="inwardBodyAdd" class="collapse hide" role="tabpanel"
+															aria-labelledby="headingInwardAdd"
+															data-parent="#accordionInwardAdd">
+															<div class="card-body bg-white text-dark p-2">
+																<div id="exampleAccordion" data-children=".item">
+																	<div class="box-header with-border">
+																		<div class="card p-2 pl-3 mb-0">
+
+																			<h4 class="font-weight-bold text-primary">
+
+																			<a class="btn btn-outline-default " role="button" aria-pressed="false"
+																				data-toggle="modal" data-target="#commonModal"
+																				data-placement="top"
+																				th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${inwardAddedToeFile.id})}">
+																					<p  th:text="${inwardAddedToeFile.inwardFileNumber}"></p>
+																			</a>
+
+																				<!--1/GEN///2017-18 - AMC for 500KVA and 250KVA Generators-->
+																			</h4>
+																			<p th:text="${inwardAddedToeFile.subject}"></p>
+																			<p>
+																				<!--<i class="mdi mdi-18px mdi-account-edit"></i>&nbsp; -->
+																			<span th:if="${inwardAddedToeFile.postMaster.employeeMaster}!=null">
+																				<span class="avatar "  data-toggle="tooltip" data-placement="top"
+																				th:title="${inwardAddedToeFile.postMaster.employeeMaster.employeefirstname} + ' ' +
+																				${inwardAddedToeFile.postMaster.employeeMaster.employeelastname}"
+																				> <img
+																					src="../../../resources/img/avatars/8.jpg"
+																					th:src="@{/resources/img/avatars/8.jpg}"
+																					class="img-avatar" alt="">
+																				</span>
+																			</span>
+
+
+																				<!--File Initiator: -->
+																				 
+																				<span th:if="${inwardAddedToeFile.postMaster.employeeMaster}==null">
+																					<span class="redText">N/A</span>
+																				</span>
+																				<span
+																					class="badge badge-info badge-pill  text-white"
+																					th:text="${inwardAddedToeFile.postMaster.postname}">
+																					<!-- Manager -->
+																				</span>
+																			</p>
+																			<small><i
+																				class="mdi mdi-18px mdi-calendar-clock"></i>&nbsp; <span
+																				class="mailbox-read-time"
+																				th:text="${#dates.format(inwardAddedToeFile.createdDate,'dd/MM/yyyy HH:MM')}">
+																			</span></small>
+
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!--eFile Added Inward Details  End Here-->
+												<!--Merged Notefile List Start here  -->
+												<div class="box box-warning box-solid" th:if="${mergedNotefileList} != null">
+													<div id="accordionMergedFiles"
+														class="card  card-accent-primary  mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header collapsed"
+															id="notesHeader" data-toggle="collapse"
+															href="#mergedBodyList" role="button" aria-expanded="true">
+															<a class="py-1 px-2 btn-link d-block mr-auto">
+																<h6 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Merged Notefile Lists<!--  =<span th:text="${inwardAddedToeFile}"></span> -->
+																</h6>
+															</a>
+														</div>
+														<div id="mergedBodyList" class="collapse hide" role="tabpanel"
+															aria-labelledby="headingMergedFiles"
+															data-parent="#accordionMergedFiles">
+															<div class="card-body bg-white text-dark p-2">
+																<div id="exampleAccordion" data-children=".item">
+																	<div class="box-header with-border">
+																		<div class="card p-2 pl-3 mb-0">
+																		
+																			<table id="mergedNotefileListTable"
+																					class="table table-responsive-xl table-bordered table-striped table-hover table-sm mb-0"
+																					width="100%" cellspacing="0">
+																				<thead class="table-primary">
+																					<tr>
+																						<th> # </th>
+																						<th> Notefile Number </th>
+																						<th> Subject </th>
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<tr th:each="mergedFilesList, itrState : ${mergedNotefileList}">
+																						<td th:text="${itrState.count}">																						</td>
+																						<td>
+																							<!-- <span th:text="${mergedFilesList.mergedNotefiles.notefileNumber}">
+																							</span> -->
+																							<a role="button" aria-pressed="false"
+																								data-toggle="modal" data-target="#commonModal"
+																								data-placement="top"
+																								th:attr="data-url=@{'/efilesuite/filemovementReport/{currentNumber}'(currentNumber=${mergedFilesList.mergedNotefiles.id})}">
+																									<p style="color: blue;" th:text="${mergedFilesList.mergedNotefiles.notefileNumber}"></p>
+																							</a>
+																						</td>
+																						<td th:text="${mergedFilesList.mergedNotefiles.subject}"></td>
+																					</tr>
+																				</tbody>
+																			
+																			</table>
+
+																			 
+
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<!--Merged Notefile List Ends here  -->
+
+
+
+
+
+
+					<!--/* <div
+						class="d-flex callout m-0 py-2 text-muted_ text-primary bg-light text-uppercase">
+						<small><b><i class="icon-paper-clip"></i>&nbsp; Recent
+								Activies</b></small>
+					</div>
+
+					<div id="accordionTwo" role="tablist"
+						th:if="${notefileAttachmentDetails} == null "></div>
+					<div id="accordionTwo" role="tablist" class="_d-none"
+						th:if="${notefileAttachmentDetails} != null ">
+						<div class="card ">
+							<div class="card-header p-0 eFile-accordion-header" role="tab"
+								id="recent-activity">
+
+								<a class="py-1 px-2 btn-link d-block" data-toggle="collapse"
+									href="#collapseTwo" role="button" aria-expanded="true"
+									aria-controls="collapseTwo">
+									<h5 class="mb-0">Attachments  </h5>
+								</a>
+
+							</div>
+							<div id="collapseTwo" class="collapse show" role="tabpanel"
+								aria-labelledby="recent-activity" data-parent="#accordionTwo">
+								<div class="card-body bg-white">
+									<div class="box box-warning box-solid">
+										<div class="box-body ">
+											<div class="row" th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+												<span _class="d-flex" >
+												<div class="col-8  d-inline-block" th:if="${sNo.count == 1 }" > 6 to 8 class="d-flex"
+													<h6>
+													===<span th:text="${notefileAttachmentDetailsSize}"></span>
+														<span th:if="${#strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+														<span th:text="${sNo.count}"> </span> ) .
+															<a class="btn btn-link preview-link"
+																th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}"
+																style="color: black;"> <i class="fa fa-file"></i>&nbsp;
+																<span th:text="${attachemtnsDetails.attachmentFileName}"></span>
+															</a>
+															<span th:if="${attachemtnsDetails.attachmentFileName}!=''">
+																<a class="btn btn-link  _btn-outline-primary"
+																	th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${attachemtnsDetails.path} , orgFileName=${attachemtnsDetails.attachmentFileName})}"
+																	style="color: black;"> <span><i
+																		class="fa fa-download"></i>&nbsp; Download</span>
+																</a>
+															</span>
+
+														</span>
+														<span th:if="${not #strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+															<span th:if="${attachemtnsDetails.attachmentFileName}!=''">
+																<span th:text="${attachemtnsDetails.attachmentFileName}"></span>
+																	<a class="btn btn-link  _btn-outline-primary"
+																		th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${attachemtnsDetails.path} , orgFileName=${attachemtnsDetails.attachmentFileName})}"
+																		style="color: black;"> <span><i
+																			class="fa fa-download"></i>&nbsp; Download</span>
+																	</a>
+																</span>
+														</span>
+
+
+													</h6>
+												</div>
+
+												<div class="col-4">
+													<span th:if="${attachemtnsDetails.attachmentFileName}!=''">
+														<span class="mailbox-read-time pull-right" th:if="${sNo.count == 1 }"
+														th:text="${#dates.format(attachemtnsDetails.createdDate,'dd/MM/yyyy')}"></span>
+													</span>
+												</div>
+												</span>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					*/-->
+
+				</div>
+				<div class="tab-pane p-0" id="attachments-tab" role="tabpanel">
+					<!--<div class="d-flex callout m-0 py-2 text-muted _text-center bg-light text-uppercase">
+                    <small><b><i class="icon-paper-clip"></i>&nbsp; Attachments</b></small>
+
+                </div>
+
+                <div id="accordionTwo" role="tablist" th:if="${notefileAttachmentDetails} == null ">
+                </div>
+                <div id="accordionTwo" role="tablist" class="d-none" th:if="${notefileAttachmentDetails} != null ">
+                    <div class="card bg-success">
+                        <div class="card-header p-0 eFile-accordion-header" role="tab" id="headingTwo">
+
+                            <a class="py-1 px-2 btn-link d-block  text-white" data-toggle="collapse" href="#collapseTwo" role="button"
+                               aria-expanded="true" aria-controls="collapseTwo">
+                                <h5 class="mb-0">Attachments</h5></a>
+
+                        </div>
+                        <div id="collapseTwo" class="collapse show" role="tabpanel"
+                             aria-labelledby="headingTwo" data-parent="#accordionTwo">
+                            <div class="card-body bg-white">
+                                <div class="box box-warning box-solid">
+                                    <div class="box-body">
+                                        <div class="row" th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+                                            <div class="col-6" >
+                                                <h6>
+                                                    <span th:text="${sNo.count}"> </span> ) .
+                                                    <a class="btn btn-link" th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}"  style="color: black;">
+                                                        <i class="fa fa-file"></i>&nbsp; <span th:text="${attachemtnsDetails.attachmentFileName}" ></span>
+                                                    </a>
+                                                    <a  class="btn btn-link  _btn-outline-primary" th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${attachemtnsDetails.path} , orgFileName=${attachemtnsDetails.attachmentFileName})}"  style="color: black;">
+                                                        <span ><i class="fa fa-download"></i>&nbsp;  Download</span>
+                                                    </a>
+
+                                                </h6>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <span class="mailbox-read-time pull-right" th:text="${#dates.format(attachemtnsDetails.createdDate,'dd/MM/yyyy HH:MM')}"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                -->
+
+					<div id="accordionTwo" role="tablist"
+						th:if="${notefileAttachmentDetails} == null "></div>
+					<div id="accordionTwo" role="tablist" class="d-none"
+						th:if="${notefileAttachmentDetails} != null ">
+						<div class="card ">
+							<div class="card-header p-0 eFile-accordion-header" role="tab"
+								id="recent-activity">
+
+								<a class="py-1 px-2 btn-link d-block" data-toggle="collapse"
+									href="#collapseTwo" role="button" aria-expanded="true"
+									aria-controls="collapseTwo">
+									<h5 class="mb-0">Attachments</h5>
+								</a>
+
+							</div>
+							<div id="collapseTwo" class="collapse show" role="tabpanel"
+								aria-labelledby="recent-activity" data-parent="#accordionTwo">
+								<div class="card-body bg-white">
+									<div class="box box-warning box-solid">
+										<div class="box-body">
+											<div class="row"
+												th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+												<div class="col-6">
+													<h6>
+
+														<span th:text="${sNo.count}"> </span> ) .
+														<span th:if="${#strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+															<a
+																class="btn btn-link preview-link"
+																th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}"
+																style="color: black;"> <i class="fa fa-file"></i>&nbsp;
+																<span th:text="${attachemtnsDetails.attachmentFileName}"></span>
+															</a>
+														</span>
+														<span th:if="${not #strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+															<span th:text="${attachemtnsDetails.attachmentFileName}"></span>
+														</span>
+														<a class="btn btn-link  _btn-outline-primary"
+															th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${attachemtnsDetails.path} , orgFileName=${attachemtnsDetails.attachmentFileName})}"
+															style="color: black;"> <span><i
+																class="fa fa-download"></i>&nbsp; Download</span>
+														</a>
+
+													</h6>
+												</div>
+
+												<div class="col-6">
+													<span class="mailbox-read-time pull-right"
+														th:text="${#dates.format(attachemtnsDetails.createdDate,'dd/MM/yyyy')}"></span>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="container">
+					<div class="row">
+						<div class="table-responsive">
+
+							<table id="eFileAttachmentsList"
+								class="table table-responsive-xl table-bordered table-striped table-hover table-sm mb-0"
+								width="100%" cellspacing="0">
+								<thead class="table-primary">
+									<tr class="flex-row">
+										<th class="text-center col-1">#</th>
+										<th class="col-10">Files</th>
+										<th class="text-center">Date</th>
+										<!-- <th class="text-center col-1"></th> -->
+									</tr>
+								</thead>
+
+								<tbody>
+									<span  th:if="${notefileAttachmentDetails}!=null" >
+										<tr th:each=" files , sNo: ${notefileAttachmentDetails}">
+											<td th:text="${sNo.count}"></td>
+											<td>
+										 		<!-- <a
+													class="btn btn-link preview-link"
+													th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${files.path})}"
+													style="color: black;"> <i class="fa fa-file"></i>&nbsp;
+													<span th:text="${files.attachmentFileName}"></span>
+												</a> -->
+												<span th:if="${#strings.endsWith(files.attachmentFileName, '.pdf') or #strings.endsWith(files.attachmentFileName, '.png') or #strings.endsWith(files.attachmentFileName, '.jpg') or #strings.endsWith(files.attachmentFileName, '.jpeg') }">
+													  <a
+														class="btn btn-link preview-link"
+														th:href="@{'/efile/attachments/{eFileName}'(eFileName=${files.path})}"
+														style="color: black;"> <i class="fa fa-file"></i>&nbsp;
+														<span th:text="${files.attachmentFileName}"></span>
+													</a>
+												</span>
+												<span th:if="${not #strings.endsWith(files.attachmentFileName, '.pdf') and not #strings.endsWith(files.attachmentFileName, '.png') and not #strings.endsWith(files.attachmentFileName, '.jpg') and not #strings.endsWith(files.attachmentFileName, '.jpeg') }">
+													<span th:text="${files.attachmentFileName}"></span>
+												</span>
+													<th:block th:if="${files.attachmentFileName} != '' and ${files.attachmentFileName} != null  " > 
+															<a class="btn btn-link  _btn-outline-primary"
+															th:href="@{'/efilesuite/downloads/{eFileName}?name={orgFileName}'(eFileName=${files.path} , orgFileName=${files.attachmentFileName})}"
+															style="color: black;"> <span><i
+																	class="fa fa-download"></i>&nbsp; Download </span>
+															</a>
+												</th:block>
+												<th:block th:if="${files.attachmentFileName} == '' or ${files.attachmentFileName} == null " > 
+													&nbsp;<b>N/A</b>
+												</th:block>
+											</td>
+											<td th:text="${#dates.format(files.createdDate,'dd/MM/yyyy')}"></td>
+										</tr>
+									</span>
+								</tbody>
+								<tbody>
+
+
+									<!--
+                        <tr th:if="${notefileAttachmentDetails} != null ">
+                            <td class="text-center"><span _th:text="${sNo.count}"> </span> </td>
+                            <td><a href='#'><a class="btn btn-link preview-link" th:href="@{'/efilesuite/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}"  style="color: black;">
+                                <i class="fa fa-file"></i>&nbsp; <span th:text="${attachemtnsDetails.attachmentFileName}" ></span>
+                            </a></a></td>
+                            <td><small class="mailbox-read-time pull-right" th:text="${#dates.format(attachemtnsDetails.createdDate,'dd/MM/yyyy HH:MM')}"></small></td>
+                            <td><a class="btn btn-sm btn-link btn-primary" href="#"><i class="fa fa-download"></i></a></td>
+
+                        </tr>-->
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					</div>
+				</div>
+
+
+				<div class="tab-pane p-0 active" id="previousNote-tab" role="tabpanel">
+
+
+				    <div class="container">
+					<div class="row">
+						<div class="table-responsive">
+
+                            <div id="accordionFour2"
+                                 class="card card-accent-primary  mb-2  card-shadow"
+                                 role="tablist">
+
+                                <div class="card-header p-0 eFile-accordion-header"
+                                     id="latestNotesHeader" >
+                                    <a class="py-1 px-2 btn-link d-block " data-toggle="collapse"
+                                       href="#latestNotesBody2" role="button"
+                                       aria-expanded="true" aria-controls="collapseFour">
+                                        <h6 class="mb-0">
+                                            <i class="icon-envelope-letter"></i>&nbsp; Latest Note
+                                        </h6>
+                                    </a>
+                                </div>
+
+
+                                <div id="latestNotesBody2"
+                                     class="card-body bg-white collapse show p-2"
+                                     data-parent="#accordionFour2">
+                                    <div id="exampleAccordion2" data-children=".item">
+                                        <div class="item  text-dark"
+                                             th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+                                            <div
+                                                th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 ">
+                                                <a data-toggle="collapse" role="button"
+                                                   aria-expanded="true"
+                                                   th:attr="href=@{#exampleAccordion2}+${itrStatee.count} ,data-parent=exampleAccordion2+${itrStatee.count} ,aria-controls=exampleAccordion2+${itrStatee.count}">
+                                                    Note : <span th:text="${itrStatee.count}"></span>
+                                                </a>
+                                                <!-- <span th:text="${itrStatee.count} !=  ${notesSizeMinusOne}+1 "></span> -->
+
+                                                <div th:attr="id=exampleAccordion2+${itrStatee.count}"
+                                                     class="collapse show  text-dark" role="tabpanel">
+                                                    <p class="mb-3  text-dark"
+                                                       th:utext="${movementDetails.content}"></p>
+                                                    <span class="pull-right text-muted " th:text="${movementDetails.fileMovementPostMasterFrom.postname}"></span><br/>
+                                                    <span class="pull-right text-muted " th:text="${#dates.format(movementDetails.entryDate,'dd/MM/yyy hh:mm a')}"></span>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+					</div>
+					</div>
+
+				</div>
+                <div class="tab-pane p-0" id="search-tab" role="tabpanel">
+
+
+                    <div class="container">
+                        <div class="row">
+                            <input type="search" class="w-100 form-control m-1" placeholder="Search here..." />
+                            <div class="col-12">
+
+                                <div class="search-content">
+                                    <span class="text-center">No search content </span>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+				<div class="tab-pane p-3" id="preview-tab" role="tabpanel"
+					style="position: relative; height: 100%;">
+					<span th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+					<span th:if="${sNo.count == 1}" >
+					<span th:if="${#strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+						<iframe id="preview-iframe"
+							style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 99%; border: 0px solid white; width: 100%;"
+							title="PDF in an i-Frame" th:src="@{'/efile/attachments/{eFileName}'(eFileName=${attachemtnsDetails.path})}" frameborder="1"
+							scrolling="auto" _height="1100" _width="850"  >
+						</iframe>
+					</span>
+					<span th:if="${not #strings.endsWith(attachemtnsDetails.attachmentFileName, '.pdf')}">
+							<iframe id="preview-iframe"
+							style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 99%; border: 0px solid white; width: 100%;"
+							title="PDF in an i-Frame" frameborder="1"
+							scrolling="auto" _height="1100" _width="850"  >
+						</iframe>
+					</span>
+
+					<!-- <iframe id="preview-iframe"
+					style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 99%; border: 0px solid white; width: 100%;"
+					title="PDF in an i-Frame" src="/efilesuite/attachments/bGncIR7TqbkibEev_24Jan2018102231GMT_1516789351542.pdf#view=&quot;FitH&quot;"
+					 frameborder="1" scrolling="auto" _height="1100" _width="850">
+					</iframe> -->
+							</span>
+						</span>
+					<h6>Settings</h6>
+
+
+				</div>
+			</div>
+
+		</aside>
+	</th:block>
+
+
+
+
+	<th:block layout:fragment="script-links">
+		<script type="text/javascript"
+			src="../../../resources/vendors/tinymce/js/tinymce/tinymce.min.js"
+			th:src="@{/resources/vendors/tinymce/js/tinymce/tinymce.min.js}"></script>
+        <script type="text/javascript"
+                src="../../../resources/vendors/tinymce/js/tinymce/jquery.tinymce.min.js"
+                th:src="@{/resources/vendors/tinymce/js/tinymce/jquery.tinymce.min.js}"></script>
+
+	</th:block>
+
+
+	<th:block layout:fragment="scripts">
+		<script _type="text/javascript">
+
+		// In your Javascript (external .js resource or <script> tag)
+		/* $(document).ready(function() {
+		    $('.auto-cmoplte-select').select2({
+		    	allowClear : true,
+		    	placeholder: "Select",
+		    	allowClear: true,
+		    	//theme: "bootstrap",
+		    	width: '100%'
+		    });
+		}); */
+		
+		$(document).ready(function() {
+			$('.auto-complete-select').select2({
+			allowClear : true,
+			//placeholder: "Select",
+			//allowClear: true,
+			minimumInputLength: 2,// min 2 chars to filter in list
+			//theme: "bootstrap",
+			width: '100%', // to fit inside div
+			language: { inputTooShort: function () { return ''; } },// For empty string in suggestion list
+			});
+			});
+
+
+
+
+   function generateParagraphNumbers() {
+         var lastPara = parseInt($('#exampleAccordion p > span.para-num').last().text()) || 0,
+            content = $('#content').val();
+            $content = $('<div>'+content+'</div>');
+
+        $content.children('p:not(.blank)').each(function(i, e){
+            var num = lastPara + i + 1;
+                paraNum = $(this).children('span.para-num');
+            if (paraNum.length==0) {
+                $(this).prepend('<span class="para-num">'+num+'. </span>');
+            } else {
+                paraNum.text(num + '. ');
+            }
+        });
+
+        //console.log('numbered:', $content.html());
+
+        $('#content').val($content.html());
+    }
+
+		function formValidations(evnt){
+			if(evnt=='Save'){
+			 	if(tinyMCE.activeEditor.getContent()=="" || tinyMCE.activeEditor.getContent()==null){
+					alert("Please enter content");
+					//$("#content").focus();
+					return false;
+				}
+			 else{
+					return true;
+				}
+			}
+			if(evnt=='Send'){
+				if(tinyMCE.activeEditor.getContent()=="" || tinyMCE.activeEditor.getContent()==null){
+					alert("Please enter content");
+					//$("#content").focus();
+					return false;
+				}else if($("#posts").val()==0){
+					alert("please select recipient");
+					$("#posts").focus();
+					return false;
+				}else{
+				    generateParagraphNumbers();
+					return true;
+				}
+			}
+
+		}
+
+
+        $(document).ready(function() {
+            var table = jQuery('#eFileAttachmentsList').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_"
+                     },
+				    "dom":"<'row'<'col-sm-12 d-flex  table-primary justify-content-end pt-1'f>>",
+					responsive: false,
+					paging: false,
+					columns: [
+                       { width:'1%', targets: 0 },
+                        { width: '80%', targets: 1 },
+                        { width: '16%', targets: 2,"orderable": false, className: "text-center p-1"  }
+					],
+				    _columnDefs: [ {
+                        targets: 1,
+
+                    } ],
+					 order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+            
+            var table = jQuery('#mergedNotefileListTable').DataTable({
+			    language: {
+			        search: "_INPUT_",
+                    searchPlaceholder: "Search...",
+                    "lengthMenu": "_MENU_"
+                 },
+			    "dom":"<'row'<'col-sm-12 d-flex  table-primary justify-content-end pt-1'f>>",
+				responsive: false,
+				paging: false,
+				columns: [
+                   { width:'1%', targets: 0 },
+                    { width: '80%', targets: 1 },
+                    { width: '19%', targets: 2}
+				],
+			    _columnDefs: [ {
+                    targets: 1,
+
+                } ],
+				 order: [ 0, 'asc' ],
+				buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'csvHtml5',
+                        text:      '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                ]
+			});
+            
+            
+				/*$.fn.dataTable.render.ellipsis = function () {
+                    return function ( data, type, row ) {
+                        return type === 'display' && data.length > 10 ?
+                            data.substr( 0, 10 ) +'…' :
+                            data;
+                    }
+                };*/
+                $.fn.dataTable.render.ellipsis = function ( cutoff, wordbreak, escapeHtml ) {
+                    var esc = function ( t ) {
+                        return t
+                            .replace( /&/g, '&amp;' )
+                            .replace( /</g, '&lt;' )
+                            .replace( />/g, '&gt;' )
+                            .replace( /"/g, '&quot;' );
+                    };
+
+                    return function ( d, type, row ) {
+                        // Order, search and type get the original data
+                        if ( type !== 'display' ) {
+                            return d;
+                        }
+
+                        if ( typeof d !== 'number' && typeof d !== 'string' ) {
+                            return d;
+                        }
+
+                        d = d.toString(); // cast numbers
+
+                        if ( d.length <= cutoff ) {
+                            return d;
+                        }
+
+                        var shortened = d.substr(0, cutoff-1);
+
+                        // Find the last white space character in the string
+                        if ( wordbreak ) {
+                            shortened = shortened.replace(/\s([^\s]*)$/, '');
+                        }
+
+                        // Protect against uncontrolled HTML input
+                        if ( escapeHtml ) {
+                            shortened = esc( shortened );
+                        }
+
+                        return '<span class="ellipsis" title="'+esc(d)+'">'+shortened+'&#8230;</span>';
+                    };
+                };
+
+			});
+
+			$(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+			function validateFiles() {
+				//alert("4444");
+		        //var modelname=$("#inputmodelname").val();
+		        for (var i = 0; i < $("#attachments").get(0).files.length; ++i) {
+		            var file1=$("#attachments").get(0).files[i].name;
+					//alert("File NAme : "+file1);
+		            if(file1){
+		                var file_size=$("#attachments").get(0).files[i].size;
+		                if(file_size<5242880){
+		                    var ext = file1.split('.').pop().toLowerCase();
+		                    if($.inArray(ext,["pdf","PDF","png","jpg","jpeg","gif","xls","xlsx", "doc","docx"])===-1){
+		                        alert("Invalid file extension. File Name : "+file1);
+		                        $("#attachments").val('');
+		                        return false;
+		                    }
+
+		                }else{
+		                    alert("File size should be less than 5 MB. File Name : "+file1);
+		                    $("#attachments").val('');
+		                    return false;
+		                }
+		            }else{
+		                alert("Please upload file");
+		                return false;
+		            }
+		        }
+		    };
+
+
+
+
+$(function() {
+       var lastPara = parseInt($('#exampleAccordion p > span.para-num').last().text()) || 0,
+            paraNumber = lastPara > 0 ? (lastPara + 0) : '';
+            content_style = "\
+            body#tinymce.mce-content-body  {\
+                counter-reset: note-new " + paraNumber + "; \
+                margin-left: 40px; \
+            }\
+            body#tinymce.mce-content-body > p {\
+        _color: red;\
+    }\
+    body#tinymce.mce-content-body > p.blank {\
+        _outline: 1px dashed blue;\
+    }\
+    body#tinymce.mce-content-body > p:not(.blank) {\
+       _background-color: yellow; \
+    }\
+    body#tinymce.mce-content-body > p:not(.blank) > span.para-num {\
+       display: none; \
+    }\
+    body#tinymce.mce-content-body > p:not(.blank)::before {\
+        counter-increment:  note-new; \
+        content: counter(note-new)  '.' '\\A0'; \
+        width: 40px; \
+        _background-color: lightgray; \
+        display: inline-block; \
+        text-align: right; \
+        position: absolute; \
+        left: 0; \
+    }\
+    ";
+
+
+   $('#content').tinymce({
+                    menubar: false,
+		branding: false,
+
+		height: 100,
+
+		autoresize_min_height: 150,
+		autoresize_bottom_margin: 50,
+
+		theme: 'modern',
+
+		toolbar: false,
+                    toolbar_items_size: 'small',
+                    plugins: ['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace wordcount visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality',' template paste textcolor colorpicker textpattern imagetools codesample toc help autoresize'],
+
+                    toolbar1: ' undo redo |  styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table   | forecolor backcolor | template  | preview  print fullscreen',
+
+		image_advtab: true,
+
+		templates: [{
+
+				title: 'Approved',
+
+				content: 'Approved 1'
+
+			},
+
+			{
+
+				title: 'Revoke',
+
+				content: 'Revoke'
+
+			}
+
+		],
+
+		content_css: [
+
+
+		],
+           content_style: content_style,
+		init_instance_callback: function (editor) {
+		    var current = null;
+            editor.on('keyup', function (e) {
+              var node = this.selection.getNode(),
+                  text = '';
+              if (e.keyCode == 13) {
+                node = $(node).prev()[0];
+              }
+              if (node.nodeName == 'P') {
+                text = tinymce.trim(node.innerText);
+                this.dom.toggleClass(node, 'blank', text.length == 0);
+              }
+            });
+		}
+
+	});
+
+});
+
+
+
+
+
+                //jQuery(document).ready(function() {
+                //File Validation
+                  $('#attachments').change(function() {
+                          var originalfiles = $("#attachments");
+                          var fileLength = originalfiles[0].files.length; // get length
+                          var file =originalfiles[0].files;
+
+                          var exts = [ 'jpg' , 'png' , 'jpeg' , 'pdf', 'doc', 'docx', 'txt', "xls", "xlsx" ];
+                          // first check if file field has any value
+                          if ( fileLength > 0 ) {
+                              for(var i=0;i<fileLength;i++){
+                                // split file name at dot
+                                var get_ext = file[i].name.split('.');
+                                // reverse name to check extension
+                                get_ext = get_ext.reverse();
+                                // check file type is valid as given in 'exts' array
+                                if ( $.inArray ( get_ext[0].toLowerCase(), exts ) > -1 ){
+                                  $("#filaNames").html("<li>"+file[i].name+"</li>" );
+                                } else {
+                                    alert("Please Upload .jpg , .png, .jpeg , .pdf, doc, docx, xls, xlsx files only");
+                                    $("#attachments").val('');
+                                }
+                              }
+                          }
+
+                  });
+            //});
+
+                /*
+	// Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+
+	var previewNode = document.querySelector("#template");
+
+	previewNode.id = "";
+
+	var previewTemplate = previewNode.parentNode.innerHTML;
+
+	previewNode.parentNode.removeChild(previewNode);
+
+
+
+	var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+
+		url: "/target-url", // Set the url
+
+		thumbnailWidth: 80,
+
+		thumbnailHeight: 80,
+
+		parallelUploads: 20,
+
+		previewTemplate: previewTemplate,
+
+		autoQueue: false, // Make sure the files aren't queued until manually added
+
+		previewsContainer: "#previews", // Define the container to display the previews
+
+		clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+
+	});
+
+
+
+	myDropzone.on("addedfile", function(file) {
+
+		// Hookup the start button
+
+		file.previewElement.querySelector(".start").onclick = function() {
+
+			myDropzone.enqueueFile(file);
+
+		};
+
+	});
+
+
+
+	// Update the total progress bar
+
+	myDropzone.on("totaluploadprogress", function(progress) {
+
+		document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+
+	});
+
+
+
+	myDropzone.on("sending", function(file) {
+
+		// Show the total progress bar when upload starts
+
+		document.querySelector("#total-progress").style.opacity = "1";
+
+		// And disable the start button
+
+		file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+
+	});
+
+
+
+	// Hide the total progress bar when nothing's uploading anymore
+
+	myDropzone.on("queuecomplete", function(progress) {
+
+		document.querySelector("#total-progress").style.opacity = "0";
+
+	});
+
+
+
+	// Setup the buttons for all transfers
+
+	// The "add files" button doesn't need to be setup because the config
+
+	// `clickable` has already been specified.
+
+	document.querySelector("#actions .start").onclick = function() {
+
+		myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+
+	};
+
+	document.querySelector("#actions .cancel").onclick = function() {
+
+		myDropzone.removeAllFiles(true);
+
+	};
+
+*/
+            //});
+
+//});
+
+
+/*jQuery(document).ready(function() {
+	//File Validation
+	  $('#attachments').change(function() {
+		      var originalfiles = $("#attachments");
+		      var fileLength = originalfiles[0].files.length; // get length
+		      var file =originalfiles[0].files;
+
+		      var exts = ['pdf','doc','docx','txt',"xls","xlsx"];
+		      // first check if file field has any value
+		      if ( fileLength > 0 ) {
+		    	  for(var i=0;i<fileLength;i++){
+			        // split file name at dot
+			        var get_ext = file[i].name.split('.');
+			        // reverse name to check extension
+			        get_ext = get_ext.reverse();
+			        // check file type is valid as given in 'exts' array
+			        if ( $.inArray ( get_ext[0].toLowerCase(), exts ) > -1 ){
+			          $("#filaNames").html("<li>"+file[i].name+"</li>" );
+			        } else {
+			        	alert("Please Upload .pdf, doc, docx, xls, xlsx files only");
+			        	$("#attachments").val('');
+			        }
+		    	  }
+		      }*/
+
+	  //});
+
+	  $('.preview-link').on('click', function(e){
+	    var url_src = $(this).attr('href');
+	    var url = url_src + '#view="FitH"';
+	    event.preventDefault();
+	    $('#preview-iframe').attr('src', url);
+        $('.eFile-aside-menu .nav-link, .eFile-aside-menu .tab-pane').removeClass('active show');
+        $('.eFile-aside-menu .preview-tab-link').addClass('active');
+        $('.eFile-aside-menu #preview-tab').addClass('active show');
+	  });
+
+/*
+$(".open-button").on("click", function() {
+  $(this).closest('.collapse-group').find('.collapse').collapse('show');
+});
+
+$(".close-button").on("click", function() {
+  $(this).closest('.collapse-group').find('.collapse').collapse('hide');
+});
+*/
+
+
+
+$(function(){
+        var lastPara = parseInt($('#exampleAccordion p > span.para-num').last().text()) || 0,
+            paraNumber = lastPara > 0 ? (lastPara + 0) : '';
+            content_style = "\
+            body#tinymce.mce-content-body  {\
+                counter-reset: note-new " + paraNumber + "; \
+                margin-left: 40px; \
+            }\
+            body#tinymce.mce-content-body > p {\
+        _color: red;\
+    }\
+    body#tinymce.mce-content-body > p.blank {\
+        _outline: 1px dashed blue;\
+    }\
+    body#tinymce.mce-content-body > p:not(.blank) {\
+       _background-color: yellow; \
+    }\
+    body#tinymce.mce-content-body > p:not(.blank) > span.para-num {\
+       display: none; \
+    }\
+    body#tinymce.mce-content-body > p:not(.blank)::before {\
+        counter-increment:  note-new; \
+        content: counter(note-new)  '.' '\\A0'; \
+        width: 40px; \
+        _background-color: lightgray; \
+        display: inline-block; \
+        text-align: right; \
+        position: absolute; \
+        left: 0; \
+    }\
+    ";
+
+            $('#content').tinymce({
+
+                    menubar: false,
+		branding: false,
+
+		height: 100,
+
+		autoresize_max_height: 500,
+		autoresize_bottom_margin: 50,
+
+		theme: 'modern',
+
+		_toolbar: false,
+                    toolbar_items_size: 'small',
+                    plugins: ['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace wordcount visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality','emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help autoresize'],
+
+                    toolbar1: 'insert | undo redo |  styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons | fullscreen | table',
+
+		_image_advtab: true,
+
+		_templates: [{
+
+				title: 'Test template 1',
+
+				content: 'Approved'
+
+			},
+
+			{
+
+				title: 'Test template 2',
+
+				content: 'Pending'
+
+			}
+
+		],
+		_content_css: [
+
+
+		],
+           content_style: content_style,
+		init_instance_callback: function (editor) {
+            editor.on('keyup', function (e) {
+              var node = this.selection.getNode(),
+                  text = '';
+              if (node.nodeName == 'P') {
+                text = tinymce.trim(node.innerText);
+                this.dom.toggleClass(node, 'blank', text.length == 0);
+              }
+            });
+		}
+	});
+
+});
+
+
+
+
+function notesExpandAll() {
+    var clicks = 0,
+        timer = null,
+        selector = '#accordionThree a[_data-toggle]';
+
+    function togleNotes() {
+         var $open = $('#accordionThree').find('.collapse.show, .collapsing'),
+            $all = $('#accordionThree').find('.collapse, .collapsing');
+      if ($all.length == $open.length) {
+        console.log('all are open, closing...');
+        //$this.find('.collapse').collapse('show');
+        $('#notesBody').find('.collapse, .collapsing').collapse('hide');
+      } else {
+        console.log('opening...');
+          $('#accordionThree').find('.collapse, .collapsing').collapse('show');
+      }
+
+      $('#accordionThree .collapse-btn').toggleClass('expand-all');
+   }
+
+    $('#accordionThree .collapse-btn').click(function(){
+        /*if ($(this).hasClass('expand-all')) {
+            $(this).attr('title', 'Collapse all');
+        } else {
+             $(this).attr('title', 'Expand all');
+        }*/
+
+        togleNotes();
+    });
+
+    $(selector).on("click", function(e) {
+        var $this = $(this);
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+          clicks++; // Increment click counter
+          if (clicks === 1) {
+            timer = setTimeout(function() {
+              //$('#main').text('Single click');
+
+               if ($this.attr('aria-expanded') == "false") {
+                    $this.toggleClass('collapsed', false);
+                    $this.attr('aria-expanded', 'true');
+                    $('#accordionThree .collapse').first().collapse('show');
+               } else {
+                 $this.toggleClass('collapsed', true);
+                 $this.attr('aria-expanded', 'false');
+                 $('#accordionThree .collapse').collapse('hide');
+                 $('#accordionThree .collapse-btn').toggleClass('expand-all', true);
+               }
+
+
+              clicks = 0; //Reset
+            }, 500); // Increase or decrease if there is slowness or speed
+          } else {
+            clearTimeout(timer); //prevent single-click action
+            //$('#main').text('Double click')
+            togleNotes();
+            clicks = 0; // Reset
+          }
+    }).on("dblclick", function(e) {
+          e.preventDefault(); //Prevent double click
+    });
+};
+
+function draftsExpandAll() {
+    var clicks = 0,
+        timer = null,
+        selector = '#accordionFive a[_data-toggle]';
+
+    function togleNotes() {
+         var $open = $('#accordionFive').find('.collapse.show, .collapsing'),
+            $all = $('#accordionFive').find('.collapse, .collapsing');
+      if ($all.length == $open.length) {
+        console.log('all are open, closing...');
+        //$this.find('.collapse').collapse('show');
+        $('#draftsBody').find('.collapse, .collapsing').collapse('hide');
+      } else {
+        console.log('opening...');
+          $('#accordionFive').find('.collapse, .collapsing').collapse('show');
+      }
+
+      $('#accordionFive .collapse-btn').toggleClass('expand-all');
+   }
+
+    $('#accordionFive .collapse-btn').click(function(){
+        /*if ($(this).hasClass('expand-all')) {
+            $(this).attr('title', 'Collapse all');
+        } else {
+             $(this).attr('title', 'Expand all');
+        }*/
+
+        togleNotes();
+    });
+
+    $(selector).on("click", function(e) {
+        var $this = $(this);
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+          clicks++; // Increment click counter
+          if (clicks === 1) {
+            timer = setTimeout(function() {
+              //$('#main').text('Single click');
+
+               if ($this.attr('aria-expanded') == "false") {
+                    $this.toggleClass('collapsed', false);
+                    $this.attr('aria-expanded', 'true');
+                    $('#accordionFive .collapse').first().collapse('show');
+               } else {
+                 $this.toggleClass('collapsed', true);
+                 $this.attr('aria-expanded', 'false');
+                 $('#accordionFive .collapse').collapse('hide');
+                 $('#accordionFive .collapse-btn').toggleClass('expand-all', true);
+               }
+
+
+              clicks = 0; //Reset
+            }, 500); // Increase or decrease if there is slowness or speed
+          } else {
+            clearTimeout(timer); //prevent single-click action
+            //$('#main').text('Double click')
+            togleNotes();
+            clicks = 0; // Reset
+          }
+    }).on("dblclick", function(e) {
+          e.preventDefault(); //Prevent double click
+    });
+};
+
+
+
+    $(function(){
+        notesExpandAll();
+        draftsExpandAll();
+        // note-content
+        $('#exampleAccordion div.item, #notesBody div.item').each(function(){
+            var LIMIT = 80,
+                text =  $(this).find('.note-content').text();
+            if (text.length > LIMIT) {
+                text = text.substr(0, LIMIT) + '...';
+            }
+
+            $(this).find('.truncate-text').text(text);
+        });
+    });
+    </script>
+
+	</th:block>
+
+
+
+
+</body>
+</html>
+
+

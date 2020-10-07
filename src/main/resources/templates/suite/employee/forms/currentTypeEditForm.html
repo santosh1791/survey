@@ -1,0 +1,29 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> Edit Current Type Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="currentTypeForm" class="custom-form" method="POST" th:action="@{'/currentTypeEdit/{id}/'(id=${id})}"  th:object="${currentTypeForm}"  autocomplete="off">
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="currentName" class="col-form-label col-form-label-sm">Current Type Name<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="currentName" id="currentName" th:field="*{currentName}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);"  >
+				<div class="text-danger" th:if="${#fields.hasErrors('currentName')}" th:errors="*{currentName}">current Type name Error</div>
+			</div>
+				
+			<div class="form-group col-md-6">
+				<label for="currentShortName" class="col-form-label col-form-label-sm">Current Type Short Name<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="currentShortName" id="currentShortName" th:field="*{currentShortName}"   required="required"  onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);"   >
+				<div class="text-danger" th:if="${#fields.hasErrors('currentShortName')}" th:errors="*{currentShortName}">current TypeShort name Error</div>
+			</div>
+						
+		</div>
+	</form>
+</div>

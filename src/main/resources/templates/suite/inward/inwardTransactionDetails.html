@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head>
+
+
+<meta charset="ISO-8859-1">
+<title>inward Transaction Details</title>
+
+
+<th:block layout:fragment="styles">
+	<style type="text/css">
+.font {
+	color: black;
+}
+
+ul>li {
+	list-style: none;
+}
+/* 
+.table-fixed tbody {
+	height: 230px;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody {
+	width: 100%;
+	display: block;
+} */
+p {
+	color: blue;
+}
+
+.redText {
+	color: red;
+}
+</style>
+</th:block>
+
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<!-- <div class="container">-->
+				<div class="row">
+					<div class="col-sm-12 col-md-12 _offset-md-1">
+						<div
+							class="card  card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+							<div
+								class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+								<h5
+									class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">Inward
+									Forward</h5>
+
+								<button
+									class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1"
+									role="button" _value="Print" onclick="goBack()">
+									<i class="fa fa-chevron-left"></i>&nbsp; Back
+								</button>
+
+								<!-- <button class="btn btn-sm btn-outline-primary pull-right" ><i class="fa fa-chevron-left"></i>&nbsp; Back</button> -->
+								<!-- <button class="btn btn-sm btn-outline-primary ml-3"  onclick="goBack()"><i class="fa fa-chevron-left"></i>  Back </button> -->
+							</div>
+							<div class="form-row" align="center">
+
+								<div class="col-lg-12 col-md-12" _style="margin-left: 3%;">
+
+									<form method="post" class="form-narrow form-horizontal"
+										th:action="@{/efilesuite/updatingInward}"
+										th:object="${inwardTransactionDetailsDTO}"
+										enctype="multipart/form-data" id="inwardTransactionDetailsDTO">
+
+										<div style="background-color: #399eb7; padding: .5%;">
+											<h5 align="left" style="color: white;">Current Detail</h5>
+										</div>
+										<input type="hidden" th:value="${inwardNumber}"
+											name="inwardNumber">
+
+										<table id=""
+											class=" table compact table-bordered table-hover table-striped table-sm mb-0"
+											cellspacing="0" width="100%">
+
+											<div
+												th:each="inwardMaster : ${efileInwardMastersDtoTestEntity}">
+												<tr>
+													<th>Type</th>
+													<td th:text="${inwardMaster.currentTypeMaster.currentName}"></td>
+													
+													<th>Number</th>
+													<td th:text="${inwardMaster.currentNumber}"></td>
+
+												</tr>
+												<tr>
+													<th>Department</th>
+														
+													<td th:if="${inwardMaster.departmentMaster}!=null" th:text="${inwardMaster.departmentMaster.departmentname}"></td>
+											<td th:if="${inwardMaster.departmentMaster}==null" th:text="${inwardMaster.otherDeptName}" >other</td>
+										
+													<th>From Address</th>
+													<td th:text="${inwardMaster.currentRecievedAddress}"></td>
+												</tr>
+												<tr>
+													<th>Received Date</th>
+													<td
+														th:text="${#temporals.format(inwardMaster.recievedDate,'dd/MM/yyyy')}"></td>
+													<th>Received Mode</th>
+													<td th:text="${inwardMaster.receivedMode}"></td>
+
+												</tr>
+												<tr>
+													<th>Current Date</th>
+													<td
+														th:text="${#temporals.format(inwardMaster.currentDate,'dd/MM/yyyy')}"></td>
+													<th>Current</th>
+													<td>
+														<div th:if="${inwardMaster.uploadFile}==''">N/A</div>
+														<div th:if="${inwardMaster.uploadFile}!=''">
+															<a
+																th:href="@{'/efilesuite/inwardPreview/{inwardName}'(inwardName=${inwardMaster.uploadFile})}"
+																style="color: black;" target="_blank" > <span><i
+																	class="mdi  mdi-eye"></i> Preview </span>
+															</a>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<th>Subject</th>
+													<td colspan="3" th:text="${inwardMaster.subject}"></td>
+
+												</tr>
+											</div>
+
+
+										</table>
+
+										<div style="background-color: #399eb7; padding: .5%;">
+											<h5 align="left" style="color: white;">Current Sheet
+												Track</h5>
+										</div>
+										<table
+											class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+											width="100%">
+
+											<thead>
+												<tr>
+													<th>S.No.</th>
+													<th>From Officer</th>
+													<th>To Officer</th>
+													<th>Created Date</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr
+													th:each="inwardTransactionDetails , sNo: ${inwardTransactionDetailsDatoEntity}">
+													<td th:text="${sNo.count}"></td>
+													<td><span
+														th:text="${inwardTransactionDetails.postMasterFrom.postname}"></span>
+														<span
+														th:if="${inwardTransactionDetails.postMasterFrom.employeeMaster} !=null">
+															(<span
+															th:text="${inwardTransactionDetails.postMasterFrom.employeeMaster.employeefirstname}"></span>
+															<span
+															th:text="${inwardTransactionDetails.postMasterFrom.employeeMaster.employeelastname}"></span>)
+													</span> <span
+														th:if="${inwardTransactionDetails.postMasterFrom.employeeMaster} ==null">
+
+													</span></td>
+													<td><span
+														th:if="${inwardTransactionDetails.postMasterTo.employeeMaster} !=null">
+															<span
+															th:text="${inwardTransactionDetails.postMasterTo.postname}"></span>
+															(<span
+															th:text="${inwardTransactionDetails.postMasterTo.employeeMaster.employeefirstname}"></span>
+															<span
+															th:text="${inwardTransactionDetails.postMasterTo.employeeMaster.employeelastname}"></span>)
+													</span> <span
+														th:if="${inwardTransactionDetails.postMasterTo.employeeMaster} ==null">
+															<span class="redText"
+															th:text="${inwardTransactionDetails.postMasterTo.postname}"></span>
+															<span class="redText"><strong> </strong> </span>
+													</span></td>
+													<td
+														th:text="${#dates.format(inwardTransactionDetails.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+												</tr>
+											</tbody>
+										</table>
+										<div
+											th:if="${#session.getAttribute('displayNoneForEditingInward')} == false">
+
+										</div>
+
+
+
+										<div style="margin-top: 2%;"
+											th:if="${#session.getAttribute('displayNoneForEditingInward')} == true">
+
+											<div class="card border-primary">
+												<h6
+													class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+													style="width: auto;">Inward Note</h6>
+
+
+												<div class="card-block pt-0" style="border-color: grey;">
+													<div class="form-row">
+														<div class="form-group col-md-6">
+															<label for="subject"
+																class="col-lg-3 pull-left control-label">Send To
+																<span style="color: red;">*</span>
+															</label> <small
+																class="pull-left control-label help-text text-muted d-inline-block"><span
+																class="text-info">EmployeeName &nbsp; Post &nbsp;
+																	Section &nbsp; Office</span></small>
+
+															<div class="col-lg-9">
+																<select name="inwardTo" id="inwardTo"
+																	_onchange="this.className=this.options[this.selectedIndex].className"
+																	class="auto-complete-select custom-select custom-select-sm "
+																	size="1">
+																	<option value="0">--Select--</option>
+																	<span th:each="postsList : ${postsMasterList}">
+																		<span th:if="${postsList.employeeMaster} != null">
+																			<option th:value="${postsList.id}"><span
+																					th:text="${postsList.employeeMaster.employeefirstname}"></span>
+																				<span
+																					th:text="${postsList.employeeMaster.employeelastname}"></span>
+																				<span th:text="${postsList.postname}"></span> <span
+																					th:if="${postsList.sectionMaster}!=null"> <span
+																					th:text="${postsList.sectionMaster.sectionname}"></span>
+																				</span> <span th:if="${postsList.sectionMaster}==null">
+
+																				</span> <span
+																					th:text="${postsList.officeMaster.officename}"></span>
+																			</option>
+																	</span> <span th:if="${postsList.employeeMaster} == null">
+																			<option class="redText" th:value="${postsList.id}">
+																				<span th:text="${postsList.postname}"></span> <span
+																					th:if="${postsList.sectionMaster}!=null"> <span
+																					th:text="${postsList.sectionMaster.sectionname}"></span>
+																				</span> <span th:if="${postsList.sectionMaster}==null">
+																				</span> <span
+																					th:text="${postsList.officeMaster.officename}"></span>
+																			</option>
+																	</span>
+																</span>
+																</select>
+																<div class="text-danger"
+																	th:if="${#fields.hasErrors('inwardTo')}"
+																	th:errors="*{inwardTo}">Officers Error</div>
+															</div>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="keywords"
+																class="col-lg-3 pull-left control-label">Remarks
+																<span style="color: red;">*</span>
+															</label>
+															<div class="col-lg-9">
+																<span
+																	th:each=" inwardTransactionDetails, itrState : ${inwardTransactionDetailsDatoEntity}">
+																	<span
+																	th:if="${itrState.count == inwardTransactionDetailsDatoEntitySize}">
+																		<span th:if="${inwardTransactionDetails.status}==2">
+																			<textarea name="content"
+																				th:text="${inwardTransactionDetails.content}"
+																				class="form-control form-control-sm" id="content"
+																				placeholder="Enter remarks"></textarea>
+																	</span> <span th:if="${inwardTransactionDetails.status}!=2">
+																			<textarea name="content"
+																				class="form-control form-control-sm" id="content"
+																				placeholder="Enter remarks"></textarea>
+																	</span>
+
+																</span>
+																</span> <span
+																	th:if="${inwardTransactionDetailsDatoEntitySize}==false">
+																	<textarea name="content"
+																		class="form-control form-control-sm" id="content"
+																		placeholder="Enter remarks"></textarea>
+																</span>
+																<div class="text-danger"
+																	th:if="${#fields.hasErrors('content')}"
+																	th:errors="*{content}">Remarks Error</div>
+															</div>
+														</div>
+													</div>
+													<div class="form-row">
+														<div class="form-group col-md-12" align="center">
+															<input type="submit" value="Save" name="save"
+																class="btn btn-info"
+																onclick="return formValidationSave();" /> <input
+																type="submit" value="Send" name="send"
+																class="btn btn-info" onclick="return formValidation();" />
+														</div>
+
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("button").click(function() {
+					var notefileNumber = $("#notefileNumber").val();
+					$.ajax({
+						url : "/efilesuite/linkingeFile/" + notefileNumber,
+						success : function(result) {
+							alert(result);
+							//$("#div1").html(result);
+						}
+					});
+				});
+			});
+
+			function formValidation() {
+
+				/* if ($("#sectionId").val() == 0) {
+					alert("Please select section");
+					$("#sectionId").focus();
+					return false;
+				} else */if ($("#inwardTo").val() == 0) {
+					bootbox.alert("Please select officer");
+					$("#inwardTo").focus();
+					return false;
+				} /* else if ($("#keywords").val() == "") {
+								alert("Please enter subject");
+								$("#keywords").focus();
+								return false;
+							} */else if ($("#content").val() == "") {
+					bootbox.alert("Please enter remarks");
+					$("#content").focus();
+					return false;
+				} else {
+					return true;
+				}
+			}
+			function formValidationSave() {
+
+				if ($("#content").val() == "") {
+					bootbox.alert("Please enter remarks");
+					$("#content").focus();
+					return false;
+				} else {
+					return true;
+				}
+			}
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$('#sectionId').change(function() {
+					var sectionid = $(this).val();
+					$.ajax({
+						type : "POST",
+						url : "/efilesuite/editInward/" + sectionid,
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success : function(data) {
+							$("#inwardTo").html(data);
+						},
+						error : function() {
+							alert("Error");
+						}
+					});
+				})
+			});
+		</script>
+
+		<script type="text/javascript">
+			//In your Javascript (external .js resource or <script> tag)
+			$(document).ready(function() {
+				$('.auto-complete-select').select2();
+			});
+		</script>
+
+	</th:block>
+</body>
+</html>

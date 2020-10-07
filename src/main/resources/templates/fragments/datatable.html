@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DataTable</title>
+</head>
+<body>
+
+<th:block th:fragment="datatable(columns)">
+
+    <script>
+
+			$(document).ready(function() {
+			    var table = $('#departmentMasterTable').DataTable({
+                    language: {
+                            search: "_INPUT_",
+                            searchPlaceholder: "Search...",
+                            "lengthMenu": "_MENU_ ",
+                            paginate: {
+                                previous: '<i class="fa fa-chevron-left"></i>',
+                                next:     '<i class="fa fa-chevron-right"></i>'
+                            },
+                            aria: {
+                                paginate: {
+                                    previous: 'Previous',
+                                    next:     'Next'
+                                }
+                            }
+                         },
+                         "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+                        responsive: true,
+                        scrollResize: false,
+                        //scrollY:         'calc( 100vh - 330px )',
+                        scrollCollapse: false,
+                        paging:         true,
+                        "pagingType": "simple_numbers",
+                        lengthChange: true,
+                        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+
+<!--/*/
+
+/*/-->
+                    // columns code fragment
+                     columns: [(${columns})],
+                     /*columns: [
+
+                       { width:'1%', targets: 0 },
+                        { width: '10%', targets: 1 },
+                       { width:'1%', targets: 2 },
+                       { width: '10%', targets: 3  },
+                       { width: '1%', targets: 4 },
+                         { width: '1%', targets: 5, "orderable": false, className: "text-center px-1" },
+                        { width: '1%', targets: 6, "orderable": false ,className: "text-center px-1" }
+                    ],*/
+                    buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ],
+                    fixedHeader: {
+                        header: true,
+                        headerOffset: $('.app-header.navbar').height()
+                    }
+                });
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+
+
+				//$(".dataTables_paginate .pagination").addClass("pagination-sm");
+
+			});
+
+</script>
+
+
+</th:block>
+
+</body>
+</html>

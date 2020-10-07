@@ -1,0 +1,94 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px!important;
+        }
+    }
+    
+    
+</style>
+<div class="modal-header">
+	<h5 class="modal-title"><!--<i class="fa fa-tasks"></i>-->Add State</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form  class="custom-form" id="stateMasterForm" method="post" th:action="@{/stateMstForm}"  th:object="${stateMasterForm}"  autocomplete="off" >
+
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+
+		<div class="form-row">
+			<!-- <div class="col-sm-12"> -->
+			<div class="form-group col-md-12">
+					<label for="stateIDTitle" class="col-form-label col-form-label-sm">State ID<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="stateID" id="stateIDTitle" placeholder="State ID" th:field="*{stateID}" onkeypress="javascript:return integersOnly(event);" >
+					<span class="text-danger" id="stateSpanID"></span>
+					<div class="text-danger" th:if="${#fields.hasErrors('stateID')}" th:errors="*{stateID}">stateID Error</div>
+			</div>
+			<div class="form-group col-md-12">
+					<label for="stateNameTitle" class="col-form-label col-form-label-sm">State Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="stateName" id="stateNameTitle" placeholder="State Name" th:field="*{stateName}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('stateName')}" th:errors="*{stateName}">stateName Error</div>
+			</div>
+			<div class="form-group col-md-12">
+					<label for="stateShortNameTitle" class="col-form-label col-form-label-sm">State Short Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="stateShortName" id="stateShortNameTitle" placeholder="State Short Name" th:field="*{stateShortName}"  onkeypress="javascript:return alphabetsOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('stateShortName')}" th:errors="*{stateShortName}">stateShortName Error</div>
+			</div>
+
+			</div>
+
+	</form>
+</div>
+<script>
+
+	var context = "[[@{/}]]";
+	var max_chars = 6;
+
+	$("#stateIDTitle").keyup(function() {
+
+		$("#mandalIDTitle").val(this.value.match(/[0-9]*/));
+
+		if ($(this).val().length >= max_chars) {
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+	});
+
+	 var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+
+	$( "#stateIDTitle" ).on('input' ,function() {
+		$("#stateSpanID").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var stateIDVal = $( "#stateIDTitle" ).val();
+		if(stateIDVal ==null || stateIDVal == ""  ){
+			return false;
+		}else if(parseInt(stateIDVal) == 0){
+			alert("Invalid State ID");
+			$( "#stateIDTitle" ).val("");
+			return false;
+		}
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkStateIDExist/"+stateIDVal+"/", 
+					/* url: "/checkStateIDExist/"+stateIDVal+"/", */
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#stateSpanID").html("State ID: "+stateIDVal+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					}
+		});
+
+	});
+
+
+</script>

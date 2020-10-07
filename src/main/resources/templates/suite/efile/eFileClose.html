@@ -1,0 +1,36 @@
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Close eFile
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="col-sm modal-body">
+	<div class="row">
+			<div class="row">
+			<div class="form-group col-md-6">
+					<div th:if="${display}==1">  <h4><font color="green" size="2"><span th:text="${msg}"></span></font></h4></div>
+				</div>
+			</div>
+		<form class="custom-form" id="closeeFile" method="post"
+			name="closeeFile" th:action="@{/efilesuite/eFileCloseassadf}"
+			enctype="multipart/form-data" autocomplete="off">
+			<input type="text" name="notefileDetails" th:value="${list}">
+			<input type="hidden" name="notefileNumberList" th:value="${notefileNumberList}" />
+			<div class="col-12">
+				<div class="form-row">
+					<div class="form-group col-md-12 mb-0">
+						<label for="content" class="col-form-label font-weight-bold">Description<span
+							style="color: red;">*</span></label>
+						<div class="w-100">
+							<textarea class="form-control" id="content" name="content"
+								placeholder="Enter description" required="required"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

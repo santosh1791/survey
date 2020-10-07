@@ -1,0 +1,799 @@
+<!-- <!DOCTYPE html>
+<html layout:decorator="layouts/main"> -->
+
+<div class="modal-header">
+	<h5 class="modal-title">
+		<!-- <i class="fa fa-tasks"></i> --> Inward Entry
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+
+
+
+
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Inward Entry</title>
+</th:block>
+
+
+
+<th:block layout:fragment="links">
+	<!--<link
+		href="../../../resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css"
+		rel="stylesheet" media="screen"
+		th:href="@{/resources/vendors/bootstrap-daterangepicker/css/daterangepicker.css}" />-->
+
+</th:block>
+
+<th:block layout:fragment="styles">
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 1200px;
+        }
+    }
+
+.tblSubHead {
+	background-color: #1f618d !important;
+	color: #FFFFFF !important;
+}
+
+#errmsg, #errmsgMobile, #errmsgFax {
+	color: red;
+}
+
+form.custom-form span.red {
+	color: red;
+}
+
+.redText {
+	color: red;
+}
+</style>
+</th:block>
+
+<body>
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<span th:text="${msg}"></span>
+					<form class="custom-form" method="post"
+						th:action="@{/efilesuite/inwardregister}"
+						th:object="${efileInwardMasterDto}" enctype="multipart/form-data"
+						id="efileInwardMasterDto">
+
+							<div class="card-block bg-white py-4">
+								<!--<form id="inwardCurrentEntry" class="" method="" action="">-->
+								<div class="form-row">
+								
+								<th:block th:if="${statusMessage != null}">
+						            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+						        </th:block>
+						        
+									<input type="hidden" name="id" id ="id" >
+									<div class="col-lg-9 col-md-12">
+										<div class="card border-primary">
+											<h6
+												class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+												style="width: auto;">1. Current Details</h6>
+
+
+											<div class="card-block pt-0" style="border-color: grey;">
+												<div class="form-row">
+													<div class="form-group col-md-4">
+														<div>
+															<label class="col-form-label col-form-label-sm "
+																for="currentTypeMaster"> Type<span class="red">*</span>
+															</label>
+														</div>
+														<select name="currentTypeMaster" id="currentTypeMaster"
+															class="auto-complete-select  form-control_ custom-select custom-select-sm"
+															required th:field="*{currentTypeMaster}">
+															<option value="0">-- Select --</option>
+															<option th:each="currentList : ${currentNameList}"
+																th:text="${currentList.currentName}"
+																th:value="${currentList.id}"
+																th:filed="*{currentTypeMaster}"></option>
+														</select>
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('currentTypeMaster')}"
+															th:errors="*{currentTypeMaster}">Current Type Error</div>
+													</div>
+
+													<div class="form-group col-md-4">
+														<label class="col-form-label col-form-label-sm"
+															for="currentNUmber">Number <span class="red">*</span></label>
+														<input type="text" name="currentNumber"
+															placeholder="Enter Current Number " id="currentNUmber"
+															class="form-control form-control-sm" required
+															th:field="*{currentNumber}">
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('currentNumber')}"
+															th:errors="*{currentNumber}">Number Error</div>
+													</div>
+
+
+													<div class="form-group col-md-4">
+														<label class="col-form-label col-form-label-sm"
+															for="currentDate"><span id="typeDateSpan"></span> Date <span class="red">*</span></label>
+														<input type="text" name="currentDate" value=""
+															id="currentDate" placeholder="DD/MM/YYYY"
+															th:field="*{currentDate}"
+															class="calendarBg form-control form-control-sm datePicker currentDate"
+															required readonly="readonly" />
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('currentDate')}"
+															th:errors="*{currentDate}">Date Error</div>
+													</div>
+
+													<div class="form-group col-md-4">
+														<div>
+															<label class="col-form-label col-form-label-sm "
+																for="departmentMaster">Department<span
+																class="red">*</span></label>
+														</div>
+														<select name="departmentMaster" id="departmentMaster"
+															class="auto-complete-select  form-control_ custom-select custom-select-sm"
+															required>
+															<option value="0" selected="selected">--Select--</option>
+															<th:block th:object="${departmentList}">
+																<p th:each="anItem : ${departmentList}">
+																	<option th:value="${anItem.id}"><a
+																			th:text="${anItem.departmentname}"></a>
+																	</option>
+																</p>
+															</th:block>
+															<option value="-1" >Other</option>
+														</select>
+														<input type="text" name="otherDeptName" placeholder='Other Department Name' class='form-control form-control-sm' id="otherDeptName" style="display: none;" />
+														<div class="invalid-feedback text-danger"
+															th:if="${#fields.hasErrors('departmentMaster')}"
+															th:errors="*{departmentMaster}">Department Error</div>
+													</div>
+
+													<div class="form-group col-md-4">
+														<label class="col-form-label col-form-label-sm"
+															for="recievedDate">Received Date <span
+															class="red">*</span></label> <input type="text"
+															name="recievedDate" value="" id="recievedDate"
+															placeholder="DD/MM/YYYY"
+															class="calendarBg form-control form-control-sm datePicker recievedDate"
+															th:field="*{recievedDate}" required readonly="readonly" />
+														<div class="invalid-feedback text-danger"
+															th:if="${#fields.hasErrors('recievedDate')}"
+															th:errors="*{recievedDate}">Received Date Error</div>
+													</div>
+													
+													<div class="form-group col-md-4">
+														<label class="col-form-label col-form-label-sm"
+															for="inwardRecievedFrom">Received from Officer <span
+															class="red">*</span></label> <input type="text"
+															name="inwardRecievedFrom"
+															placeholder="Enter Received from Officer "
+															id="inwardRecievedFrom"
+															class="form-control form-control-sm latterUpperCase"
+															th:field="*{inwardRecievedFrom}" required>
+														<div class="text-danger"
+															th:if="${#fields.hasErrors('inwardRecievedFrom')}"
+															th:errors="*{inwardRecievedFrom}">Department Error</div>
+													</div>
+													
+													<div class="form-group col-md-4">
+														<div>
+															<label class="col-form-label col-form-label-sm "
+																for="recievedMode">Received Mode<span
+																class="red">*</span></label>
+														</div>
+														<select id="recievedMode" name="receivedMode" onchange="javascript:showEmail();" 
+															class="custom-select custom-select-sm"
+															style="width: 100%;" required>
+															<option value="0">-- Select --</option>
+															<option value="Email">By Email</option>
+															<option value="Hand">By Hand</option>
+															<option value="Post">By Post</option>
+														</select>
+													</div>
+													
+													<div class="form-group col-md-4"  id='emailDivID'  style="display: none">
+														<label class="col-form-label col-form-label-sm"
+															for="email">email <span class="red">*</span></label>
+														<input type="email" name="email" value=""
+															placeholder="example@test.com" id="email"
+															class="form-control form-control-sm" th:field="*{email}">
+													</div>
+
+													
+
+													<div class="form-group col-md-8 mb-0">
+
+														<label for="subject"
+															class="col-form-label col-form-label-sm">Subject<span
+															class="red">*</span></label>
+														<textarea id="currentSubject"
+															class="form-control form-control-sm"
+															name="subject" placeholder="Enter Subject here"
+															rows="3" required></textarea>
+															<!-- <div class="text-danger"
+															th:if="${#fields.hasErrors('subject')}"
+															th:errors="*{subject}">Department Error</div> -->
+													</div>
+
+													<div class="form-group col-md-4 mb-0">
+														<label class="col-form-label col-form-label-sm"
+															for="uploadFile"> Attach Current <span
+															class="red">*</span>
+														</label> <input type="file" name="uploadFile" value="" onchange="javascript:validateFiles();"
+															id="uploadFile" class="form-control form-control-sm"
+															style="height: 65px;" required > <small
+															style="position: absolute; bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"
+															class="help-text text-muted d-inline-block"> (
+															Supported Formats : .pdf, .png, .jpg, .jpeg )</small>
+													</div>
+													
+													<div class="col-md-12 mt-4">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-1" aria-expanded="false" aria-controls="collapseExample">More...</h6>
+
+                                                    		<section id="section-1" class="hide collapse">
+                                                    			<div class="form-row card-block pt-0">
+																<div class="form-group col-md-4">
+																	<label class="col-form-label col-form-label-sm"
+																		for="fromAddress">Address <!-- <span class="red">*</span> --></label>
+																	<input type="text" name="currentRecievedAddress"
+																		placeholder="Enter From Address"
+																		oninput="chkOnlySplChars(this,'in From Address');"
+																		id="fromAddress" class="form-control form-control-sm">
+																</div>
+			
+																
+			
+																<div class="form-group col-md-4">
+																	<label class="col-form-label col-form-label-sm" for="fax">Fax
+																		<!-- <span class="red">*</span> -->
+																	</label> <input type="text" name="fax" placeholder="8888888888"
+																		id="fax" class="form-control form-control-sm"
+																		th:field="*{fax}"> <span id="errmsgFax"></span>
+																</div>
+																<div class="form-group col-md-4">
+																	<label class="col-form-label col-form-label-sm"
+																		for="pincode">Pincode <!-- <span class="red">*</span> --></label>
+																	<input type="pincode" name="pincode"
+																		placeholder="Enter Pincode" id="pincode"
+																		class="form-control form-control-sm" maxlength="6"
+																		th:field="*{pincode}"> <span id="errmsg"></span>
+																</div>
+																<div class="form-group col-md-4">
+																	<label class="col-form-label col-form-label-sm"
+																		for="mobileNumber">Mobile Number <!-- (optional) --></label>
+																	<input type="text" name="mobileNumber"
+																		placeholder="Enter Mobile Number" id="mobileNumber"
+																		class="form-control form-control-sm" maxlength="10"
+																		th:field="*{mobileNumber}"><span
+																		id="errmsgMobile"></span>
+																</div>
+																</div>
+															</section>
+													</div>
+
+
+
+													
+
+												</div>
+
+											</div>
+											<!-- /.card-block -->
+										</div>
+										<!-- /.row -->
+									</div>
+
+									<div class="col-lg-3 col-md-12">
+										<div class="card border-primary">
+											<h6 class="mb-0 formTitle font-weight-bold text-primary"
+												style="width: auto;">2. Concerned Officer Details</h6>
+
+											<div class="card-block pt-0">
+												<div class="form-row">
+													<div class="form-group col-md-12">
+														<div id="sendto">
+															<label class="col-form-label col-form-label-sm "
+																for="concernedOfficer"> Send To <span
+																class="red">*</span></label>
+																<small class="help-text text-muted d-inline-block"><span
+																class="text-info">EmployeeName &nbsp; Post &nbsp; Section &nbsp; Office</span></small>
+														</div>
+														<select id="postMaster" name="postMaster"
+															class="auto-complete-select w-100 custom-select custom-select-sm" required>
+															<option value="0">--Select--</option>
+															<span th:each="postsList : ${postsMasterList}">
+																<span th:if="${postsList.employeeMaster} != null">
+																	<option th:value="${postsList.id}"><span
+																			th:text="${postsList.employeeMaster.employeefirstname}"></span>
+																		<span
+																			th:text="${postsList.employeeMaster.employeelastname}"></span>
+																		<span th:text="${postsList.postname}"></span> <span
+																			th:if="${postsList.sectionMaster}!=null"> <span
+																			th:text="${postsList.sectionMaster.sectionname}"></span>
+																		</span> <span th:if="${postsList.sectionMaster}==null">
+
+																		</span> <span th:text="${postsList.officeMaster.officename}"></span>
+																	</option>
+															</span> <span th:if="${postsList.employeeMaster} == null">
+																	<option class="redText" th:value="${postsList.id}">
+																		<span th:text="${postsList.postname}"></span> <span
+																			th:if="${postsList.sectionMaster}!=null"> <span
+																			th:text="${postsList.sectionMaster.sectionname}"></span>
+																		</span> <span th:if="${postsList.sectionMaster}==null">
+																		</span> <span th:text="${postsList.officeMaster.officename}"></span>
+																	</option>
+															</span>
+														</span>
+														</select>
+													</div>
+
+													<div class="form-group col-md-12 mb-0">
+														<label for="endorsement"
+															class="col-form-label col-form-label-sm">Endorsement</label>
+														<textarea style="min-height: 246px;" id="endorsement"
+															class="form-control form-control-sm" name="endorsement"></textarea>
+													</div>
+												</div>
+
+											</div>
+										</div>
+										<!-- /.card.border-primary-->
+									</div>
+
+									<div class="col-sm-12 text-right" align="center">
+										<button style="width: 80px;" type="submit" name="Save"
+											value="Save" id="sendBtn"
+											class="btn btn-sm btn-primary d-inline-block ml-auto"
+											onclick="javascript:return submitDataSave();">Save</button>
+									
+										<button style="width: 80px;" type="submit" name="Send"
+											value="Send" id="sendBtn"
+											class="btn btn-sm btn-primary d-inline-block ml-auto"
+											onclick="javascript:return submitData();">Send</button>
+											
+										<button style="width: 80px;" type="submit" name="MisSent"
+											value="MisSent" id="sendBtn"
+											class="btn btn-sm btn-primary d-inline-block ml-auto"
+											onclick="javascript:return submitDataSave();">Mis-Sent</button>
+											
+									</div>
+								</div>
+								<!-- /.form-row main-->
+								<!--</form>-->
+							</div>
+
+						<!-- </div> -->
+					</form>
+
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.animated.fadeIn -->
+		</div>
+		<!--/.main .container-fluid -->
+
+	</div>
+
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript">
+			$('input.recievedDate').daterangepicker({
+				"singleDatePicker": true,
+				"showDropdowns": true,
+				"timePicker": false,
+				"autoApply": true,
+				"linkedCalendars": false,
+				"alwaysShowCalendars": true,
+				maxDate : moment(),
+			    "autoUpdateInput": false,
+				locale : {
+					
+					format:"DD/MM/YYYY"
+				}
+				 
+			} );
+			
+			$('input.currentDate').daterangepicker({
+				"singleDatePicker": true,
+				"showDropdowns": true,
+				"timePicker": false,
+				"autoApply": true,
+				"linkedCalendars": false,
+				"alwaysShowCalendars": true,
+				maxDate : moment(),
+			    "autoUpdateInput": false,
+				locale : {
+					
+					format:"DD/MM/YYYY"
+				}
+			}
+			 
+			);
+			
+			
+			$('input.datePicker').on('apply.daterangepicker', function(ev, picker) {
+			    $(this).val(picker.startDate.format('DD/MM/YYYY'));
+
+			});
+
+			$('input.datePicker').on('cancel.daterangepicker', function(ev, picker) {
+			    $(this).val('');
+			});
+			
+		</script>
+
+
+		<script type="text/javascript">
+
+/* Normal Validation */
+function submitData(){
+	
+	
+	var sEmail = $('#email').val();
+	
+	 if($("#currentTypeMaster").val()==0){
+		 bootbox.alert("Select Current Type ");
+		 $("#currentTypeMaster").focus();
+		 return false;
+	 }else if($("#currentNUmber").val()==""){
+		 bootbox.alert("Enter Current Number   ");
+		 $("#currentNUmber").focus();
+		 return false;
+	 }else if($("#currentDate").val()==""){
+		 bootbox.alert("Select Current Date   ");
+		 $("#currentDate").focus();
+		 return false;
+	 }else if($("#departmentMaster").val()==0){
+		 bootbox.alert("Select Department ");
+		 $("#departmentMaster").focus();
+		 return false;
+	 }else if($("#departmentMaster").val()=="-1" && ( $("#otherDeptName").val()== null || $("#otherDeptName").val() =="" ) ){
+		 $("#otherDeptName").show();
+		 bootbox.alert("Enter other department name ");
+		 $("#otherDeptName").focus();
+		 return false;
+		 
+	 }else if($("#recievedDate").val()==""){
+		 bootbox.alert("Select Received Date  ");
+		 $("#recievedDate").focus();
+		 return false;
+	 }else if($("#inwardRecievedFrom").val()==""){
+		 bootbox.alert("Enter Recieved From Officer   ");
+		 $("#inwardRecievedFrom").focus();
+		 return false;
+	 }else if($("#recievedMode").val()==0){
+		 bootbox.alert("Select Received Mode ");
+		 $("#recievedMode").focus();
+		 return false;
+	 }else if($("#recievedMode").val()=="Email"  && ( $("#email").val()== null || $("#email").val() =="" ) ){
+		 $("#email").show();
+		 bootbox.alert("Provide e-Mail ");
+		 $("#email").focus();
+		 return false;
+	 }else if($("#uploadFile").val()==""){
+		 bootbox.alert("Please Upload current");
+		 $("#uploadFile").focus();
+	 }else if($("#postMaster").val()==0){
+		 bootbox.alert("Select Concerned Officer ");
+		 $("#postMaster").focus();
+		 return false;
+	 }else{
+		 return true;
+	 }
+}
+
+function submitDataSave(){
+	//alert(evnt);
+	var sEmail = $('#email').val();
+	// bootbox.alert($("#currentTypeMaster").val());
+	 if($("#currentTypeMaster").val()==0){
+		 bootbox.alert("Select Current Type ");
+		 $("#currentTypeMaster").focus();
+		 return false;
+	 }else if($("#currentNUmber").val()==""){
+		 bootbox.alert("Enter Current Number   ");
+		 $("#currentNUmber").focus();
+		 return false;
+	 }else if($("#currentDate").val()==""){
+		 bootbox.alert("Select Current Date   ");
+		 $("#currentDate").focus();
+		 return false;
+	 }else if($("#departmentMaster").val()==0){
+		 bootbox.alert("Select Department ");
+		 $("#departmentMaster").focus();
+		 return false;
+	 }else if($("#departmentMaster").val()=="-1" && ( $("#otherDeptName").val()== null || $("#otherDeptName").val() =="" ) ){
+		 $("#otherDeptName").show();
+		 bootbox.alert("Enter other department name ");
+		 $("#otherDeptName").focus();
+		 return false;
+		 
+	 }else if($("#recievedDate").val()==""){
+		 bootbox.alert("Select Received Date  ");
+		 $("#recievedDate").focus();
+		 return false;
+	 }else if($("#inwardRecievedFrom").val()==""){
+		 bootbox.alert("Select Recieved From Officer   ");
+		 $("#inwardRecievedFrom").focus();
+		 return false;
+	 }else if($("#recievedMode").val()==0){
+		 bootbox.alert("Select Received Mode ");
+		 $("#recievedMode").focus();
+		 return false;
+	 }else if($("#recievedMode").val()=="Email"  && ( $("#email").val()== null || $("#email").val() =="" ) ){
+		 $("#email").show();
+		 bootbox.alert("Provide e-Mail ");
+		 $("#email").focus();
+		 return false;
+	 }else if($("#currentSubject").val()==""){
+    	 bootbox.alert("Enter Subject Number   ");
+		 $("#currentSubject").focus();
+		 return false;
+     }else{
+		 return true;
+	 }
+}
+
+
+/**
+	INput not Allow spaces and tabs
+**/
+function TextToTrim(obj){
+    obj.value = obj.value.trim();
+}
+/*First time Special characters are not allowed   */
+function chkOnlySplChars(obj,msg){
+	var txtValue = obj.value.trim();
+	if(txtValue==""){
+		return false;
+	}
+	var flag = true;
+	var _x = 0;
+	for(var x=0;x<txtValue.length;x++ ){
+		var _charCode = txtValue.charCodeAt(x);
+		if( !((_charCode>=33 && _charCode<=64) || (_charCode>=91 && _charCode<=96)
+				|| (_charCode>=123 && _charCode<=126) )){
+			_x++;
+		}
+	}
+	if(_x==0){
+		bootbox.alert(" Special Charaters are not allowed "+msg);
+		obj.value="";
+		return false;
+	}else{
+		return true;
+	}
+}
+ 
+
+jQuery(document).ready(function() {
+	
+	
+	/*Convert textbox user entered text to uppercase */
+	jQuery('#inwardRecievedFrommmm').keyup(function() {
+		 
+		$(this).val($(this).val().toUpperCase());
+	});
+
+	/* Phone number validation */
+	 $("#mobileNumber").keydown(function (e) {
+		 
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+
+//   	      if ($("#mobileNumber").val().charAt(0)=="" || $("#mobileNumber").val().charAt(0)!="9" || $("#mobileNumber").val().charAt(0)!="8" || $("#mobileNumber").val().charAt(0)!="7")
+// //   	     if(isNaN($("#mobileNumber").val())||$("#mobileNumber").val().indexOf(" ")!=1)
+//           {
+//                bootbox.alert("it should start with 9 ");
+//                return false
+//           }
+
+
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#mobileNumber").val().length > 9) {
+	        	if($("#mobileNumber").val().length > 9)
+	        	{
+	        		$("#errmsgMobile").html("10 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsgMobile").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+	 /* Pin number validation */
+	 $("#pincode").keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#pincode").val().length > 5) {
+	        	if($("#pincode").val().length > 5)
+	        	{
+
+	        		$("#errmsg").html("6 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsg").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+	 
+	 /* fax number validation */
+	 $("#fax").keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#fax").val().length > 10) {
+	        	if($("#fax").val().length > 10)
+	        	{
+
+	        		$("#errmsgFax").html("11 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsgFax").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+
+
+	 $("#currentTypeMaster").on("change", function(){
+		 var text = $("#currentTypeMaster option:selected").text();
+		 $("#typeDateSpan").html(text);
+		 
+	 });
+	 
+	 $("#departmentMaster").on("change", function(){
+	    	var val = $(this).val();
+	    	//bootbox.alert("val::"+val);
+	    	if(val == "-1")
+	    		$("#otherDeptName").show();		
+	    	else{
+	    		$("#otherDeptName").val("");
+	    		$("#otherDeptName").hide();
+	    	}
+	    	
+	    }); 
+//
+//File Validation
+  /* $('#uploadFile').change(function() {
+	  
+	      var file = $("#uploadFile").val();
+	      var exts = ['pdf','jpg','jpeg','png'];
+	      // first check if file field has any value
+	      if ( file ) {
+	        // split file name at dot
+	        var get_ext = file.split('.');
+	        // reverse name to check extension
+	        get_ext = get_ext.reverse();
+	        // check file type is valid as given in 'exts' array
+	        if ( $.inArray ( get_ext[0].toLowerCase(), exts ) > -1 ){
+	          //alert( 'Allowed extension!' );
+	        } else {
+	        	alert("Please Upload .pdf, png, jpg, jpeg files only");
+	        	$("#uploadFile").val('');
+	        }
+	      }
+
+  }); */
+  
+  
+	 	
+}); 
+
+</script>
+
+
+		<script type="text/javascript">
+	$(document).ready(function() {
+
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$('#sectionId').change(function() {
+			var sectionid = $(this).val();
+			$.ajax({
+				type : "POST",
+				url : "/efilesuite/editInward/" + sectionid,
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success : function(data) {
+					$("#postMaster").html(data);
+				},
+				error : function() {
+					bootbox.alert("Error");
+				}
+			});
+		})
+	});
+	
+	
+	function validateFiles() {
+		//bootbox.alert("4444");
+        //var modelname=$("#inputmodelname").val();
+        for (var i = 0; i < $("#uploadFile").get(0).files.length; ++i) {
+            var file1=$("#uploadFile").get(0).files[i].name;
+			//bootbox.alert("File NAme : "+file1);
+            if(file1){                        
+                var file_size=$("#uploadFile").get(0).files[i].size;
+                if(file_size<5242880){
+                    var ext = file1.split('.').pop().toLowerCase();                            
+                    if($.inArray(ext,["pdf","png","jpg","jpeg"])===-1){
+                        bootbox.alert("Invalid file extension. File Name : "+file1);
+                        $("#uploadFile").val('');
+                        return false;
+                    }
+
+                }else{
+                    bootbox.alert("File size should be less than 5 MB. File Name : "+file1);
+                    $("#uploadFile").val('');
+                    return false;
+                }                        
+            }else{
+                bootbox.alert("Please upload file");         
+                return false;
+            }
+        }
+    };
+    
+    function showEmail(){
+    	var val = $("#recievedMode").val();
+    	//bootbox.alert("val::"+val+", index:"+index);
+    	if(val!=undefined && val!=null && val!="" && val !="0"){
+	    	if(val == "Email")
+	    		$("#emailDivID").show();		
+	    	else{
+	    		$("#email").val("");
+	    		$("#emailDivID").hide();
+	    	}
+    	}else{
+    		$("#email").val("");
+    		$("#emailDivID").hide();
+    	}
+    		
+    	
+    } 
+    
+    $(document).ready(function() {
+	    $('.auto-complete-select').select2({
+	    	dropdownParent: $('#sendto'),
+	        templateResult: function(state) {
+	            return state.text;
+	        }
+	    });
+	});
+</script>
+	</th:block>
+
+
+
+</body>
+
+</html>

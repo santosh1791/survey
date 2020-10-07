@@ -1,0 +1,111 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 600px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Add District</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form class="custom-form" id="districtMasterForm" method="post" th:action="@{/districtMstForm}"  th:object="${districtMasterForm}"  autocomplete="off" >
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+		
+		<div class="form-row">
+				
+				<div class="form-group col-md-6">
+					<label class="col-form-label col-form-label-sm" for="stateIDTitle">State<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select class="custom-select custom-select-sm" style="min-width: 200px; text-align: left!important;" id="stateID" name="stateMaster"  _class="text-left form-control _mt-1 js-example-basic-single">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${statesList}">
+							<p th:each="anItem : ${statesList}">
+								<option  th:value="${anItem.id}"><span th:text="${anItem.statename}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('stateMaster')}" th:errors="*{stateMaster}">stateID Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label class="col-form-label col-form-label-sm" for="districtIDTitle">District ID<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="districtID" id="districtIDTitle" placeholder="District ID" th:field="*{districtID}" onkeypress="javascript:return integersOnly(event);" >
+					<span class="text-danger" id="distSpanID"></span>
+					<div class="text-danger" th:if="${#fields.hasErrors('districtID')}" th:errors="*{districtID}">districtID Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label class="col-form-label col-form-label-sm" for="districtNameTitle">District Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="districtName" id="districtNameTitle" placeholder="District Name" th:field="*{districtName}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('districtName')}" th:errors="*{districtName}">districtName Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label class="col-form-label col-form-label-sm" for="districtShortNameTitle">District Short Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase"  name="districtShortName" id="districtShortNameTitle" placeholder="District Short Name" th:field="*{districtShortName}" onkeypress="javascript:return alphabetsOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('districtShortName')}" th:errors="*{districtShortName}">districtShortName Error</div>
+				</div>
+
+			
+		</div>
+	</form>
+</div>
+
+<th:block layout:fragment="scripts">
+
+<script>
+var context = "[[@{/}]]";
+var max_chars = 6;
+
+	$("#districtIDTitle").keyup(function() {
+
+		$("#districtIDTitle").val(this.value.match(/[0-9]*/)); 
+
+		if ($(this).val().length >= max_chars) { 
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+
+	});
+	 var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	
+	$( "#districtIDTitle" ).on('input' ,function() {
+		$("#distSpanID").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var distIDVal = $( "#districtIDTitle" ).val();
+		var stateVal = $( "#stateID" ).val();
+		//alert(stateVal);
+		if(stateVal==null || stateVal =="0")
+			return false;
+		if( distIDVal ==null || distIDVal == "" || parseInt(distIDVal) == 0){
+			$( "#districtIDTitle" ).val("");
+			return false;
+		}
+		
+		
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkDistrictIDExist/"+distIDVal+"/"+stateVal+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#distSpanID").html("Distict ID: "+distIDVal+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					} 
+		}); 
+	
+	});
+	
+	
+</script>
+
+</th:block>

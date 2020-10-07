@@ -1,0 +1,187 @@
+<html layout:decorator="layouts/main" xmlns="http://www.w3.org/1999/html">
+
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Role Services</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+    <style>
+        .btn {
+
+            border-width: 2px;
+        }
+        h6[role="button"]{
+            cursor: pointer;
+        }
+
+        .custom-inner-checkbox{
+        	margin: 5px 15px 5px 0px !important;
+        }
+        .custom-control-input{
+	        border-radius: 50%  !important;
+        }
+        .card-columns .card {
+            margin-bottom: .75rem;
+            margin-top: 15px;
+        }
+        .custom-control-label:before {
+            background-color: #edf1f891;
+            border: 1px solid #507dba;
+        }
+    </style>
+</th:block>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="container-fluid px-3 role-service-mapping">
+        <div class="animated fadeIn">
+            <div class="row">
+	            <div class="col-md-12">
+	            	 <form class="custom-form" id="roleServiceForm" method="post" name="roleServiceForm" th:action="@{/roleService/roleServiceMapping}"   th:object="${roleServiceForm}"  onsubmit="return validateMe();" autocomplete="off">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <span class="head-top-line">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Role Services</h5>
+                            </span>
+                        </div>
+                        <!--<div class=""></div>-->
+
+                            <div class="card-block bg-white pb-4 pt-3 ">
+                                <div class="row">
+                                    <div class="col-12">
+                                            <div class="card card-block p-0 border-0 mb-0" id="servicesContent">
+                                            	<th:block th:if="${sMessage != null}">
+										            <div th:replace="fragments/components :: alert (type='success', message=${sMessage})">Alert</div>
+										        </th:block>
+										        <th:block th:if="${fMessage != null}">
+										            <div  th:replace="fragments/components :: alert (type='danger', message=${fMessage})">Alert</div>
+										        </th:block>
+
+												<div class="form-group form-row">
+                   										<label class="col-form-label _col-form-label-sm _col-md-1" >Role:</label>
+                   										<div class="col-md-5">
+                                               			<select required  name="rolesMaster"  id="rolesMasterID" class="custom-select _custom-select-sm w-100">
+																<option value="0">-- Select --</option>
+																	<p th:each="anItem : ${rolesList}">
+																		<option  th:value="${anItem.id}"  th:selected="( ${anItem.id} == ${roleID})"><span th:text="${anItem.rolename}"></span></option>
+																	</p>
+															</select>
+														<div class="text-danger" th:if="${#fields.hasErrors('rolesMaster')}" th:errors="*{rolesMaster}">rolesMaster Error</div>
+                                                     	</div>
+                                                 </div>
+
+
+                                                <!--###### Role Services ######-->
+                                                <div class="card-columns mt-2">
+                                                    <div class="card border-primary" th:each="parentService, pServiceStat: ${servicesList}">
+
+                                  						<!--<div _class="">-->
+
+                                                        	<h5 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" aria-expanded="false" aria-controls="collapseExample" >
+
+                                                               <div class="custom-control custom-checkbox">
+																			 	 <input type="checkbox" class="custom-control-input"  th:attr="name='serviceMapFormDTO[' + ${parentService.index} + '].serviceID', id='p_'+${parentService.index}, onclick='checkForTheChildService(this,'+${parentService.index}+');'" th:value="${parentService.serviceID}"  th:checked="${parentService.selected}">
+																			  	<label class="custom-control-label" th:attr="for='p_'+${parentService.index}" ><span th:text="${parentService.serviceName}"></span></label>
+																</div>
+                                                               </h5>
+
+		                                                        <div id="services" class="card-block pt-0" style="border-color: grey;">
+		                                                            <div class="row">
+
+			                                                           	<div class="col-lg-12 col-md-12" th:each="childService, sServiceStat: ${parentService.childServices}">
+
+			                                                           		<div class="custom-control custom-checkbox custom-inner-checkbox">
+																			 	 <input type="checkbox" class="custom-control-input"  th:attr="name='serviceMapFormDTO[' + ${childService.index} + '].serviceID', id='p_'+${parentService.index}+'_c_'+ ${childService.index} , onclick='checkForTheParentService(this,'+${parentService.index}+', '+${childService.index}+');'" th:value="${childService.serviceID}"  th:checked="${childService.selected}">
+																			  	<label class="custom-control-label" th:attr="for='p_'+${parentService.index}+'_c_'+ ${childService.index}" ><span th:text="${childService.serviceName}"></span></label>
+																			</div>
+
+			                                                           	</div>
+
+		                                                        	</div><!--# services > .form-row -->
+		                                                    	</div>
+		                                            <!--</div>--><!-- .card one-->
+
+
+
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                      </div><!-- #momContent -->
+
+                                      <div class="card-footer bg-white py-2 w-100">
+                                          <div class="row">
+                                              <div class="col-md-12 text-right">
+                                                  <button _style="width: 130px;" type="submit" class="btn btn-primary text-uppercase" >Submit</button>
+                                              </div>
+                                          </div>
+                                      </div>
+
+
+                                    </div>
+                                </div><!-- .card-block .form-row -->
+
+                            </div><!-- .card-block .bg-white .py-4-->
+						</form>
+
+                    </div><!-- .card -->
+		        </div><!-- .col-md-12 -->
+            </div><!-- /.row -->
+        </div><!-- /.animated.fadeIn -->
+    </div><!--/.main .container-fluid -->
+
+</div>
+<!-- END FRAGMENT: "content" -->
+
+
+<th:block layout:fragment="scripts">
+	<script>
+	var context = "[[@{/}]]";
+	$("#rolesMasterID" ).on('change' ,function() {
+
+		 if(this.value!=null && this.value !="" && this.value!=0){
+
+			$("#roleServiceForm").attr("action",  context + "roleService/roleServiceMapping/"+this.value+"/");
+			$("#roleServiceForm").submit();
+
+		}
+
+
+
+	});
+
+	//$('.custom-control-input').prop('indeterminate', true);
+	function checkForTheChildService(obj, index){
+		if(! $("#p_"+index).is(':checked') ){
+			//$('*[id^="p_'+id+'"]').prop('checked', false);
+			$("input[id^='p_"+index+"']" ).prop('checked', false);
+		}
+	}
+
+	function checkForTheParentService(obj, parentIndex, childIndex){
+		///ele.prop('checked', false);
+		$("#p_"+parentIndex).prop('checked', true);
+
+	}
+	function validateMe(){
+		if($("#rolesMasterID" ).val()==null || $("#rolesMasterID" ).val()=="" || $("#rolesMasterID" ).val()=="0"){
+			$("#rolesMasterID" ).focus();
+			alert("Please select role");
+			return false
+		}
+
+		return true;
+
+	}
+
+	</script>
+</th:block>
+
+</body>
+</html>

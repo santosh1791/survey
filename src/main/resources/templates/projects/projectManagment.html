@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+	<title th:text="#{view.index.title}">Welcome!</title>
+
+</head>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+		<!-- Breadcrumb -->
+		<ol class="breadcrumb mb-3">
+
+			<li class="breadcrumb-item active">Projects</li>
+
+		</ol>
+
+
+		<!--			<h1 class="tab_title text-muted"><i class="icon-speedometer"></i> Dashboard</h1>-->
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+
+					<div class="card w-100">
+						<div class="card-header">
+							<h5 class="mb-0"> <span class="badge badge-info badge-pill"><div th:text="${#session.getAttribute('projectsCount')}"></div></span> Projects</h5>
+						</div>
+						<div class="card-block p-0">
+							<div class="list-group">
+								<!-- <a href="#index.jsp" th:classappend="${module == 'overview' ? 'active' : ''}" th:href="@{/pms/overview}" class="list-group-item list-group-item-action">Project 1</a>
+
+								<a href="#index.jsp" th:classappend="${module == 'overview' ? 'active' : ''}" th:href="@{/pms//overview}" class="list-group-item list-group-item-action">Project 2</a>
+								 -->
+								<th:block th:object="${#session.getAttribute('projectsList')}">
+										<div th:each="anItem : ${#session.getAttribute('projectsList')}">
+										<a th:classappend="${module == 'overview' ? 'active' : ''}" class="list-group-item list-group-item-action" th:text="${anItem.name}"
+												th:value="${anItem.name}"></a>
+										</div>
+									</th:block>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!-- /.conainer-fluid -->
+
+
+	</div>
+	<!-- main-fragment-->
+	<th:block layout:fragment="scripts"></th:block>
+
+</body>
+
+</html>

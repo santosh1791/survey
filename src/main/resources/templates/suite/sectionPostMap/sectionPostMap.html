@@ -1,0 +1,47 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i>Section Post Mapping</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="sectionPostMapForm" name="sectionPostMapForm" method="post" th:action="@{/sectionPostMapping}"  th:object="${sectionPostMapForm}"  >
+		<div class="row">
+			<div class="form-group col-md-6">
+				<div th:if="${display}==1">  <h4><font color="green" size="2"><span th:text="${msg}"></span></font></h4></div>
+			</div>
+		</div>
+		<div class="row">
+				<div class="form-group col-md-6">
+					<label for="sectionMaster">Section <span class="text-danger">*</span></label>
+					<select  style="min-width: 200px; text-align: left!important;"  name="sectionMaster" id="sectionMaster"
+							class="text-left form-control _mt-1 js-example-basic-single">
+						<option value="0">--Select Section--</option>
+							<option th:each="sections : ${sectionList}" th:value="${sections.id}" th:text="${sections.sectionname}"> </option>   
+					</select>
+					 <div class="text-danger" th:if="${#fields.hasErrors('sectionMaster')}" th:errors="*{sectionMaster}">SectionMaster  Error</div>
+				</div>
+				<div class="form-group col-md-6">	
+					<label for="postMaster">Post<span class="text-danger">*</span></label>
+					<select  style="min-width: 200px; text-align: left!important;"  name="postMaster" id="postMaster"
+							class="text-left form-control _mt-1 js-example-basic-single" multiple>
+						<option value="0">--Select Post--</option>
+						<option th:each="anItem : ${postList}" th:value="${anItem.id}"><span th:text="${anItem.postname}"></span></option>
+					</select>
+					 <div class="text-danger" th:if="${#fields.hasErrors('postMaster')}" th:errors="*{postMaster}">Post Master Error</div>
+			</div>
+			<!-- <div class="form-group col-md-12" align="center">
+				<input type="submit" name="Map" Value="Submit" class="btn btn-primary"  size="5">
+			</div> -->
+		</div>
+		
+	</form>
+</div>
+<!-- 
+<script type="text/javascript">
+$(function() {
+    $('.multiselect-ui').multiselect({
+        includeSelectAllOption: true
+    });
+});
+</script> -->

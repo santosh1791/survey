@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="#{view.index.title}">Inward Register</title>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"> </script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+/* Normal Validation */
+function submitData(){
+	
+	var sEmail = $('#email').val();	
+// alert($("#currentTypeMaster").val());
+	 if($("#currentTypeMaster").val()==0){
+		 alert("Select Current Type ");
+		 $("#currentTypeMaster").focus();
+		 return false;
+	 }else if($("#recievedMode").val()==0){
+		 alert("Select Received Mode  ");
+		 $("#recievedMode").focus();
+		 return false;
+	 }else if($("#recievedDate").val()==""){
+		 alert("Select Received Date  ");
+		 $("#recievedDate").focus();
+		 return false;
+	 }else if($("#departmentMaster").val()==0){
+		 alert("Select Department   ");
+		 $("#departmentMaster").focus();
+		 return false;
+	 }else if($("#inwardRecievedFrom").val()==""){
+		 alert("Select Recieved From Officer   ");
+		 $("#inwardRecievedFrom").focus();
+		 return false;
+	 }/* else if ($.trim(sEmail).length == 0) {
+         alert('Please enter valid email address');
+         $('#email').focus();
+         return false;
+     }else if($("#pincode").val().length!=6){
+    	 alert("pincode must be six digits only");
+    	 $("pincode").focus();
+    	 return false;
+     }else if($("#mobileNumber").val().length!=10){
+    	 alert("Mobile Number must be 10 digits only");
+    	 $("mobileNumber").focus();
+    	 return false; 
+     } */else if($("#currentNUmber").val()==""){
+		 alert("Enter Current Number   ");
+		 $("#currentNUmber").focus();
+		 return false;
+	 }else if($("#currentSubject").val()==""){
+    	 alert("Enter Subject Number   ");
+		 $("#currentSubject").focus();
+		 return false;
+     }else if($("#currentDate").val()==""){
+		 alert("Select Current Date   ");
+		 $("#currentDate").focus();
+		 return false;
+	 } else if($("#sectionMaster").val()==0){
+		 alert("Select Concerned Section");
+		 $("#sectionMaster").focus();
+		 return false;
+	 }else if($("#postMaster").val()==0){
+		 alert("Select Concerned Officer ");
+		 $("#postMaster").focus();
+		 return false;
+	 }else{
+		 return true;
+	 }
+}
+
+
+ 
+
+/**
+	INput not Allow spaces and tabs
+**/
+function TextToTrim(obj){
+    obj.value = obj.value.trim();
+}
+/*First time Special characters are not allowed   */
+function chkOnlySplChars(obj,msg){
+	var txtValue = obj.value.trim();
+	if(txtValue==""){
+		return false;
+	}
+	var flag = true;
+	var _x = 0;
+	for(var x=0;x<txtValue.length;x++ ){
+		var _charCode = txtValue.charCodeAt(x);
+		if( !((_charCode>=33 && _charCode<=64) || (_charCode>=91 && _charCode<=96) 
+				|| (_charCode>=123 && _charCode<=126) )){
+			_x++;
+		}
+	}
+	if(_x==0){
+		alert(" Special Charaters are not allowed "+msg);
+		obj.value="";
+		return false;
+	}else{
+		return true;
+	}
+}
+
+jQuery(document).ready(function() {
+
+	/*Convert textbox user entered text to uppercase */
+	jQuery('#inwardRecievedFrom').keyup(function() {
+		$(this).val($(this).val().toUpperCase());
+	});
+	
+	/* Phone number validation */
+	 $("#mobileNumber").keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+	 
+//   	      if ($("#mobileNumber").val().charAt(0)=="" || $("#mobileNumber").val().charAt(0)!="9" || $("#mobileNumber").val().charAt(0)!="8" || $("#mobileNumber").val().charAt(0)!="7")
+// //   	     if(isNaN($("#mobileNumber").val())||$("#mobileNumber").val().indexOf(" ")!=1)
+//           {
+//                alert("it should start with 9 ");
+//                return false
+//           }
+	 
+	 
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#mobileNumber").val().length > 9) {
+	        	if($("#mobileNumber").val().length > 9)
+	        	{
+	        		$("#errmsgMobile").html("10 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsgMobile").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+	 /* Phone number validation */
+	 $("#pincode").keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+  	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+ 	             // Allow: Ctrl+A, Command+A
+ 	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+ 	             // Allow: home, end, left, right, down, up
+ 	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+ 	                 // let it happen, don't do anything
+ 	                 return;
+ 	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) || $("#pincode").val().length > 5) {
+	        	if($("#pincode").val().length > 5)
+	        	{
+	        		
+	        		$("#errmsg").html("6 Digits Only").show().fadeOut("slow");
+	        	}else{
+		        	$("#errmsg").html("Digits Only").show().fadeOut("slow");
+	        	}
+	            e.preventDefault();
+	        }
+	    });
+});
+        
+     </script>
+
+<style type="text/css">
+.tblSubHead {
+	background-color: #1f618d !important;
+	color: #FFFFFF !important;
+}
+
+#errmsg, #errmsgMobile {
+	color: red;
+}
+</style>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<ol class="tab_title breadcrumb mb-3">
+			<li class="breadcrumb-item active">Inward Current Entry</li>
+		</ol>
+		<form method="post" id="efileInwardMasterDto"
+			th:action="@{/efilesuite/inwardregister}"
+			th:object="${efileInwardMasterDto}" enctype="multipart/form-data">
+			<div class="container-fluid">
+				<div class="animated fadeIn">
+					<div class="card card-block " style="padding: 0.5rem 1rem 1.2rem">
+						<div
+							class="d-flex flex-row flex-wrap justify-content-around  no-gutters">
+							<div style="overflow: auto; width: 100%;">
+
+								<div align="center">
+									<font color="red" size="5" th:text="${msg}"></font>
+								</div>
+								<table
+									class="table table-bordered table-striped table-condensed _table-col-2-right mb-0"
+									cellspacing="0" width="100%">
+									<tbody>
+
+
+
+										<tr>
+											<td align="right" colspan="2">
+												<!-- <input type="button" th:href="@{/efilesuite/inwardreport}"
+												name="viewregisCurrents" value="View Registered Currents"
+												class="btn btn-primary"> -->
+												<a class="btn btn-primary"
+												th:href="@{/efilesuite/inwardreport}">View Registered
+													Currents </a>
+											</td>
+										</tr>
+										<tr>
+											<td valign="top">
+												<table width="100%">
+													<tr height="35">
+														<td colspan="4" style="border-bottom: 1px solid #ddd;"
+															class="tblSubHead"><b> Current Details </b></td>
+													</tr>
+													<tr>
+														<td><label>Type </label> <font color="red">*</font></td>
+														<td><select name="currentTypeMaster"
+															id="currentTypeMaster" class="form-control"
+															required="required" th:field="*{currentTypeMaster}">
+																<option value="0">-- Select --</option>
+																<option th:each="currentList : ${currentNameList}"
+																	th:text="${currentList.currentName}"
+																	th:value="${currentList.id}"
+																	th:filed="*{currentTypeMaster}"></option>
+														</select>
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('currentTypeMaster')}"
+																th:errors="*{currentTypeMaster}">Current Type
+																Error</div></td>
+														<td>Received Mode <font color="red">*</font>
+														</td>
+														<td><select name="recievedMode" required="required"
+															th:field="*{recievedMode}" id="recievedMode"
+															class="form-control"><option value="0">--
+																	Select --</option>
+																<option value="Hand">By Hand</option>
+																<option value="Post">By Post</option>
+																<option value="Email">By Email</option>
+														</select>
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('recievedMode')}"
+																th:errors="*{recievedMode}">Received Mode Error</div></td>
+													</tr>
+													<tr>
+														<td>Received Date <font color="red">*</font>
+														</td>
+														<td><input type="text" name="recievedDate" value=""
+															id="recievedDate" placeholder="YYYY-MM-DD"
+															class="calendarBg form-control recievedDate"
+															required="required" th:field="*{recievedDate}">
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('recievedDate')}"
+																th:errors="*{recievedDate}">Received Date Error</div></td>
+
+														<td>Department <font color="red">*</font>
+														</td>
+														<td><select name="departmentMaster"
+															onchange="showOthersDiv(this.value)"
+															id="departmentMaster" class="form-control"
+															required="required">
+																<option value="0" selected="selected">--Select--</option>
+																<th:block th:object="${departmentList}">
+																	<p th:each="anItem : ${departmentList}">
+																		<option th:value="${anItem.id}"><a
+																				th:text="${anItem.departmentname}"></a>
+																		</option>
+																	</p>
+																</th:block>
+														</select>
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('departmentMaster')}"
+																th:errors="*{departmentMaster}">Department Error</div></td>
+													</tr>
+													<tr>
+														<td>Received from Officer <font color="red">*</font>
+														</td>
+														<td><input type="text" name="inwardRecievedFrom"
+															placeholder="Enter Received from Officer "
+															id="inwardRecievedFrom" class="form-control"
+															required="required" th:field="*{inwardRecievedFrom}">
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('inwardRecievedFrom')}"
+																th:errors="*{inwardRecievedFrom}">Department Error</div>
+														</td>
+														<td>From Address</td>
+														<td><input type="text" name="fromAddress"
+															placeholder="Enter From Address"
+															oninput="chkOnlySplChars(this,'in From Address');"
+															id="fromAddress" class="form-control"></td>
+													</tr>
+
+													<tr>
+														<td>email</td>
+														<td><input type="email" name="email" value=""
+															placeholder="example@test.com" id="email"
+															class="form-control" th:field="*{email}"></td>
+
+														<td>fax</td>
+														<td><input type="text" name="fax"
+															placeholder="8888888888" id="fax" class="form-control"
+															th:field="*{fax}"></td>
+													</tr>
+													<tr>
+														<td>Pincode</td>
+														<td><input type="pincode" name="pincode"
+															placeholder="Enter Pincode" id="pincode"
+															class="form-control" maxlength="6" th:field="*{pincode}">
+															&nbsp;<span id="errmsg"></span></td>
+
+														<td>Mobile Number</td>
+														<td><input type="text" name="mobileNumber"
+															oninput="return mobileNumberValidation();"
+															placeholder="Enter Mobile Number" id="mobileNumber"
+															class="form-control" maxlength="10"
+															th:field="*{mobileNumber}"> &nbsp;<span
+															id="errmsgMobile"></span></td>
+													</tr>
+													<tr>
+														<td>Number <font color="red">*</font>
+														</td>
+														<td><input type="text" name="currentNUmber"
+															placeholder="Enter Current Number " id="currentNUmber"
+															class="form-control" required="required"
+															th:field="*{currentNUmber}">
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('currentNUmber')}"
+																th:errors="*{currentNUmber}">Number Error</div></td>
+														<td>Date <font color="red">*</font>
+														</td>
+														<td><input type="text" name="currentDate" value=""
+															id="currentDate" placeholder="YYYY-MM-DD"
+															th:field="*{currentDate}"
+															class="calendarBg form-control currentDate">
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('currentDate')}"
+																th:errors="*{currentDate}">Date Error</div></td>
+													</tr>
+													<tr>
+														<td>Subject <font color="red">*</font>
+														</td>
+														<td><textarea name="currentSubject"
+																required="required" th:field="*{currentSubject}"
+																placeholder="Enter Subject" id="currentSubject"
+																class="form-control form-control "></textarea>
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('currentSubject')}"
+																th:errors="*{currentSubject}">Subject Error</div></td>
+
+														<td>Attach Current <font color="red">*</font><br />
+															<sub style='font-weight: normal;'>( Supported
+																Formats : .pdf, .png, .jpg, .jpeg )</sub>
+														</td>
+														<td><input type="file" name="uploadFile" value=""
+															id="uploadFile" class="form-control"> <!-- <div class="text-danger" th:if="${#fields.hasErrors('uploadFileName')}" th:errors="*{uploadFileName}">Subject Error</div> -->
+														</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="border-bottom: 1px solid #ddd;"
+															class="tblSubHead"><b> Concerned Officer Details
+														</b></td>
+													</tr>
+
+													<tr>
+														<td colspan="1">Concerned Section<font color="red">*</font>
+														</td>
+														<td colspan="3"><select name="sectionMaster"
+															required="required" th:field="*{sectionMaster}"
+															onchange="getData('getSectionOfficers','officer')"
+															id="sectionMaster" class="form-control"><option
+																	value="0" selected="selected">--Select--</option>
+																<option th:each="sections: ${sectionList}"
+																	th:text="${sections.sectionname}"
+																	th:value="${sections.id}" />
+														</select>
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('sectionMaster')}"
+																th:errors="*{sectionMaster}">Concerned Section
+																Error</div>
+													</tr>
+													<tr>
+														<td colspan="1">Concerned Officer <font color="red">*</font>
+														</td>
+														<td colspan="3"><select name="postMaster"
+															required="required" th:field="*{postMaster}"
+															id="postMaster" class="form-control"><option
+																	value="0" selected="selected">--Select--</option>
+
+																<option th:each="postsList : ${postsMasterList}"
+																	th:text="${postsList.postname}"
+																	th:value="${postsList.id}"></option>
+														</select>
+															<div class="text-danger"
+																th:if="${#fields.hasErrors('postMaster')}"
+																th:errors="*{postMaster}">Concerned Officer Error</div>
+														</td>
+													</tr>
+													<tr>
+														<td colspan="1">Endorsement</td>
+														<td colspan="3"><textarea name="endorsement"
+																placeholder="Enter Endorsement" id="endorsement"
+																class="form-control" th:field="*{endorsement}"></textarea></td>
+													</tr>
+
+												</table>
+											</td>
+
+										</tr>
+										<tr>
+											<td align="center" colspan="4">
+												<!-- <input type="submit"
+												name="save" value="Save" id="savebttn"
+												onclick="return submitData();" class="btn btn-primary"> -->
+												<input type="submit" name="send" value="Send" id="sendbttn"
+												onclick="return submitData();" class="btn btn-primary">
+											<!--  <input
+												type="reset" name="rButton" value="Back"
+												onclick="javascript: history.go(-1)" class="btn btn-primary"> -->
+											</td>
+										</tr>
+
+
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</form>
+		<!-- <script>
+	$(".nav-item.iw-entry .nav-link").addClass("active");
+</script> -->
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+$("input.recievedDate").daterangepicker({
+	//parentEl: ".modal .modal-body",
+	singleDatePicker: true,
+	showDropdowns: false,
+	//minDate: moment(),
+    locale: {
+        format: 'YYYY-MM-DD'  
+    } 
+   
+	}); 
+$("input.currentDate").daterangepicker({
+	//parentEl: ".modal .modal-body",
+	singleDatePicker: true,
+	showDropdowns: false,
+	//startDate: start,
+	minDate: moment(),
+    locale: {
+        format: 'YYYY-MM-DD'  
+    } 
+   
+	}); 
+</script>

@@ -1,0 +1,116 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> Add Current Type</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="currentTypeForm" class="custom-form" method="POST" th:action="@{/currentTypeForm}"  th:object="${currentTypeForm}"  autocomplete="off">
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="currentName" class="col-form-label col-form-label-sm">Current Type Name <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="currentName" id="currentName" maxlength="100" placeholder="Enter current type name" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);"  >
+				<span class="text-danger" id="checkCurrentTypeExists"></span>
+				<div class="text-danger" th:if="${#fields.hasErrors('currentName')}" th:errors="*{currentName}">currentType name Error</div>
+			</div>
+	
+			<div class="form-group col-md-6">
+				<label for="currentShortName" class="col-form-label col-form-label-sm">Current Type Short Name <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="currentShortName" id="currentShortName" 
+					maxlength="100" placeholder="Enter current type short name" onkeypress="javascript:return shortNameValidation(event);"  oninput="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" required="required"  >
+				<span class="text-danger" id="checkShortNameExists" ></span>
+				<div class="text-danger" th:if="${#fields.hasErrors('currentShortName')}" th:errors="*{currentShortName}">currentTypeShort name Error</div>
+			</div>
+			
+		</div>
+	</form>
+</div>
+<script>
+
+var context = "[[@{/}]]";
+$( "#currentName" ).on('input' ,function() {
+	//alert('aaaaaaaaa');
+	var currentName = $( "#currentName" ).val();
+	if(currentName ==null || currentName == ""  ){
+		return false;
+	}else if(parseInt(currentName) == 0){
+		$( "#currentName" ).val("Invalid Current Name");
+		$( "#currentName" ).val("");
+		return false;
+
+	}
+
+	 var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	 //alert(context);
+	 $.ajax ({
+				type: "POST",
+				url: context + "checkCurrentTypeExist/"+currentName+"",
+				beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+				success: function(html) {
+					if(html == "Y"){
+						$("#saveBtn").attr("disabled", "disabled");
+						$("#checkCurrentTypeExists").html(""+currentName+" already exists");
+					}else{
+						$("#checkCurrentTypeExists").html("");
+						$("#saveBtn").removeAttr("disabled");
+					}
+				}
+	});
+
+});
+
+function shortNameValidation(evt) {
+    
+    var theEvent = evt || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    var keyVal = String.fromCharCode( key );
+    var regex = /[-0-9a-zA-Z]/;
+    if(evt.shiftKey)
+    	return false;
+    if( !regex.test(keyVal) && ![8,16,20,35,36,37,38,39].includes(key) ) {
+      theEvent.returnValue = false;
+      if(theEvent.preventDefault) theEvent.preventDefault();
+    }
+	   
+}
+
+
+$( "#currentName" ).on('input' ,function() {
+	//alert('aaaaaaaaa');
+	var currentName = $( "#currentName" ).val();
+	if(currentName ==null || currentName == ""  ){
+		return false;
+	}else if(parseInt(currentName) == 0){
+		$( "#currentName" ).val("Invalid Current Name");
+		$( "#currentName" ).val("");
+		return false;
+
+	}
+
+	 var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	 //alert(context);
+	 $.ajax ({
+				type: "POST",
+				url: context + "checkCurrentTypeExist/"+currentName+"",
+				beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+				success: function(html) {
+					if(html == "Y"){
+						$("#saveBtn").attr("disabled", "disabled");
+						$("#checkShortNameExists").html(""+currentName+" already exists");
+					}else{
+						$("#checkShortNameExists").html("");
+						$("#saveBtn").removeAttr("disabled");
+					}
+				}
+	});
+
+});
+</script>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>eFile Inbox</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+    z-index: 999;
+    border-top: 2px solid #3d70b2 !important;
+    color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+
+
+/*
+Access denied message styles
+*/
+#accesdenied {
+  background-color: lightgray;
+  border-radius: 10px;
+  margin: auto;
+  width: 50%;
+  cursor: not-allowed;
+  margin-top: 10%;
+}
+#accessdeniedhead {
+  padding-top: 30px;
+  font-size: 60px;
+  font-family: Arial;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  border-bottom-style: dashed;
+  padding-bottom: 20px;
+}
+#redx {
+   color: red;
+   text-decoration: none;
+   cursor: not-allowed;
+}
+#accessdeniedpara {
+  text-align: center;
+  font-family: Arial;
+  font-weight: bold;
+  padding-bottom: 3%;
+}
+#accessdeniedlines {
+  font-family: Arial;
+  text-align: center;
+  word-spacing: -1px;
+  font-size: 10px;
+  font-weight: normal;
+  color: gray;
+}
+#gears {
+  text-align: center;
+  color: #333;
+  width: 200px;
+  margin: auto;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.85);
+  /* opacity: 0.85; */
+  padding: 30px 0px;
+}
+
+
+</style>
+
+<style>
+        ::-moz-selection {
+            background: #b3d4fc;
+            text-shadow: none;
+        }
+
+        ::selection {
+            background: #b3d4fc;
+            text-shadow: none;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            padding: 0px;
+            margin: 0;
+            height: 100vh;
+            overflow: auto;
+            font-size: 20px;
+            line-height: 1.4;
+            color: #737373;
+            background: #f0f0f0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        html,
+        input {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+       
+       
+
+        
+
+        .container {
+            _max-width: 380px;
+            _width: 380px;
+            margin: 0 auto;
+        }
+
+        /* google search */
+
+        #goog-fixurl ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #goog-fixurl form {
+            margin: 0;
+        }
+
+        #goog-wm-qt,
+        #goog-wm-sb {
+            border: 1px solid #bbb;
+            font-size: 16px;
+            line-height: normal;
+            vertical-align: top;
+            color: #444;
+            border-radius: 2px;
+        }
+
+        #goog-wm-qt {
+            width: 220px;
+            height: 20px;
+            padding: 5px;
+            margin: 5px 10px 0 0;
+            box-shadow: inset 0 1px 1px #ccc;
+        }
+
+        #goog-wm-sb {
+            display: inline-block;
+            height: 32px;
+            padding: 0 10px;
+            margin: 5px 0 0;
+            white-space: nowrap;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), #f1f1f1);
+            background-image: -moz-linear-gradient(rgba(255, 255, 255, 0), #f1f1f1);
+            background-image: -ms-linear-gradient(rgba(255, 255, 255, 0), #f1f1f1);
+            background-image: -o-linear-gradient(rgba(255, 255, 255, 0), #f1f1f1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            *overflow: visible;
+            *display: inline;
+            *zoom: 1;
+        }
+
+        #goog-wm-sb:hover,
+        #goog-wm-sb:focus {
+            border-color: #aaa;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            background-color: #f8f8f8;
+        }
+
+        #goog-wm-qt:hover,
+        #goog-wm-qt:focus {
+            border-color: #105cb6;
+            outline: 0;
+            color: #222;
+        }
+
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+        .error-msg-box{
+            max-width: 500px;
+            width: 500px;
+            padding: 30px 20px 50px;
+            border: 1px solid #b3b3b3;
+            margin: 0 auto;
+            box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+            background: #fcfcfc;
+        }
+    </style>
+</th:block>
+
+<th:block th:fragment="page-head" class="page-head">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item"><a href="#">eFile</a>
+        </li>
+        <li class="breadcrumb-item active">Inbox</li>
+    </ol>
+</th:block>
+<body>
+
+	<div layout:fragment="content">
+
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="w-100">
+					<span th:if="${additionalChargePost} == false">
+					<th:block th:replace="fragments/layout :: eFileTabs" >
+						
+					</th:block>
+						<div class="card  bg-transparent mb-0 card-shadow ">
+							<div class="card-body py-0 bg-white"
+								style="_min-height: calc(100vh - 130px);">
+
+
+
+									<div class="table-responsive " >
+										<table border="1" id="eFileINboxFileTable"
+											class="table table-bordered table-hover table-striped table-sm _mb-0"
+											width="100%" cellspacing="0">
+											<thead class="table-primary">
+												<tr>
+													<th>#</th>
+													<th>File Number</th>
+													<th>Received From</th>
+													<th>Subject</th>
+													<th>Created Date  </th>
+												</tr>
+											</thead>
+											<tbody th:if="${inboxFilesListCount} == false">
+												<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+												<!-- <select class="form-control" name="category" >
+														<option value="0"> select category</option>
+														<option th:each="category: ${savedFilesList}" th:value="${category.notefileNumber}"th:text="${category.keywords}"></option>
+													</select> -->
+
+												<tr th:each="inboxFiles, sNo : ${inboxFilesList}">
+													<td th:text="${sNo.count}"></td>
+													<td><a role="button"
+														th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${inboxFiles.notefileNumber})}">
+															<p th:text="${inboxFiles.notefileNumber}"></p>
+													</a></td>
+													<!-- <td th:text="${inboxFiles.postMasters}"></td> -->
+													<!-- <td th:text="${inboxFiles.notefileRecievedFrom}"></td> -->
+													<td>
+														<span  th:text="${inboxFiles.notefileReceivedFromPostMaster.postname}"></span>
+														<span th:if="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster}!=null">
+															(<span th:text="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster.employeefirstname}"></span>
+																<span th:text="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster.employeelastname}"></span>
+															)	
+														</span>
+														<span th:if="${inboxFiles.notefileReceivedFromPostMaster.employeeMaster}==null">
+															(N/A)
+														</span>
+													</td>
+													
+													<!-- <td> <span th:text="${postMasters.postname}"></span> 
+														(<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  
+																<span th:text="${postMasters.employeeMaster.employeelastname}"></span> )
+													</td> -->
+													<td th:text="${inboxFiles.subject}"></td>
+													<td th:text="${#dates.format(inboxFiles.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+								<!-- table-responsive px-3-->
+							</div>
+							<!-- .card-block-->
+
+						</div>
+						<!--  main > .w-100 >.card -->
+						</span>
+						
+					</div>
+					<!-- main > .w-100 -->
+
+					<span th:if="${additionalChargePost} == true"> <!-- <div class="card  bg-transparent mb-0 card-shadow ">
+							<div class="card-body py-0 bg-transparent"
+								style="_min-height: calc(100vh - 130px);">
+								<div id="accesdenied">
+							   		 <h6 id="accessdeniedhead" ><spam id="redx">X</spam> Access Denied </h6>
+							    	<p id="accessdeniedpara" >Your files given to some other post<br/><br/>
+							   	 <small id="accessdeniedlines">---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</small></p>
+							 	</div> 
+							 </div>
+						</div> -->
+						<div class="container" style="height: 100vh;">
+    						<div class="d-flex" style="height: 100vh;">
+						<div class="card error-msg-box mt-2 text-center align-self-center">
+							<span
+								class="mdi mdi-48px mdi-alert-circle-outline text-center _text-info"></span>
+							<h3 class="text-center mt-1" _th:text="#{error.title}">
+								Your files given to some other post on Additional Charge <span>:(</span>
+							</h3>
+							Please contact admin.
+
+
+							<!-- <a style="max-width: 150px;"  class="btn btn-sm btn-outline-primary mx-auto mt-3" th:href="@{/}">Home</a> -->
+						</div>
+						</div></div>
+					</span>
+				</div>
+				<!-- main > .row -->
+			</div>
+			<!-- main > .animated.fadeIn -->
+		</div>
+		<!-- main > .container-fluid -->
+	</div>
+	<!-- FRAGMENT: "content" -->
+
+
+	<th:block layout:fragment="scripts">
+        <script>
+        
+			$(document).ready(function() {
+				var table = $('#eFileINboxFileTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+					{ width:'1%', targets: 0 },
+	                    { width: '15%', targets: 1 },
+	                   { _width:'30%', targets: 2 },
+	                   { width: '25%', targets: 3, className: "px-1" },
+	                     { width: '16%', targets: 4, className: "px-1" }
+
+
+
+					],
+					order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+
+                $('table').on('click','.actionSwitch', function(e){
+                    var $this = $(this);
+                    var $input = $this.find('.switch-input');
+                    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+                    e.preventDefault();
+                    e.stopPropagation();
+                    bootbox.confirm({
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-outline-primary'
+                            }
+                        },
+                        callback: function (result) {
+                            var context = "[[@{/}]]";
+                            var isChecked = $input.prop("checked")
+                            var url = isChecked ? "disableEmployee" : "enableEmployee";
+                            var id = $this.data('id');
+                            console.log('This was logged in the callback: ' + result);
+                            if(result){
+                                $.get(context + url + '/' + id + '/' , function(){
+                                    $input.prop('checked',!isChecked);
+                                });
+                            }
+                        }
+                    });
+                });
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+			});
+			
+			$("#eFileInboxLink").addClass("active");
+		</script>
+    </th:block>
+</body>
+</html>

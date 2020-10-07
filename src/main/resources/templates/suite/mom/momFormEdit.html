@@ -1,0 +1,1478 @@
+<html layout:decorator="layouts/main" xmlns="http://www.w3.org/1999/html">
+
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Minutes of Meeting</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+    <style>
+        .btn {
+
+            _border-width: 2px;
+        }
+        h6[role="button"]{
+            cursor: pointer;
+        }
+    </style>
+</th:block>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+<div layout:fragment="content">
+
+
+    <div class="container-fluid px-3">
+        <div class="animated fadeIn">
+            <div class="row">
+	            <div class="col-md-12">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Minutes of Meeting</h5>
+                            <button
+                                class="btn btn-sm btn-outline-primary d-inline-block ml-auto mt-1"
+                                onclick="goBack()"> <i class="fa fa-chevron-left"></i>
+                                Back
+                            </button>
+                        </div>
+                        <!--<div class=""></div>-->
+                            <div class="card-block bg-white py-4 ">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <form class="custom-form" id="momMasterForm" method="post" name="momMasterForm" th:action="@{'/editMomDetails/{id}/'(id=${id})}" enctype="multipart/form-data"
+                                        th:object="${momMasterForm}" autocomplete="off">
+
+									<input type="hidden" name="submitType" id="submitType"/> 
+                                            <div class="card card-block p-0 border-0 mb-0" id="momContent">
+
+
+                                                <!--###### Minutes of Meeting Details ######-->
+                                                <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-1" aria-expanded="false" aria-controls="collapseExample">Details</h6>
+
+                                                    <section id="section-1" class="show">
+                                                        <div id="meetingDetails" class="card-block pt-0" style="border-color: grey;">
+                                                            <div class="form-row">
+                                                            
+                                                            <div class="form-group col-lg-4 col-md-4">
+                                                                <label class="col-form-label col-form-label-sm"  for="designation">Type<span class="text-danger">*</span></label>
+                                                                 <label class="radio-inline">
+															      <input type="radio" name="internalMeeting" id="isInterenalYes" value="true" th:field="*{internalMeeting}" disabled="disabled"/>Internal &nbsp;&nbsp;&nbsp;
+															    </label>
+															    <label class="radio-inline">
+															      <input type="radio" name="internalMeeting" id="isInterenalNo" value="false" th:field="*{internalMeeting}" disabled="disabled"/>External
+															    </label>
+															    <div class="text-danger" th:if="${#fields.hasErrors('internalMeeting')}" th:errors="*{internalMeeting}">Meeting Type Error</div>
+                                                            </div>
+                                                            
+                                                             <div class="form-group col-lg-4 col-md-4">
+                                                                <label class="col-form-label col-form-label-sm"  for="designation">New Meeting<span class="text-danger">*</span></label>
+                                                                 <label class="radio-inline">
+															      <input type="radio" name="newMeeting" id="isNewYes" value="true" th:field="*{newMeeting}" disabled="disabled"/>Yes &nbsp;&nbsp;&nbsp;
+															    </label>
+															    <label class="radio-inline">
+															      <input type="radio" name="newMeeting" id="isNewNo" value="false" th:field="*{newMeeting}" disabled="disabled"/>No
+															    </label>
+															     <div class="text-danger" th:if="${#fields.hasErrors('newMeeting')}" th:errors="*{newMeeting}">newMeeting Error</div>
+                                                            </div>
+                                                            
+                                                             <div class="form-group col-lg-2 col-md-3" id="search" style="display:none;">
+                                                                            <label class="col-form-label col-form-label-sm" for="recordedBy">Search (PrevMeeting)<span class="text-danger">*</span></label>
+                                                                            <select id="prevMomMaster"  name="prevMomMaster" class="custom-select custom-select-sm">
+                                                                                <option value="0">--Select --</option>
+                                                                                <option th:each="mom : ${momList}"  th:value="${mom.id}" th:selected="(${mom.id} == ${prevId})">
+                                                                                    <span th:text="${mom.momNumber}"></span>
+                                                                                </option>
+                                                                            </select>
+                                                                            <div class="text-danger" th:if="${#fields.hasErrors('prevMomMaster')}" th:errors="*{prevMomMaster}">prevMomMaster Error</div>
+                                                              </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="meetingVenue">Venue <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="meetingVenue" id="meetingVenue"
+                                                                    placeholder="Meeting Venue" th:field="*{meetingVenue}">
+                                                                    <div class="text-danger" th:if="${#fields.hasErrors('meetingVenue')}" th:errors="*{meetingVenue}">meetingVenue Error</div>
+                                                            </div>
+                                                            <div class="form-group col-lg-4 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="purpose">Subject<span class="text-danger">*</span></label>
+                                                                <textarea type="text" class="form-control form-control-sm" name="purpose" id="purpose"
+                                                                    placeholder="Meeting purpose" th:field="*{purpose}"></textarea>
+                                                                    <div class="text-danger" th:if="${#fields.hasErrors('purpose')}" th:errors="*{purpose}">purpose Error</div>
+                                                            </div>
+															
+															 <!-- <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="projectName">Project Name<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="projectName" id="projectName" th:field="*{projectName}"
+                                                                    placeholder="Project Name">
+                                                            </div> -->
+                                                            
+                                                            <div class="form-group col-lg-2 col-md-3 mb-0">
+                                                                <label class="col-form-label col-form-label-sm"  for="conductedBy">Conducted by<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="conductedBy" id="conductedBy"
+                                                                       placeholder="Meeting conducted by" th:field="*{conductedBy}">
+                                                                       <div class="text-danger" th:if="${#fields.hasErrors('conductedBy')}" th:errors="*{conductedBy}">conductedBy Error</div>
+                                                            </div>
+															 <div class="form-group col-lg-2 col-md-3">
+                                                                            <label class="col-form-label col-form-label-sm" for="conductedByDesignation">Designation<!-- <span class="text-danger">*</span> --></label>
+                                                                            <input type="text" class="form-control form-control-sm" name="conductedByDesignation" id="conductedByDesignation"  th:field="*{conductedByDesignation}" placeholder="Designation"></input>
+                                                              </div>	
+															 <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="organization">Organization</label>
+                                                                <input type="text" class="form-control form-control-sm" name="organization" id="organization"
+                                                                    placeholder="Organization" th:field="*{organization}">
+                                                                    <div class="text-danger" th:if="${#fields.hasErrors('organization')}" th:errors="*{organization}">organization Error</div>
+                                                            </div>
+															
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm" for="startTime">Start time<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="startTime" id="startTime" th:field="*{startTime}" readonly="readonly"/>
+                                                                <div class="text-danger" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}">startTime Error</div>
+                                                            </div>
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm" for="endTime">End time<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="endTime" id="endTime" th:field="*{endTime}" readonly="readonly"/>
+                                                                <div class="text-danger" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}">startTime Error</div>
+                                                            </div>
+															
+															<!-- <div class="form-group col-lg-2 col-md-3">
+                                                                            <label class="col-form-label col-form-label-sm" for="recordedBy">Recorded By<span class="text-danger">*</span></label>
+                                                                            <select id="recordedBy"  name="recordedBy" class="custom-select custom-select-sm" >
+                                                                                <option value="0">--Select Participant--</option>
+                                                                                <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}" th:selected="(${employee.id} == ${recordedById})">
+                                                                                    <span th:text="${employee.employeefirstname}"></span>
+                                                                                </option>
+                                                                                <option value="-1">Other</option>
+                                                                            </select>
+                                                              </div> -->
+															      
+                                                              <div th:if="*{momDocumentGeneratedName!=null and !momDocumentGeneratedName.isEmpty()}" class="form-group col-lg-2 col-md-3">
+                                                               <label class="col-form-label col-form-label-sm" for="endTime">Old Attachment<span class="text-danger"></span></label><br/>
+                                                               <input type="hidden" name="oldDocument" id='oldDocumnet' th:value="*{momDocumentOriginalName}"></input>
+                                                               <a target="_blank" th:href="@{'/loadMomDoc/{id}/'(id=*{momDocumentGeneratedName})}"><span th:text="*{momDocumentOriginalName}"></span> </a>
+                                                               
+                                                           </div>
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm" for="endTime">Attachment</label>
+                                                                <input type="file" class="form-control form-control-sm  btn btn-sm text-left" name="uploadMomDocument" id="upload" onchange="javascript:UploadMomAttachement(this);"/>
+                                                                <small	style=" margin-left:4px; bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"
+																		class="help-text text-muted d-inline-block"> ( Supported Formats : .pdf, .png, .jpg, .jpeg, doc, docx )</small>
+                                                            </div>
+                                                            
+                                                            
+                                                             <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="momNumber">Mom Number<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="momNumber" id="momNumber"  th:field="*{momNumber}" 
+                                                                    placeholder="momNumber" readonly="readonly">
+                                                            </div>
+                                                           
+
+                                                            <!--<div class="form-group col-md-9 d-none">
+                                                                <label class="col-form-label col-form-label-sm" for="endTime">Attachment</label>
+
+                                                                <div class="input-group w-100 custom-file-group d-flex align-items-start px-0">
+
+                                                                    <label class="custom-file border" for="upload">
+                                                                        <input type="file" id="upload" name="upload" class="custom-file-input" required onchange="javascript:UploadMomAttachement(this);">
+                                                                        <span class="custom-file-control"></span>
+                                                                    </label>
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text" id="">upload</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>-->
+                                                        </div><!--# meetingDetails > .form-row -->
+                                                    </div>
+                                                </section><!-- # section-1-->
+                                            </div><!-- .card one-->
+
+
+                                            <!--###### Paticipants ######-->
+                                                <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-2" aria-expanded="false" aria-controls="collapseExample">List of Participants</h6>
+
+
+                                                    <section id="section-2" class="show">
+                                                        <div class="card-block pt-0" style="border-color: grey;">
+                                                            <div id="participantsDetails">
+																
+																<span th:if="${momParticipantsList}!=null">
+																	<th:block th:object="${momParticipantsList}" >
+								
+																	<div  th:each="anItem, sNo : ${momParticipantsList}" >
+																	<div th:attr="id='participant' + ${sNo.count} + ''" th:if="${ anItem.isActive == true}">
+																		<div class="form-row"  >
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="col-form-label col-form-label-sm" for="momParticipants.employeeMaster">Participant<span class="text-danger">*</span></label>
+                                                                            
+                                                                            <select th:if="${anItem.employeeMaster != null}" th:attr="name='momParticipants[' + ${sNo.count-1} + '].employeeMaster',id='momParticipants_employeeMaster_' + ${sNo.count-1} + '',onChange='javascript:getEmployeeDetails(\'momParticipants_employeeMaster_' + ${sNo.count-1} + '\',\'participantName' + ${sNo.count-1} + '\',\'mobileNumber' + ${sNo.count-1} + '\',\'email' + ${sNo.count-1} + '\', \'participantdesignation' + ${sNo.count-1} + '\', \'organizationName' + ${sNo.count-1} + '\')'" class="custom-select custom-select-sm">
+                                                                                <option value="0">--Select Participant--</option>
+                                                                                <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}" th:selected="(${employee.id} == ${anItem.employeeMaster.id})">
+                                                                                    <span th:text="${employee.employeefirstname}"></span>
+                                                                                </option>
+                                                                                <option value="-1">Other</option>
+                                                                            </select>
+                                                                            <select th:if="${anItem.employeeMaster == null}" th:attr="name='momParticipants[' + ${sNo.count-1} + '].employeeMaster',id='momParticipants_employeeMaster_' + ${sNo.count-1} + '',onChange='javascript:getEmployeeDetails(\'momParticipants_employeeMaster_' + ${sNo.count-1} + '\',\'participantName' + ${sNo.count-1} + '\',\'mobileNumber' + ${sNo.count-1} + '\',\'email' + ${sNo.count-1} + '\', \'participantdesignation' + ${sNo.count-1} + '\')'" class="custom-select custom-select-sm">
+                                                                                <option value="0">--Select Participant--</option>
+                                                                                <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}"  >
+                                                                                    <span th:text="${employee.employeefirstname}"></span>
+                                                                                </option>
+                                                                                <option value="-1" selected="selected">Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="col-form-label col-form-label-sm" for="momParticipants.participantName">Participant Name<span class="text-danger">*</span></label>
+                                                                            <input type="text" class="form-control form-control-sm"  th:attr="name='momParticipants[' + ${sNo.count-1} + '].participantName',id='participantName' + ${sNo.count-1} + '',value=${anItem.participantName}"
+                                                                                   placeholder="Participant Name" >
+                                                                        </div>
+                                                                         <div class="form-group col-md-2">
+                                                                            <label class="col-form-label col-form-label-sm" for="momParticipants.designation">Designation<!-- <span class="text-danger">*</span> --></label>
+                                                                            <input type="text" class="form-control form-control-sm"  th:attr="name='momParticipants[' + ${sNo.count-1} + '].designation',id='participantdesignation' + ${sNo.count-1} + '',value=${anItem.designation}"
+                                                                                   placeholder="Designation">
+                                                                        </div>
+                                                                        <div class="form-group col-lg-2 col-md-2">
+			                                                                <label class="col-form-label col-form-label-sm"  for="momParticipants.organizationName">Organization</label>
+			                                                                <input type="text" class="form-control form-control-sm"  th:attr="name='momParticipants[' + ${sNo.count-1} + '].organizationName',id='organizationName' + ${sNo.count-1} + '',value=${anItem.organizationName}" 
+			                                                                    placeholder="Organization" >
+			                                                            </div>
+                                                                        <div class="form-group col-md-1">
+                                                                            <label class="col-form-label col-form-label-sm" for="momParticipants.mobileNumber">Mobile</label>
+                                                                            <input type="text" class="form-control form-control-sm" th:attr="name='momParticipants[' + ${sNo.count-1} + '].mobileNumber',id='mobileNumber' + ${sNo.count-1} + '',value=${anItem.mobileNumber}"
+                                                                                   onkeypress="javascript:return integersOnly(event);" onchange="trimValue(this);" maxlength="10" placeholder="Mobile"/>
+                                                                        </div>
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="col-form-label col-form-label-sm" for="momParticipants.email">Email<span class="text-danger">*</span></label>
+                                                                            <input type="text" class="form-control form-control-sm" th:attr="name='momParticipants[' + ${sNo.count-1} + '].email',id='email' + ${sNo.count-1} + '',value=${anItem.email}"
+                                                                                   placeholder="Email">
+                                                                        </div>
+                                                                        <div class="form-group col-md-1">
+                                                                        <br>
+                                                                         <button type="button" class="btn btn-sm btn-outline-primary"  th:attr="id='deleteParticipant' + ${sNo.count-1} + '',onclick='javascript:deleteParticipant(' + ${sNo.count-1} + ')'"><i class="fa fa-trash-o" ></i></button>
+                                                                        </div>
+                                                                    </div>
+																	</div>
+																	
+                                                                    </div>
+																	</th:block>
+																
+																</span>
+                                                                    
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card-footer py-1">
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    <button style="width: 80px;" type="button" value="1" class="btn btn-sm btn-outline-primary" th:attr="id='addParticipant',value=${participantsCount}"><i class="fa fa-plus" ></i>&nbsp; Add</button>
+                                                                   <!--  <button style="width: 80px;" type="button" class="btn btn-sm btn-outline-primary" id="deleteParticipant"><i class="fa fa-trash-o" ></i>&nbsp; Delete</button> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </section>
+                                                </div>
+                                                
+                                                
+                                                <div class="card border-primary">
+                                                <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                       style="width: auto;" data-toggle="collapse" data-target="#section-2" aria-expanded="false" aria-controls="collapseExample">3. Deliberations  & Decisions</h6>
+                                                   <section id="section-2" class="show">
+                                                       <div class="card-block pt-0" style="border-color: grey;">
+                                                          <div class="form-row" >
+                                                              <div class="form-group col-md-6 col-lg-6">
+                                                                  <label class="col-form-label col-form-label-sm" for="deliberations">Deliberation<span class="text-danger">*</span></label>
+                                                                  <textarea class="form-control form-control-sm" name="deliberations" id="deliberations" placeholder="deliberations" th:field="*{deliberations}"></textarea>
+                                                              </div>
+                                                              <div class="form-group col-md-6 col-lg-6">
+                                                                  <label class="col-form-label col-form-label-sm" for="desicions">Decisions<span class="text-danger">*</span></label>
+                                                                  <textarea class="form-control form-control-sm" name="desicions" id="desicions" placeholder="desicions" th:field="*{desicions}"></textarea>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                   </section>
+                                                </div>
+                                                
+  		  							 <!--##### Action Points of Previous Meeting ######-->
+												<span th:if="${prevDiscussions}!=null">
+													
+												   <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-3" aria-expanded="false" aria-controls="collapseExample">Action points of previous meeting (if applicable)</h6>
+
+                                                    <section id="section-3" class="show">
+
+                                                            <div class="card-block pt-0" style="border-color: grey;">
+                                                            <div class="form-group" id="prevMeetingDetails">
+                                                            <div id="prevMeetingDetails">
+                                                            
+                                                            <table id="CurrentMmeetingDetails" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+															<thead class="thead-table">
+																<tr>
+																	<th>S.No</th>
+																	<th>Action needed</th>
+																	<th>Responsible Person</th>
+																	<th>Designation</th>
+																	<th>Target date</th>
+																</tr>
+															</thead>
+														<tbody>
+														<th:block  th:each="anItem , iterStat : ${prevDiscussions}">
+															<tr th:if="${anItem.isActive == true}">
+																<td th:text="${iterStat.count}"></td>
+																<td><span th:text="${anItem.pointsDiscussed}" ></span></td>
+																<td><span th:text="${anItem.responsibilityName}" ></span></td>
+																<td><span th:text="${anItem.designation}" ></span></td>
+																<td>
+																	<p th:if="${anItem.targetDate !=null}">
+																		<span th:text="${#temporals.format(anItem.targetDate, 'dd/MM/yyyy')}" ></span>
+																	</p>
+																</td>
+															</tr>
+													</th:block>
+												</tbody>
+											</table>
+                                                            
+                                                            <!-- <th:block th:object="${prevDiscussions}">
+                                                            
+                                                            	<span th:each="anItem , iterStat : ${prevDiscussions}">
+                                                            		
+                                                            		<div id="prev1">
+                                                                        <div class="form-row" >
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.actionNeeded">Action needed</label>
+                                                                                <textarea rows="3" cols="3" class="form-control form-control-sm" name="momActionPointsOfPrevMeetings[0].actionNeeded" id="prev_actionNeeded0"></textarea>
+                                                                                <span th:text="${iterStat.count}" ></span>
+                                                                                <span th:text="${anItem.pointsDiscussed}" class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold"></span>
+                                                                            </div>
+                                                                      </div>
+                                                            	</span>
+                                                            </th:block> -->
+                                                            </div>
+                                                                <!-- <div id="prevMeetingDetails">
+                                                                    <div id="prev1">
+                                                                        <div class="form-row" >
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.actionNeeded">Action needed</label>
+                                                                                <textarea rows="3" cols="3" class="form-control form-control-sm" name="momActionPointsOfPrevMeetings[0].actionNeeded" id="prev_actionNeeded0"></textarea>
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.employeeMaster">Responsibility</label>
+                                                                                 <select id="prev_employeeMaster0"  name="momActionPointsOfPrevMeetings[0].employeeMaster" class="custom-select custom-select-sm"
+                                                                                 onchange="javascript:getEmployeeName('prev_employeeMaster0','prev_responsibility0')" >
+                                                                                    <option value="0">--Select Responsibility--</option>
+                                                                                    <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}">
+                                                                                        <span th:text="${employee.employeefirstname}"></span>
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.responsibility">Responsibility Name</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="momActionPointsOfPrevMeetings[0].responsibility" id="prev_responsibility0"
+                                                                                    placeholder="Responsibility Name">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.targetDate">Target date for action</label>
+                                                                                <input type="text" class="form-control form-control-sm prevTargetDate" name="momActionPointsOfPrevMeetings[0].targetDate" id="prev_targetDate0"
+                                                                                    placeholder="title">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.momStatusMaster">Current status/ Action taken</label>
+                                                                                 <select id="prev_momStatusMaster0"  name="momActionPointsOfPrevMeetings[0].momStatusMaster" class="custom-select custom-select-sm" >
+                                                                                    <option value="0">--Select Status--</option>
+                                                                                    <option th:each="status : ${momStatusMastersList}"  th:value="${status.id}">
+                                                                                        <span th:text="${status.momStatus}"></span>
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="col-form-label col-form-label-sm" for="momActionPointsOfPrevMeetings.completionDate">Actual completion date</label>
+                                                                                <input type="text" class="form-control form-control-sm prevCompletionDate" name="momActionPointsOfPrevMeetings[0].completionDate"
+                                                                                id="prev_completionDate0" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>#prevMeetingDetails -->
+                                                            </div>
+                                                          <!--   <div class="card-footer py-1">
+                                                                <div class="row">
+                                                                    <div class="col-md-12 text-right">
+                                                                        <button style="width: 80px;" type="button" value="1" class="btn btn-sm btn-outline-primary" id="addPrev"><i class="fa fa-plus" ></i>&nbsp; Add Action</button>
+                                                                        <button style="width: 80px;" type="button" class="btn btn-sm btn-outline-primary" id="deletePrev"><i class="fa fa-trash-o" ></i>&nbsp; Delete Action</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div> -->
+
+                                                    </section>
+                                                </div> 
+												</span>
+                                       
+                                            
+
+
+                                            <!--###### Discussions Held Meeting ######-->
+                                                <div class="card border-primary">
+
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-4" aria-expanded="false" aria-controls="collapseExample">Discussions Held In the Meeting</h6>
+
+                                                    <section id="section-4" class="show">
+
+                                                    <div class="card-block pt-0" style="border-color: grey;">
+                                                        <div id="discussions">
+                                                        <span th:if="${momDiscussionsList}!=null">
+														<th:block th:object="${momDiscussionsList}" >
+														
+														
+														<div  th:each="anItem, sNo : ${momDiscussionsList}" >
+                                                           		<div th:attr="id='dis' + ${sNo.count} + ''"  th:if="${anItem.isActive == true}">
+                                                                    <div class="form-row" >
+                                                                    	 <div class="form-group col-md-2">
+                                                                                   <label class="col-form-label col-form-label-sm" for="momDiscussions.pointsDiscussed">Point discussed/Agreed<span class='text-danger'>*</span></label>
+                                                                                   <textarea _style="min-height: 100px;" rows="2" cols="5" class="form-control" th:attr="name='momDiscussions[' + ${sNo.count-1} + '].pointsDiscussed',id='dis_pointsDiscussed' + ${sNo.count-1} + ''"
+                                                                                       placeholder="Point discussed" th:text="${anItem.pointsDiscussed}"></textarea>
+                                                                          </div>
+                                                                            <div class="form-group col-md-2">
+                                                                               	<label class="col-form-label col-form-label-sm" for="momDiscussions.responsibility">Responsibility</label>
+                                                                                <select th:if="${anItem.responsibility !=null}" th:attr="name='momDiscussions[' + ${sNo.count-1} + '].responsibility',id='momDiscussions_responsibility' + ${sNo.count-1} + '',onChange='javascript:getEmployeeName(\'momDiscussions_responsibility' + ${sNo.count-1} + '\',\'dis_responsibilityName' + ${sNo.count-1} + '\', \'dis_designation' + ${sNo.count-1} + '\')'" class="custom-select custom-select-sm"
+                                                                                onchange="javascript:getEmployeeName('momDiscussions_responsibility0','dis_responsibilityName0')" >
+                                                                                   <option value="0">--Select Responsibility--</option>
+                                                                                   <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}" th:selected="(${employee.id} == ${anItem.responsibility.id})">
+                                                                                       <span th:text="${employee.employeefirstname}" ></span>
+                                                                                       <option value="-1">Other</option>
+                                                                                   </option>
+                                                                               </select>
+                                                                               
+                                                                               <select th:if="${anItem.responsibility ==null}" th:attr="name='momDiscussions[' + ${sNo.count-1} + '].responsibility',id='momDiscussions_responsibility' + ${sNo.count-1} + '',onChange='javascript:getEmployeeName(\'momDiscussions_responsibility' + ${sNo.count-1} + '\',\'dis_responsibilityName' + ${sNo.count-1} + '\', \'dis_designation' + ${sNo.count-1} + '\')'" class="custom-select custom-select-sm"
+                                                                                onchange="javascript:getEmployeeName('momDiscussions_responsibility0','dis_responsibilityName0')" >
+                                                                                   <option value="0" th:if="${anItem.responsibilityName == null or anItem.responsibilityName == ''}">--Select Responsibility--</option>
+                                                                                   <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}" >
+                                                                                       <span th:text="${employee.employeefirstname}" ></span>
+                                                                                   </option>
+                                                                                   <option th:if="${anItem.responsibilityName != null and !anItem.responsibilityName.isEmpty()}" value="-1" selected="selected">Other</option>
+                                                                               </select>
+                                                                               
+                                                                       		</div>
+                                                                       		
+	                                                                            <div class="form-group col-md-2">
+	                                                                            <label class="col-form-label col-form-label-sm" for="momDiscussions.responsibilityName">Name</label>
+	                                                                            <input type="text" class="form-control form-control-sm" 
+	                                                                             th:attr="name='momDiscussions[' + ${sNo.count-1} + '].responsibilityName',id='dis_responsibilityName' + ${sNo.count-1} + '',value=${anItem.responsibilityName}"
+	                                                                                   placeholder="Name">
+	                                                                       		</div>
+	                                                                       		
+	                                                                       	<div class="form-group col-md-2">
+	                                                                            <label class="col-form-label col-form-label-sm" for="momDiscussions.designation">Designation<!-- <span class="text-danger">*</span> --></label>
+	                                                                            <input type="text" class="form-control form-control-sm"  th:attr="name='momDiscussions[' + ${sNo.count-1} + '].designation',id='dis_designation' + ${sNo.count-1} + '',value=${anItem.designation}"
+	                                                                                   placeholder="Designation">
+                                                                       		</div>
+                                                                           
+	                                                                       		
+                                                                       		 <div class="form-group col-md-2">
+                                                                       		 	<!--  <h1 th:text="${anItem.targetDate}"></h1> -->
+                                                                                <label class="col-form-label col-form-label-sm" for="momDiscussions.targetDate">Target date for action</label>
+                                                                            		 <input th:if="${anItem.targetDate!=null }"  type="text" 
+                                                                            		 class="form-control form-control-sm prevTargetDate" 
+                                                                            		 th:attr="name='momDiscussions[' + ${sNo.count-1} + '].targetDate',id='dis_targetDate' + ${sNo.count-1} + '',value=${#temporals.format(anItem.targetDate, 'dd/MM/yyyy')}"
+	                                                                                   	placeholder="Target date" readonly="readonly"> 
+                                                                            		 <input th:if="${anItem.targetDate==null }"  type="text" class="form-control form-control-sm prevTargetDate" th:attr="name='momDiscussions[' + ${sNo.count-1} + '].targetDate',id='dis_targetDate' + ${sNo.count-1} + '',value=${anItem.targetDate}"
+                                                                                  			placeholder="Target date" readonly="readonly"> 
+                                                                            </div>
+	                                                                            
+	                                                                           <!--/*  <div>
+	                                                                           	<br/>
+	                                                                           	 <button style="width: 80px;" type="button" value="-1" onclick="javascript:deleteDiscussion(' + ${sNo.count} + ');"
+	                                                                           	 class="btn btn-sm btn-outline-primary" th:attr="id='deleteDiscussion' + ${sNo.count} + '',onClick='javascript:deleteDiscussion(' + ${sNo.count} + ')'>
+	                                                                           	 <i class="fa fa-trash-o" ></i>&nbsp; Delete</button>
+	                                                                           </div> */-->
+	                                                                           
+                                                                           <div>
+                                                                           	<br/>
+                                                                           	 <button style="width: 80px;" type="button" value="-1" 
+                                                                           	 class="btn btn-sm btn-outline-primary" th:attr="id='deleteDiscussion' + ${sNo.count-1} + '',onClick='javascript:deleteDiscussion(' + ${sNo.count-1} + ')'">
+                                                                           	 <i class="fa fa-trash-o" ></i>&nbsp; Delete</button>
+                                                                          </div>
+                                                                           
+                                                                    </div>
+                                                                </div>
+                                                         </div>
+                                                         </th:block>
+                                                         </span>
+                                                    </div>
+	                                                    <div class="card-footer py-1">
+	                                                        <div class="form-row">
+	                                                        	<div th:if="*{approvedDocumentGeneratedName!=null and !approvedDocumentGeneratedName.isEmpty()}" class="form-group col-lg-2 col-md-3">
+                                                                	<label class="col-form-label col-form-label-sm" for="endTime">Old Attachment<span class="text-danger"></span></label><br/>
+                                                               		 <a target="_blank" th:href="@{'/loadMomDoc/{id}/'(id=*{approvedDocumentGeneratedName})}"><span th:text="*{approvedDocumentOriginalName}"></span> </a>
+                                                                
+                                                          		 </div>
+	                                                        	 <div class="col-lg-4 col-md-6 text-left">
+	                                                                <label class="col-form-label col-form-label-sm" for="endTime">Attachment</label>
+	                                                                <input type="hidden" name="oldAppDocumnet" id='oldAppDocumnet' th:value="*{approvedDocumentOriginalName}"></input>
+	                                                                <input type="file" class="form-control form-control-sm  btn btn-sm text-left" name="uploadMomApprovedDocument" id="uploadMomApprovedDocument" onchange="javascript:UploadMomAttachement(this);"/>
+	                                                                <small	style=" margin-left:4px; bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"
+																		class="help-text text-muted d-inline-block"> ( Supported Formats : .pdf, .png, .jpg, .jpeg, doc, docx )</small>
+	                                                            </div>
+	                                                            <div class="col-lg-8  col-md-6 text-right">
+	                                                                <button style="width: 80px;" type="button" value="1" class="btn btn-sm btn-outline-primary" th:attr="id='addDis',value=${discussionsCount}"><i class="fa fa-plus" ></i>&nbsp; Add</button>
+	                                                            </div>
+	                                                        </div>
+	                                                    </div>
+                                                    </div>
+                                                    </section>
+                                                </div>
+
+
+
+                                            <!--#### Action Points of Current Meeting ########-->
+                                                <!-- <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-5" aria-expanded="false" aria-controls="collapseExample">5. Action Points of Current Meeting</h6>
+
+
+                                                    <section id="section-5" class="show">
+
+                                                        <div class="card-block pt-0" style="border-color: grey;">
+                                                            <div id="CurrentMmeetingDetails">
+                                                                <div id="current1">
+                                                                    <div class="form-row" >
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-12">
+                                                                                        <label class="col-form-label col-form-label-sm" for="currentMeetingPoints.actionNeeded">Action needed<span class="text-danger">*</span></label>
+                                                                                        <textarea _style="min-height: 173px;" rows="2" class="form-control form-control-sm " name="currentMeetingPoints[0].actionNeeded" id="current_actionNeeded0"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-5">
+                                                                                        <label class="col-form-label col-form-label-sm" for="currentMeetingPoints.employeeMaster">Responsibility*<span class="text-danger">*</span></label>
+                                                                                        <select id="current_employeeMaster0"  name="currentMeetingPoints[0].employeeMaster" class="custom-select custom-select-sm"
+                                                                                        onchange="javascript:getEmployeeName('current_employeeMaster0','current_responsibility0')">
+                                                                                            <option value="0">--Select Participant--</option>
+                                                                                            <option th:each="employee : ${employeeMastersList}"  th:value="${employee.id}">
+                                                                                                <span th:text="${employee.employeefirstname}"></span>
+                                                                                            </option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-4">
+                                                                                        <label class="col-form-label col-form-label-sm" for="currentMeetingPoints.responsibility">Responsibility Name<span class="text-danger">*</span></label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="currentMeetingPoints[0].responsibility" id="current_responsibility0" placeholder="Responsibility Name">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-3">
+                                                                                        <label class="col-form-label col-form-label-sm" for="currentMeetingPoints.targerDate">Target date for action<span class="text-danger">*</span></label>
+                                                                                        <input type="text" class="form-control form-control-sm currentTargetDate" name="currentMeetingPoints[0].targerDate" id="current_targerDate0"
+                                                                                            placeholder="title">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer py-1">
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    <button style="width: 80px;" type="button" value="1" class="btn btn-sm btn-outline-primary" id="addCurrent"><i class="fa fa-plus" ></i>&nbsp; Add Action</button>
+                                                                    <button style="width: 80px;" type="button" value="-1" class="btn btn-sm btn-outline-primary" id="deleteCurrent"><i class="fa fa-trash-o" ></i>&nbsp; Delete Action</button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </section>
+                                                </div> -->
+                                            </div>
+                                        </div><!-- #momContent -->
+                                        <div class="card-footer bg-white py-2 w-100">
+                                            <div class="row">
+                                                <div class="col-md-12 text-right">
+                                                	
+                                                    <button style="width: 130px;" type="button" class="btn btn-sm btn-primary" id="submitMomDetails" >Save/Draft</button>
+                                                    <button style="width: 130px;" type="button" class="btn btn-sm btn-primary" id="approveMomDetails" >Approved</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                    </div>
+                                </div><!-- .card-block .form-row -->
+
+                            </div><!-- .card-block .bg-white .py-4-->
+
+                    </div><!-- .card -->
+		        </div><!-- .col-md-12 -->
+            </div><!-- /.row -->
+        </div><!-- /.animated.fadeIn -->
+    </div><!--/.main .container-fluid -->
+
+</div>
+<!-- END FRAGMENT: "content" -->
+
+
+<th:block layout:fragment="scripts">
+	<script>
+	/* DATE RAGNE PICKER */
+ 	$("#startTime").daterangepicker({
+		singleDatePicker : true,
+		showDropdowns : false,
+		ampm: true,
+		autoUpdateInput: false,
+		applyClass: "btn-primary",
+		cancelClass: "btn-danger",
+		locale : {
+			format : 'DD/MM/YYYY hh:mm A',
+			cancelLabel: 'Clear'
+		},
+		timePicker: true,
+        timePickerIncrement: 5,
+	});
+ 	$('#startTime').on('cancel.daterangepicker', function(ev, picker) {
+ 	      $(this).val('');
+ 	  });
+ 	$('#startTime').on('apply.daterangepicker', function(ev, picker) {
+ 	      $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm A'));
+ 	    // $('#endTime').data('daterangepicker').setStartDate(picker.startDate.format('DD/MM/YYYY hh:mm A'));
+ 	    //$('#endTime').daterangepicker({minDate, picker.startDate.format('DD/MM/YYYY hh:mm A')} );
+ 	 });
+ 	
+
+	$("#endTime").daterangepicker({
+		singleDatePicker : true,
+		showDropdowns : false,
+		autoUpdateInput: false,
+		ampm: true,
+		applyClass: "btn-primary",
+		cancelClass: "btn-danger",
+		locale : {
+			format : 'DD/MM/YYYY hh:mm A',
+			cancelLabel: 'Clear'
+		},
+		timePicker: true,
+        timePickerIncrement: 5,
+	});
+	$('#endTime').on('cancel.daterangepicker', function(ev, picker) {
+ 	      $(this).val('');
+ 	  });
+ 	$('#endTime').on('apply.daterangepicker', function(ev, picker) {
+ 	      $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm A'));
+ 	     //$('#startTime').data('daterangepicker').options("minDate",picker.startDate.format('DD/MM/YYYY hh:mm A'));
+ 	  });
+ 	
+
+		$("input.prevTargetDate").daterangepicker({
+			singleDatePicker : true,
+			showDropdowns : false,
+			locale : {
+				format : 'DD/MM/YYYY'
+			},
+		});
+		$("input.prevCompletionDate").daterangepicker({
+			singleDatePicker : true,
+			showDropdowns : false,
+			locale : {
+				format : 'DD/MM/YYYY'
+			},
+		});
+
+		$("input.currentTargetDate").daterangepicker({
+			singleDatePicker : true,
+			showDropdowns : false,
+			locale : {
+				format : 'DD/MM/YYYY'
+			},
+		});
+
+	</script>
+	<script>
+	$(document).ready(function(){
+		if ($("#isNewYes").is(":checked")) {
+			$("#search").hide();
+			}
+		else if ($("#isNewNo").is(":checked")) {
+			$("#search").show()
+			}
+		
+		/* if($('input:radio[name=isNew]:checked').val()=="Yes")
+		{
+			alert("yes");
+			$("#search").hide();
+		}
+		
+		if($('input:radio[name=isNew]:checked').val()=="No")
+		{
+			alert("No");
+			$("#search").show();
+		} */
+		
+		$("#addParticipant").click(function(){
+			var participantNo=parseInt($("#addParticipant").val())+1;
+			var employee="<div id='participant"+participantNo+"'>"+
+								"<div class='form-row'>"+
+									"<div class='form-group col-md-2'>"+
+										"<label class='col-form-label col-form-label-sm' for='momParticipants.employeeMaster'>Participant<span class='text-danger'>*</span></label>"+
+										"<select id='momParticipants_employeeMaster_"+(participantNo-1)+"' "+
+										" name='momParticipants["+(participantNo-1)+"].employeeMaster' class='custom-select custom-select-sm' onchange='javascript:getEmployeeDetails(\"momParticipants_employeeMaster_"+(participantNo-1)+"\",\"participantName"+(participantNo-1)+"\",\"mobileNumber"+(participantNo-1)+"\",\"email"+(participantNo-1)+"\", \"participantdesignation"+(participantNo-1)+"\", \"organizationName"+(participantNo-1)+"\")'>"+
+											"<option value='0'>--Select Participant--</option>"+
+											"<option th:each='employee : ${employeeMastersList}'  th:value='${employee.id}'>"+
+											"<span th:text='${employee.employeefirstname}'></span>"+
+											"</option>"+
+										"</select>"+
+									"</div>"+
+									"<div class='form-group col-md-2'>"+
+										"<label  class='col-form-label col-form-label-sm' for='momParticipants.participantName'>Participant Name<span class='text-danger'>*</span></label>"+
+										"<input type='text' class='form-control form-control-sm'  name='momParticipants["+(participantNo-1)+"].participantName' id='participantName"+(participantNo-1)+"' placeholder='Participant Name'>"+
+									"</div>"+
+									"<div class='form-group col-md-2'>"+
+                                    "<label class='col-form-label col-form-label-sm' for='momParticipants.designation'>Designation<!--<span class='text-danger'>*</span> --></label>"+
+                                    "<input type='text' class='form-control form-control-sm'  name='momParticipants["+(participantNo-1)+"].designation' id='participantdesignation"+(participantNo-1)+"' placeholder='Designation'>"+
+                                    "</div>"+
+                                    "<div class='form-group col-md-2'>"+
+                                    "<label class='col-form-label col-form-label-sm' for='momParticipants.organizationName'>Organization<!--<span class='text-danger'>*</span> --></label>"+
+                                    "<input type='text' class='form-control form-control-sm'  name='momParticipants["+(participantNo-1)+"].organizationName' id='organizationName"+(participantNo-1)+"' placeholder='Organization'>"+
+                                    "</div>"+
+									"<div class='form-group col-md-1'>"+
+										"<label class='col-form-label col-form-label-sm' for='momParticipants.mobileNumber'>Mobile</label>"+
+											"<input type='text' class='form-control form-control-sm' onkeypress='javascript:return integersOnly(event);' onchange='trimValue(this);' maxlength='10' name='momParticipants["+(participantNo-1)+"].mobileNumber' id='mobileNumber"+(participantNo-1)+"' placeholder='Mobile'>"+
+									"</div>"+
+									"<div class='form-group col-md-2'>"+
+										"<label class='col-form-label col-form-label-sm' for='momParticipants.email'>Email<span class='text-danger'>*</span></label>"+
+											"<input type='text' class='form-control form-control-sm' name='momParticipants["+(participantNo-1)+"].email' id='email"+(participantNo-1)+"' placeholder='Email'>"+
+								"</div>"+
+								"<div class='form-group col-md-1'><br><button  type='button' id='deleteParticipant"+(participantNo-1)+"' class='btn btn-sm btn-outline-primary' onclick='javascript:deleteParticipant("+(participantNo-1)+")'>"+
+								"<i class='fa fa-trash-o' ></i></button>"+"</div>"
+							"</div>"+
+						"</div>"
+ 			$("#participantsDetails").append(employee);
+			var data=$("#momParticipants_employeeMaster_0").html();
+			var id="#momParticipants_employeeMaster_"+(participantNo-1);
+			$(id).html(data);
+			$("#addParticipant").val(participantNo);
+			$(id+" option:selected").removeAttr("selected");
+		});
+
+
+		/* $("#deleteParticipant").click(function(){
+			var count=parseInt($("#addParticipant").val());
+			if(count==1)
+			{
+				alert("You cannot delete Participant1");
+			}
+			else
+			{
+				var id="#participant"+count;
+				$(id).remove();
+				$("#addParticipant").val(count-1);
+			}
+		}); */
+
+
+
+
+
+		$("#addPrev").click(function(){
+			var prevNo=parseInt($("#addPrev").val())+1;
+ 			var prev="<div id='prev"+prevNo+"'>"
+ 				+ "<div class='form-row' >"
+ 				+ "<div class='form-group col-md-2'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momActionPointsOfPrevMeetings.actionNeeded'>Action needed</label>"
+ 				+ "<textarea rows='3' cols='3' class='form-control form-control-sm' name='momActionPointsOfPrevMeetings["+(prevNo-1)+"].actionNeeded' id='prev_actionNeeded"+(prevNo-1)+"'></textarea>"
+ 				+ "</div>"
+ 				+ "<div class='form-group col-md-2'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momActionPointsOfPrevMeetings.employeeMaster'>Responsibility</label>"
+ 				+ "<select id='prev_employeeMaster"+(prevNo-1)+"'  name='momActionPointsOfPrevMeetings["+(prevNo-1)+"].employeeMaster' "+
+ 				"class='custom-select custom-select-sm' onchange='javascript:getEmployeeDetails(\"prev_employeeMaster"+(prevNo-1)+"\",\"prev_responsibility"+(prevNo-1)+"\")'>"
+ 				+ "<option value='0'>--Select Responsibility--</option>"
+ 				+ "<option th:each='employee : ${employeeMastersList}'  th:value='${employee.id}'>"
+ 				+ "<span th:text='${employee.employeefirstname}'></span>"
+ 				+ "</option>"
+ 				+ "</select>"
+ 				+ "</div>"
+ 				+ "<div class='form-group col-md-2'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momActionPointsOfPrevMeetings.responsibility'>Responsibility Name</label>"
+ 				+ "<input type='text' class='form-control form-control-sm' name='momActionPointsOfPrevMeetings["+(prevNo-1)+"].responsibility' id='prev_responsibility"+(prevNo-1)+"' placeholder='Responsibility Name'>"
+ 				+ "</div>"
+ 				+ "<div class='form-group col-md-2'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momActionPointsOfPrevMeetings.targetDate'>Target date for action</label>"
+ 				+ "<input type='text' class='form-control form-control-sm prevTargetDate' name='momActionPointsOfPrevMeetings["+(prevNo-1)+"].targetDate' id='prev_targetDate"+(prevNo-1)+"' placeholder='title'>"
+ 				+ "</div>"
+ 				+ "<div class='form-group col-md-2'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momActionPointsOfPrevMeetings.momStatusMaster'>Current status/ Action taken</label>"
+ 				+ "<select id='prev_momStatusMaster"+(prevNo-1)+"'  name='momActionPointsOfPrevMeetings["+(prevNo-1)+"].momStatusMaster' class='custom-select custom-select-sm' >"
+ 				+ "<option value='0'>--Select Status--</option>"
+ 				+ "<option th:each='status : ${momStatusMastersList}'  th:value='${status.id}'>"
+ 				+ "<span th:text='${status.momStatus}'></span>"
+ 				+ "</option>"
+ 				+ "</select>"
+ 				+ "</div><div class='form-group col-md-2'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momActionPointsOfPrevMeetings.completionDate'>Actual completion date</label>"
+ 				+ "<input type='text' class='form-control form-control-sm prevCompletionDate' name='momActionPointsOfPrevMeetings["+(prevNo-1)+"].completionDate' id='prev_completionDate"+(prevNo-1)+"' /></div>"
+ 				+ "</div></div>";
+			$("#prevMeetingDetails").append(prev);
+			$("#prev_momStatusMaster"+(prevNo-1)).html($("#prev_momStatusMaster0").html())
+			$("#prev_employeeMaster"+(prevNo-1)).html($("#prev_employeeMaster0").html());
+			$("#addPrev").val(prevNo);
+
+			$("input.prevTargetDate").daterangepicker({
+				singleDatePicker : true,
+				showDropdowns : false,
+				locale : {
+					format : 'DD/MM/YYYY'
+				},
+			});
+			$("input.prevCompletionDate").daterangepicker({
+				singleDatePicker : true,
+				showDropdowns : false,
+				locale : {
+					format : 'DD/MM/YYYY'
+				},
+			});
+
+		});
+
+		$("#deletePrev").click(function(){
+			var count=parseInt($("#addPrev").val());
+			if(count==0)
+			{
+				;
+			}
+			else
+			{
+				var id="#prev"+count;
+				$(id).remove();
+				$("#addPrev").val(count-1);
+			}
+		});
+
+
+
+
+
+
+$("#addDis").click(function(){
+			
+			var disNo=parseInt($("#addDis").val())+1;
+ 			/* var dis="<div id='dis"+disNo+"'>"
+ 				+ "<div class='form-row' >"
+ 				+ "<div class='form-group col-md-6'>"
+ 				+ "<label class='col-form-label col-form-label-sm' for='momDiscussions.pointsDiscussed'>Point discussed / Agreed upon</label>"
+ 				+ "<textarea rows='3' cols='3' class='form-control form-control-sm' name='momDiscussions["+(disNo-1)+"].pointsDiscussed' id='dis_pointsDiscussed"+(disNo-1)+"' placeholder='Point discussed'></textarea>"
+ 				+ "</div><div class='form-group col-md-3'><label class='col-form-label col-form-label-sm' for='momDiscussions.cparNum'>CPAR No</label>"
+ 				+ "<input type='text' class='form-control form-control-sm' name='momDiscussions["+(disNo-1)+"].cparNum' id='dis_cparNum"+(disNo-1)+"' placeholder='CPAR No'/></div>"
+ 				+ "<div class='form-group col-md-3'><label class='col-form-label col-form-label-sm' for='momDiscussions.'>Action item number</label>"
+ 				+ "<input type='text' class='form-control form-control-sm' name='momDiscussions["+(disNo-1)+"].actionItemNo' id='dis_actionItemNo"+(disNo-1)+"'	placeholder='Action item number'>"
+ 				+ "</div></div></div>"; */
+ 				var dis="<div id='dis"+disNo+"'>"+
+ 							"<div class='form-row' >"+
+				 				"<div class='form-group col-md-3'>"+
+				 				"<label class='col-form-label col-form-label-sm' for='momDiscussions.pointsDiscussed'>Point discussed/Agreed<span class='text-danger'>*</span></label>"+
+				 				"<textarea _style='min-height: 100px;' rows='2' cols='5' class='form-control' name='momDiscussions["+(disNo-1)+"].pointsDiscussed' id='dis_pointsDiscussed"+(disNo-1)+"'"+
+				 				"placeholder='Point discussed'></textarea>"+
+				 				"</div>"+
+				 				
+				 				"<div class='form-group col-md-2'>"+
+				 				"<label class='col-form-label col-form-label-sm' for='momDiscussions.responsibility'>Responsibility</label>"+
+				 				"<select id='momDiscussions_responsibility"+(disNo-1)+"'  name='momDiscussions["+(disNo-1)+"].responsibility' class='custom-select custom-select-sm'"+
+				 				"onchange='javascript:getEmployeeName(\"momDiscussions_responsibility"+(disNo-1)+"\",\"dis_responsibilityName"+(disNo-1)+"\", \"dis_designation"+(disNo-1)+"\")' >"+
+				 				"<option value='0'>--Select Responsibility--</option>"+
+				 				"<option th:each='employee : '${employeeMastersList}'  th:value='${employee.id}'>"+
+				 				"<span th:text='${employee.employeefirstname}'></span>"+
+				 				"</option>"+
+				 				"</select>"+
+				 				"</div>"+
+				 				
+				 				"<div class='form-group col-md-2'>"+
+				 				"<label class='col-form-label col-form-label-sm' for='momDiscussions.responsibilityName'>Name</label>"+
+				 				"<input  type='text' class='form-control form-control-sm ' name='momDiscussions["+(disNo-1)+"].responsibilityName' id='dis_responsibilityName"+(disNo-1)+"'"+
+				 				"placeholder='Name'>"+
+				 				"</div>"+
+				 				
+				 				"<div class='form-group col-md-2'>"+
+				 				"<label class='col-form-label col-form-label-sm' for='momDiscussions.designation'>Designation<!--<span class='text-danger'>*</span> --></label>"+
+				 				"<input type='text' class='form-control form-control-sm'  name='momDiscussions["+(disNo-1)+"].designation' id='dis_designation"+(disNo-1)+"'"+
+				 				"placeholder='Designation'>"+
+				 				"</div>"+
+				 				
+				 				"<div class='form-group col-md-2'>"+
+				 				"<label class='col-form-label col-form-label-sm' for='momDiscussions.targetDate'>Target date for action</label>"+
+				 				"<input type='text' class='form-control form-control-sm prevTargetDate' name='momDiscussions["+(disNo-1)+"].targetDate' id='dis_targetDate"+(disNo-1)+"'"+
+				 				"placeholder='Target date' readonly='readonly'>"+
+				 				"</div>"+
+				 				
+				 				"<div>"+
+				 				"<br/>"+
+				 				"<button type='button' value='-1' onclick='javascript:deleteDiscussion("+(disNo-1)+");'"+
+				 				"class='btn btn-sm btn-outline-primary' id='deleteDiscussion"+(disNo-1)+"'>"+
+				 				"<i class='fa fa-trash-o' ></i></button>"+
+				 				"</div>"+
+ 						"</div>"+
+ 					"</div>";
+			$("#discussions").append(dis);
+			var data=$("#momDiscussions_responsibility0").html();
+			var id="#momDiscussions_responsibility"+(disNo-1);
+			$(id).html(data);
+			$(id+" option:selected").removeAttr("selected");
+			$("#addDis").val(disNo);
+			
+			$("input.prevTargetDate").daterangepicker({
+				singleDatePicker : true,
+				showDropdowns : false,
+				locale : {
+					format : 'DD/MM/YYYY'
+				},
+			});
+		});
+
+
+		/* $("#deleteDis").click(function(){
+			var count=parseInt($("#addDis").val());
+			if(count==1)
+			{
+				alert("You cannot delete Discussion 1");
+			}
+			else
+			{
+				var id="#dis"+count;
+				$(id).remove();
+				$("#addDis").val(count-1);
+			}
+		}); */
+
+
+
+
+		$("#addCurrent").click(function(){
+			var currentNO=parseInt($("#addCurrent").val())+1;
+ 			var current="<div id='current"+currentNO+"'><div class='form-row' >"
+ 				+ "<div class='col-md-6'><div class='form-row'><div class='form-group col-md-12'><label class='col-form-label col-form-label-sm' for='currentMeetingPoints.actionNeeded'>Action needed<span class='text-danger'>*</span></label>"
+ 				+ "<textarea class='form-control form-control-sm' rows='2' name='currentMeetingPoints["+(currentNO-1)+"].actionNeeded' id='current_actionNeeded"+(currentNO-1)+"'></textarea></div></div></div>"
+ 				+ "<div class='col-md-6'><div class='form-row'><div class='form-group col-md-5'><label class='col-form-label col-form-label-sm' for='currentMeetingPoints.employeeMaster'>Responsibility</label>"
+ 				+ "<select id='current_employeeMaster"+(currentNO-1)+"'  name='currentMeetingPoints["+(currentNO-1)+"].employeeMaster' class='custom-select custom-select-sm' onchange='javascript:getEmployeeDetails(\"current_employeeMaster"+(currentNO-1)+"\",\"current_responsibility"+(currentNO-1)+"\")'>"
+ 				+ "<option value='0'>--Select Participant--</option><option th:each='employee : ${employeeMastersList}'  th:value='${employee.id}'>"
+ 				+ "<span th:text='${employee.employeefirstname}'></span></option></select></div>"
+ 				+ "<div class='form-group col-md-4'><label class='col-form-label col-form-label-sm' for='currentMeetingPoints.responsibility'>Responsibility Name<span class='text-danger'>*</span></label>"
+ 				+ "<input type='text' class='form-control form-control-sm' name='currentMeetingPoints["+(currentNO-1)+"].responsibility' id='current_responsibility"+(currentNO-1)+"' placeholder='Responsibility Name'>"
+ 				+ "</div><div class='form-group col-md-3'><label class='col-form-label col-form-label-sm' for='currentMeetingPoints.targerDate'>Target date for action<span class='text-danger'>*</span></label>"
+ 				+ "<input type='text' class='form-control form-control-sm currentTargetDate' name='currentMeetingPoints["+(currentNO-1)+"].targerDate' id='current_targerDate"+(currentNO-1)+"' placeholder='title'>"
+ 				+ "</div></div></div></div></div>";
+			$("#CurrentMmeetingDetails").append(current);
+			$("#current_employeeMaster"+(currentNO-1)).html($("#current_employeeMaster0").html());
+			$("#addCurrent").val(currentNO);
+
+
+			$("input.currentTargetDate").daterangepicker({
+				singleDatePicker : true,
+				showDropdowns : false,
+				locale : {
+					format : 'DD/MM/YYYY'
+				},
+			});
+
+		});
+
+		$("#deleteCurrent").click(function(){
+			var count=parseInt($("#addCurrent").val());
+			if(count==1)
+			{
+				alert("You cannot delete Current Action Point 1");
+			}
+			else
+			{
+				var id="#current"+count;
+				$(id).remove();
+				$("#addCurrent").val(count-1);
+			}
+		});
+
+		
+		
+		function validateData()
+		{
+			var meetingVenue=$("#meetingVenue");
+			var purpose=$("#purpose");
+			var conductedBy=$("#conductedBy");
+			var startTime=$("#startTime");
+			var endTime=$("#endTime");
+			var recordedBy = $("#recordedBy");
+			//var upload=$("#upload");
+			if(meetingVenue.val().trim()=="")
+			{
+				alert("Please enter meeting venue");
+				meetingVenue.focus();
+				return false;
+			}
+			if(purpose.val().trim()=="")
+			{
+				alert("Please enter meeting purpose");
+				purpose.focus();
+				return false;
+			}
+			if(conductedBy.val().trim()=="")
+			{
+				alert("Please enter conductedBy");
+				conductedBy.focus();
+				return false;
+			}
+			/* if(( $("#oldDocumnet").val()==null || $("#oldDocumnet").val()=="" ) && ($("#upload").val() == null || $("#upload").val() == "" )){
+				
+				alert("Please upload mom document");
+				$("#upload").focus();
+				flag = false;
+				
+			} */
+			if(startTime.val()=="")
+			{
+				alert("Please select start time");
+				startTime.focus();
+				return false;
+			}
+			if(endTime.val()=="")
+			{
+				alert("Please select end time");
+				endTime.focus();
+				return false;
+			}
+			/* if(recordedBy.val() == null || recordedBy.val() =="" || recordedBy.val() == "0")
+			{
+				alert("Please choose recorded by");
+				recordedBy.focus();
+				return false;
+			} */
+			var participants=$("#addParticipant").val();
+			for(var i=0;i<participants;i++)
+			{
+				var emp=$("#momParticipants_employeeMaster_"+i);
+				var name=$("#participantName"+i);
+				var mobile=$("#mobileNumber"+i);
+				var email=$("#email"+i);
+				if(emp.val()==null || emp.val()==0)
+				{
+					alert("Please select participant"+(i+1));
+					emp.focus();
+					return false;
+				}
+				if(name.val().trim()=="")
+				{
+					alert("Please enter participant"+(i+1)+" name");
+					name.focus();
+					return false;
+				}
+				if(email.val().trim()=="")
+				{
+					alert("please enter email for participant"+(i+1));
+					email.focus();
+					return false;
+				}
+			}
+
+			/* var prev=$("#addPrev").val();
+			for(var i=0;i<prev;i++)
+			{
+				var actionNeeded=$("#prev_actionNeeded"+i);
+				var emp=$("#prev_employeeMaster"+i);
+				var empName=$("#prev_responsibility"+i);
+				var targetDate=$("#prev_targetDate"+i);
+				var status=$("#prev_momStatusMaster"+i)
+				var completionDate=$("#prev_completionDate"+i);
+				if(actionNeeded.val().trim()=="")
+				{
+					alert("please enter action needed"+(i+1));
+					actionNeeded.focus();
+					return false;
+				}
+				if(emp.val()==null || emp.val()=="0")
+				{
+					alert("Please select Responsibility for aciton"+(i+1));
+					emp.focus();
+					return false;
+				}
+				if(empName.val().trim()=="")
+				{
+					alert("Please enter responsibility name for action "+(i+1));
+					empName.focus();
+					return false;
+				}
+				if(status.val()==0)
+				{
+					alert("please select status for action "+(i+1));
+					status.focus();
+					return false;
+				}
+			} */
+			var dis=$("#addDis").val();
+			for(var i=0;i<dis;i++)
+			{
+				var points=$("#dis_pointsDiscussed"+i);
+				var cpar=$("#dis_cparNum"+i);
+				var item=$("#dis_actionItemNo"+i)
+				if(points.val().trim()=="")
+				{
+					alert("please enter points discussed details")
+					points.focus();
+					return false;
+				}
+				/* if(cpar.val().trim())
+				{
+					alert("please enter CPAR Number")
+					cpar.focus();
+					return false;
+				}
+				if(item.val().trim())
+				{
+					alert("please enter Action Item no")
+					item.focus();
+					return false;
+				} */
+			}
+			/* var currents=$("#addCurrent").val()
+			for(var i=0;i<currents;i++)
+			{
+				var action =$("#current_actionNeeded"+i);
+				var emp = $("#current_employeeMaster"+i);
+				var empName = $("#current_responsibility"+i);
+				var target = $("#current_targerDate"+i);
+				if(action.val().trim()=="")
+				{
+					alert("please enter action needed "+(i+1));
+					action.focus();
+					return false;
+				}
+				if(emp.val()==0)
+				{
+					alert("Please select responsibility fro aciton "+(i+1));
+					emp.focus();
+					return false;
+				}
+				if(empName.val().trim()=="")
+				{
+					alert("Please enter responsibility name for action "+(i+1))
+					empName.focus();
+					return false;
+				}
+			} */
+			//$("#submitType").val("saveOrDraft");
+			return true;
+			
+		}
+		
+		$("#submitMomDetails").click(function(){
+			$("#submitType").val("saveOrDraft");
+			var flag = validateData();
+			
+			if(flag && confirm("Do you want to save the details?")){
+				$("#momMasterForm").submit();
+			}
+			return validateData();
+		});
+		
+		$("#approveMomDetails").click(function(){
+			$("#submitType").val("approve");
+			var flag = validateData();
+			/* if(flag){
+				
+				if($("#oldAppDocumnet").val()==null || $("#oldAppDocumnet").val()=="" && ($("#uploadMomApprovedDocument").val() == null || $("#uploadMomApprovedDocument").val() == "" )){
+					alert("Please upload approved mom document");
+					$("#uploadMomApprovedDocument").focus();
+					flag = false;
+				}
+				
+			} */
+			if(flag && confirm("Do you want to approve?")){
+				$("#momMasterForm").submit();
+			}
+		});
+
+		
+		$("#isNewYes").click(function(){
+			$("#submitType").val("newMeeting")
+			$("#momMasterForm").submit();
+			$("#search").hide()
+		});
+		
+		$("#isNewNo").click(function(){
+			$("#submitType").val("oldMeeting")
+			$("#momMasterForm").submit();
+			$("#search").show()
+		});
+		
+		$("#prevMomMaster").change(function(){
+			$("#submitType").val("getPreviousMomDetails")
+			$("#momMasterForm").submit();
+		});
+		
+		
+		
+
+	});
+	</script>
+
+	<script>
+	var context = "[[@{/}]]";
+	function getEmployeeDetails(empId, empName,empMobile,empEmail, empDesignation, empOrg)
+	{
+		
+		var id=$("#"+empId);
+		var name=$("#"+empName);
+		var mobile=$("#"+empMobile);
+		var email=$("#"+empEmail);
+		var designation = $("#"+empDesignation);
+		var empOrg = $("#"+empOrg);
+		
+		
+		if(parseInt(id.val())==0 || parseInt(id.val())==-1)
+		{
+			name.val(""),email.val(""),mobile.val(""),designation.val(""),empOrg.val("");;
+		}
+		else
+		{
+			name.val(""),email.val(""),mobile.val(""),designation.val(""),empOrg.val("");;
+			var path= context + "getEmployeeDetailsForMom/"+id.val();
+		 	var token = $("meta[name='_csrf']").attr("content");
+		 	var header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax ({
+				type: "POST",
+				url: path+"/",
+				beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+				success: function(html) {
+					
+					var details=html.split("$");
+					if(details[0]!=null && details[0]!="null")
+						name.val(details[0]);
+					if(details[1]!=null && details[1]!="null")
+						mobile.val(details[1]);
+					if(details[2]!=null && details[2]!="null")
+						email.val(details[2]);
+					if(details[3]!=null && details[3]!="null")
+						designation.val(details[3]);
+					
+					empOrg.val("[[${session.orgName}]]");
+
+				},
+	            error : function() {
+	                alert("Error");
+	            }
+			});
+		}
+
+	}
+
+	function getEmployeeName(empId, empName, empDesignation)
+	{
+		var id=$("#"+empId);
+		var name=$("#"+empName);
+		var designation = $("#"+empDesignation);
+		if(parseInt(id.val())==0 || parseInt(id.val())==-1)
+		{
+			name.val(""),designation.val("");;
+		}
+		else
+		{
+			name.val(""),designation.val("");;
+			var path= context + "getEmployeeDetailsForMom/"+id.val();
+		 	var token = $("meta[name='_csrf']").attr("content");
+		 	var header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax ({
+				type: "POST",
+				url: path+"/",
+				beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+				success: function(html) {
+					var details=html.split("$");
+					if(details[0]!=null && details[0]!="null")
+						name.val(details[0]);
+					if(details[3]!=null && details[3]!="null")
+						designation.val(details[3]);
+				},
+	            error : function() {
+	                alert("Error");
+	            }
+			});
+		}
+
+	}
+	function getEmployeeDesgination(empId, empDesignation)
+	{
+		
+		var id=$("#"+empId);
+		var designation = $("#"+empDesignation);
+		if(parseInt(id.val())==0 || parseInt(id.val())==-1)
+		{
+			designation.val("");
+		}
+		else
+		{
+			designation.val("");
+			var path= context + "getEmployeeDetailsForMom/"+id.val();
+		 	var token = $("meta[name='_csrf']").attr("content");
+		 	var header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax ({
+				type: "POST",
+				url: path+"/",
+				beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+				success: function(html) {
+					var details=html.split("$");
+					if(details[3]!=null && details[3]!="null")
+						designation.val(details[3]);
+				},
+	            error : function() {
+	                alert("Error");
+	            }
+			});
+		}
+
+	}
+
+		function validateThisExtension(uploadfile, allowedFiles) {
+// 			alert(uploadfile.value + "==" + allowedFiles);
+			var uf = uploadfile.value;
+			var result = false;
+			if (uf != "") {
+				if (1 < uf.match(/\./g).length) {
+					alert("Invalid File Name(Multidots found)");
+					result = false;
+				} else {
+					var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+("
+							+ allowedFiles.join('|') + ")$");
+					if (!regex.test(uploadfile.value.toLowerCase())) {
+
+						alert("Please upload files having extensions: "
+								+ allowedFiles.join(', ') + " only.");
+
+						uploadfile.value = "";
+						result = false;
+					} else
+						result = true;
+				}
+			} else
+				result = false;
+			return result;
+		}
+
+		function UploadMomAttachement(fileUpload) {
+			/* if (validateThisExtension(fileUpload, [ ".jpeg", ".jpg",
+					".png", ".pdf", ".doc", ".docx" , ".docm"])) {
+				if (typeof (fileUpload.files) != "undefined") {
+					var size = parseFloat(fileUpload.files[0].size ).toFixed(2);
+					if (size > 5242880) {
+						fileUpload.value = "";
+						alert("Please upload file with max size of 5MB");
+					}
+				}
+			} */
+			validateFiles(fileUpload);
+		}
+		
+		function validateFiles(fileUpload) {
+			var file_size=fileUpload.files[0].size;
+            if(file_size<5242880){
+                var ext = fileUpload.value.split('.').pop().toLowerCase();                            
+                if($.inArray(ext,["pdf","PDF","png","jpg","jpeg","doc","docx"])===-1){
+                    alert("Invalid file extension. File Name : "+fileUpload.value);
+                    fileUpload.value = "";
+                    return false;
+                }
+
+            }else{
+                alert("File size should be less than 5 MB. File Name : "+fileUpload.value);
+                fileUpload.value = "";
+                return false;
+            }
+		};	
+		
+		function deleteParticipant(row_id)
+		{
+			var count=parseInt($("#addParticipant").val());
+			if(count==1)
+			{
+				alert("You cannot delete Participant1");
+			}
+			else{
+				var id="#participant"+(row_id+1);
+				$(id).remove();
+				$("#addParticipant").val(count-1);
+				for(var i=row_id;i<(count-1);i++)
+				{
+					$('#momParticipants_employeeMaster_'+(i+1)).attr('name', 'momParticipants['+(i)+'].employeeMaster');
+// 					$('#momParticipants_employeeMaster_'+(row_id+1)).attr('onChange', 'javascript:')
+					$('#momParticipants_employeeMaster_'+(i+1)).attr('onChange', 'javascript:getEmployeeDetails(\"momParticipants_employeeMaster_'+(i)+'\",\"participantName'+(i)+'\",\"mobileNumber'+(i)+'\",\"email'+(i)+'\", \"participantdesignation'+(i)+'\", \"organizationName'+(i)+'\")');
+					$('#momParticipants_employeeMaster_'+(i+1)).attr('id', 'momParticipants_employeeMaster_'+(i));
+					
+					$('#participantName'+(i+1)).attr('name', 'momParticipants['+(i)+'].participantName');
+					$('#participantName'+(i+1)).attr('id', 'participantName'+(i));
+					
+					
+					$('#participantdesignation'+(i+1)).attr('name', 'momParticipants['+(i)+'].designation');
+					$('#participantdesignation'+(i+1)).attr('id', 'participantdesignation'+(i));
+					
+					$('#organizationName'+(i+1)).attr('name', 'momParticipants['+(i)+'].organizationName');
+					$('#organizationName'+(i+1)).attr('id', 'organizationName'+(i));
+					
+					$('#mobileNumber'+(i+1)).attr('name', 'momParticipants['+(i)+'].mobileNumber');
+					$('#mobileNumber'+(i+1)).attr('id', 'mobileNumber'+(i));
+					
+					$('#email'+(i+1)).attr('name', 'momParticipants['+(i)+'].email');
+					$('#email'+(i+1)).attr('id', 'email'+(i));
+					
+					$('#deleteParticipant'+(i+1)).attr('onClick', 'javascript:deleteParticipant('+(i)+')');
+					$('#deleteParticipant'+(i+1)).attr('id', 'deleteParticipant'+(i));
+					$('#participant'+(i+2)).attr('id', 'participant'+(i+1));
+				}
+			}
+		}
+		
+		
+		function deleteDiscussion(row_id)
+		{
+			var count=parseInt($("#addDis").val());
+			if(count==1)
+			{
+				alert("You cannot delete Discussion1");
+			}
+			else{
+				var id="#dis"+(row_id+1);
+				$(id).remove();
+				$("#addDis").val(count-1);
+				for(var i=row_id;i<(count-1);i++)
+				{
+					$('#dis_pointsDiscussed'+(i+1)).attr('name', 'momDiscussions['+(i)+'].pointsDiscussed');
+					$('#dis_pointsDiscussed'+(i+1)).attr('id', 'dis_pointsDiscussed'+(i));
+					
+					 $('#momDiscussions_responsibility'+(i+1)).attr('name', 'momDiscussions['+(i)+'].responsibility');
+// 					$('#momParticipants_employeeMaster_'+(row_id+1)).attr('onChange', 'javascript:')
+					$('#momDiscussions_responsibility'+(i+1)).attr('onChange', 'javascript:getEmployeeName(\"momDiscussions_responsibility'+(i)+'\",\"dis_responsibilityName'+(i)+'\", \"dis_designation'+(i)+'\")');
+					$('#momDiscussions_responsibility'+(i+1)).attr('id', 'momDiscussions_responsibility'+(i));
+					
+					
+					$('#dis_responsibilityName'+(i+1)).attr('name', 'momDiscussions['+(i)+'].responsibilityName');
+					$('#dis_responsibilityName'+(i+1)).attr('id', 'dis_responsibilityName'+(i));
+					
+					$('#dis_designation'+(i+1)).attr('name', 'momDiscussions['+(i)+'].designation');
+					$('#dis_designation'+(i+1)).attr('id', 'dis_designation'+(i));
+					
+					
+					$('#dis_targetDate'+(i+1)).attr('name', 'momDiscussions['+(i)+'].targetDate');
+					$('#dis_targetDate'+(i+1)).attr('id', 'dis_targetDate'+(i)); 
+					
+					$('#deleteDiscussion'+(i+1)).attr('onClick', 'javascript:deleteDiscussion('+(i)+')');
+					$('#deleteDiscussion'+(i+1)).attr('id', 'deleteDiscussion'+(i));
+					$('#dis'+(i+2)).attr('id', 'dis'+(i+1));
+				}
+			}
+		}
+		
+	</script>
+</th:block>
+
+</body>
+</html>
+

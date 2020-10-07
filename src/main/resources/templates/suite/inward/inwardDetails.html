@@ -1,0 +1,763 @@
+<html layout:decorator="layouts/main">
+<head>
+
+
+<meta charset="ISO-8859-1">
+<title>Inward File Details</title>
+<th:block layout:fragment="styles">
+
+<style type="text/css">
+
+    _table.dataTable.table-sm>thead>tr>th.sorting {
+
+    padding-left: 20px!important;
+
+	}
+
+.font {
+	color: black;
+}
+ul>li {
+	list-style: none;
+}
+
+
+
+/*
+Access denied message styles
+*/
+#accesdenied {
+	background-color: lightgray;
+	border-radius: 10px;
+	margin: auto;
+	width: 50%;
+	cursor: not-allowed;
+	margin-top: 10%;
+}
+
+#accessdeniedhead {
+	padding-top: 30px;
+	font-size: 60px;
+	font-family: Arial;
+	text-align: center;
+	border-bottom: 1px solid #333;
+	border-bottom-style: dashed;
+	padding-bottom: 20px;
+}
+
+#redx {
+	color: red;
+	text-decoration: none;
+	cursor: not-allowed;
+}
+
+#accessdeniedpara {
+	text-align: center;
+	font-family: Arial;
+	font-weight: bold;
+	padding-bottom: 3%;
+}
+
+#accessdeniedlines {
+	font-family: Arial;
+	text-align: center;
+	word-spacing: -1px;
+	font-size: 10px;
+	font-weight: normal;
+	color: gray;
+}
+
+#gears {
+	text-align: center;
+	color: #333;
+	width: 200px;
+	margin: auto;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.85);
+	/* opacity: 0.85; */
+	padding: 30px 0px;
+}
+
+
+
+/*
+.table-fixed tbody {
+	height: 230px;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody {
+	width: 100%;
+	display: block;
+} */
+p {
+	color: blue;
+}
+.dropdown.action:hover > .dropdown-menu {
+  display: inline-block;
+  margin-top: -2px;
+}
+.dropdown-menu.dropdown-menu-right {
+    float: right;
+    left: initial;
+    right: 0;
+}
+.dropdown.action:hover > .dropdown-menu .dropdown-item {
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+
+.dropdown.action > .dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+  pointer-events: none;
+}
+</style>
+</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div>
+			<input type="hidden" name="org.apache.struts.taglib.html.TOKEN"
+				value="f04ae4fa6d250990ad506e6349f0f48c">
+		</div>
+		<input type="hidden" name="method" value="" id="method">
+
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+
+				<div class="card card-block p-0 px-3 mt-3">
+					<div
+						class="">
+						<div style="_overflow: auto; width: 100%; _margin-top: 2%;">
+							<span th:if="${additionalChargePost} == false"> 
+									<!-- Saved Files List -->
+									<div  class="w-100" th:if="${inwardSaveFilesListDisplay} == 1">
+										<table id="inwardSaveboxTable"
+                                               class="table table-bordered table-striped table-sm  mb-0 mt-0" cellspacing="0"
+											width="100%">
+											<thead class="table-primary">
+												<tr>
+													<th>#</th>
+													<th>Inward Number</th>
+													<th>Subject</th>
+													<th>Entry Date</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+
+											<tbody th:if="${inwardSaveFilesListDisplay} ==  1">
+
+												<tr th:each="savedFiles, sNo : ${inwardSavedFilesList}">
+													<td th:text="${sNo.count}"></td>
+													<td >
+														<a class="btn btn-outline-default " role="button" aria-pressed="false"
+															data-toggle="modal" data-target="#commonModal"
+															data-placement="top"
+															th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${savedFiles.id})}">
+															<p  th:text="${savedFiles.inwardFileNumber}"></p>
+														</a>
+													</td>
+													<td th:text="${savedFiles.subject}"></td>
+													<td th:text="${#dates.format(savedFiles.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+													<td>
+
+                                                        <div class="dropdown action">
+                                                            <button style="background: #ff7e0e6e;" class="btn btn-primary btn-sm dropdown-toggle" type="button" id="inwardSaveboxTabledropdownMenuButton" _data-flip="true" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Actions
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="inwardSaveboxTabledropdownMenuButton">
+
+
+                                                            <a role="button" class="dropdown-item py-1" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${savedFiles.id})}"><i class="mdi mdi-18px mdi-file-send "></i>&nbsp;Forward </a>
+
+													 	<button role="button" class="dropdown-item py-1" aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+																data-placement="top"  th:attr="data-url=@{'/efilesuite/closeInwardShow/{currentNumber}'(currentNumber=${savedFiles.id})}"><i class="mdi mdi-18px mdi-file-excel "></i>&nbsp;Close </button>
+
+													 	<button role="button" class="dropdown-item py-1" aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+															data-placement="top" th:attr="data-url=@{'/efilesuite/createEfile/{currentNumber}'(currentNumber=${savedFiles.inwardFileNumber})}" ><i class="mdi mdi-18px mdi-file-plus "></i>&nbsp;Create eFile </button>
+
+														<a  class="dropdown-item py-1" th:href="@{'/efilesuite/addeFile/{inwardNumber}'(inwardNumber=${savedFiles.inwardFileNumber})}" ><i class="mdi mdi-18px mdi-file-tree "></i>&nbsp;Add To eFile </a>
+                                                            </div>
+                                                        </div>
+													</td>
+												</tr>
+
+											</tbody>
+
+										</table>
+									</div>
+									<!-- sent Files List -->
+									<div th:if="${inwardSentFilesListDisplay} == 2" class="_col-sm-12">
+										<table  id="inwardSentboxTable"
+											class="table table-bordered table-striped table-sm  mb-0 mt-0" cellspacing="0"
+                                                width="100%">
+											<thead class="table-primary">
+												<tr>
+													<th>#</th>
+													<th>Inward Number</th>
+													<th>Sent To</th>
+													<th>Subject</th>
+													<th>Sent Date</th>
+<!-- 													<th  th:if="${#session.getAttribute('inwardSentFilesListDisplay')} == true">Action</th>
+ -->												</tr>
+											</thead>
+											<tbody>
+
+												<tr th:each="sentFiles , sNo : ${inwardSentFilesList}">
+													<td th:text="${sNo.count}"></td>
+													<td> <a class="btn btn-outline-default " role="button" aria-pressed="false"
+														data-toggle="modal" data-target="#commonModal"
+														data-placement="top"
+														th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${sentFiles.id})}">
+															<p th:text="${sentFiles.inwardFileNumber}"></p>
+													</a></td>
+													<!-- <td th:text="${sentFiles.inwardOwnerPostMaster}"></td> -->
+													<td>
+														<span th:text="${sentFiles.inwardOwnerPostMaster.postname}" ></span>
+														<span th:if="${sentFiles.inwardOwnerPostMaster.employeeMaster} != null ">
+															( <span th:text="${sentFiles.inwardOwnerPostMaster.employeeMaster.employeefirstname}"></span>
+																<span th:text="${sentFiles.inwardOwnerPostMaster.employeeMaster.employeelastname}"></span>
+															)
+														</span>
+														<span th:if="${sentFiles.inwardOwnerPostMaster.employeeMaster} == null ">
+															( )
+														</span>
+													</td>
+													<td th:text="${sentFiles.subject}"></td>
+													<td th:text="${#dates.format(sentFiles.lastModifiedDate,'dd/MM/yyyy hh:mm a')}"></td>
+													<!--/* <td  th:if="${#session.getAttribute('inwardSentFilesListDisplay')} == true">
+														<th:block
+														th:if="${#authorization.expression('hasRole(''ROLE_INWARD_FORWARD'')')}">
+													 	<a role="button" class="btn btn-info" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${sentFiles.inwardNumber})}"> forward </a>
+													 	<a role="button" class="btn btn-info"  aria-pressed="false" data-toggle="modal" data-target="#modelBlank"
+																data-placement="top"  th:attr="data-url=@{'/efilesuite/closeInwardShow/{currentNumber}'(currentNumber=${sentFiles.inwardNumber})}"> Closed </a>
+													 	</th:block>
+													 	<a role="button" class="btn btn-info" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${sentFiles.inwardNumber})}"> Closed </a>
+													 	<a role="button" class="btn btn-info" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${sentFiles.inwardNumber})}"> Create eFile </a>
+
+													</td> */-->
+
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+									<!-- Inbox Files List -->
+									<div th:if="${inwardInBoxFilesListDisplay} ==  3" class="_col-sm-12">
+										<table id="inwardInboxTable"
+                                               class="table table-bordered table-striped table-sm  mb-0 mt-0" cellspacing="0"
+											width="100%">
+											<thead class="table-primary">
+												<tr>
+													<th>#</th>
+													<th>Inward Number</th>
+													<th>Received From</th>
+													<th>Subject</th>
+													<th>Received Date</th>
+													<th class="text-center">Actions </th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<tr th:each="inboxFiles, sNo : ${inwardInboxFilesList}">
+													<td th:text="${sNo.count}"></td>
+													<td>
+													<a  class="btn btn-link " role="button" aria-pressed="false"
+														data-toggle="modal" data-target="#commonModal"
+														data-placement="top"
+														th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${inboxFiles.id})}">
+
+													<!--/* <a role="button"
+														th:href="@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${inboxFiles.inwardFileNumber})}"> */-->
+															<span class="text-primary" th:text="${inboxFiles.inwardFileNumber}"></span>
+													</a></td>
+													<!-- <td th:text="${inboxFiles.postMaster.postname}"></td> -->
+													<td>
+														<span th:text="${inboxFiles.postMaster.postname}" ></span>
+														<span th:if="${inboxFiles.postMaster.employeeMaster} != null ">
+															( <span th:text="${inboxFiles.postMaster.employeeMaster.employeefirstname}"></span>
+																<span th:text="${inboxFiles.postMaster.employeeMaster.employeelastname}"></span>
+															)
+														</span>
+														<span th:if="${inboxFiles.postMaster.employeeMaster} == null ">
+															( )
+														</span>
+													</td>
+
+													<td th:text="${inboxFiles.subject}"></td>
+													<td th:text="${#dates.format(inboxFiles.lastModifiedDate,'dd/MM/yyyy hh:mm a')}"></td>
+													<td>
+                                                        <div class="dropdown action">
+                                                            <button  style="background: #ff7e0e6e;" class="btn btn-primary btn-sm dropdown-toggle mx-auto" type="button" id="dropdownMenuButton" data-flip="true" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                               Actions
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+
+
+													<!-- <th:block th:if="${#authorization.expression('hasRole(''ROLE_INWARD_FORWARD'')')}"> -->
+													 	<a role="button" class="dropdown-item py-1" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${inboxFiles.id})}"><i class="mdi mdi-18px mdi-file-send "></i>&nbsp;Forward </a>
+													 	<!--/*  </th:block> */-->
+													 	<!--/* <a role="button" class="btn btn-info" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${inboxFiles.inwardFileNumber})}"> Closed </a>
+													 	<a role="button"  class="btn btn-info" th:href="@{'/efilesuite/editInward/{currentNumber}'(currentNumber=${inboxFiles.inwardFileNumber})}"> Create eFile </a> */-->
+
+													 	<!--/* <a role="button" class="btn btn-info"  aria-pressed="false" data-toggle="modal" data-target="#modelBlank"
+																data-placement="top"  th:attr="data-url=@{'/efilesuite/closeInwardShow/{currentNumber}'(currentNumber=${inboxFiles.inwardNumber})}"> Closed </a> */-->
+
+														 <a  class="dropdown-item py-1" role="button"  aria-pressed="false"
+														 	data-toggle="modal" data-target="#commonModal" data-placement="top"
+					 th:attr="data-url=@{'/efilesuite/closeInwardShow/{currentNumber}'(currentNumber=${inboxFiles.id})}"><i class="mdi mdi-18px mdi-file-excel "></i>&nbsp;Close </a>
+
+
+														<a  class="dropdown-item py-1" role="button"  aria-pressed="false" data-toggle="modal"
+															data-target="#commonModal" data-placement="top"
+					th:attr="data-url=@{'/efilesuite/createEfile/{currentNumber}'(currentNumber=${inboxFiles.inwardFileNumber})}"><i class="mdi mdi-18px mdi-file-plus "></i>&nbsp;Create eFile</a>
+
+														<a  class="dropdown-item py-1" role="button"
+					 th:href="@{'/efilesuite/addeFile/{inwardNumber}'(inwardNumber=${inboxFiles.id})}" ><i class="mdi mdi-18px mdi-file-tree "></i>&nbsp;Add To eFile </a>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+
+									<!-- Closed Files List -->
+									<div th:if="${inwardClosedFilesListDisplay} ==  4" >
+										<table id="inwardClosedTable"
+                                               class="table table-bordered table-striped table-sm  mb-0 mt-0" cellspacing="0"
+											width="100%">
+											<thead class="table-primary">
+												<tr>
+													<th>#</th>
+													<th>Inward Number</th>
+													<th>Received From</th>
+													<th>Subject  </th>
+													<th>Close Date </th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<tr th:each="closedFiles, sNo : ${inwardClosedFilesList}">
+													<td th:text="${sNo.count}"></td>
+													<td>
+														<a class="btn btn-outline-default " role="button" aria-pressed="false"
+														data-toggle="modal" data-target="#commonModal"
+														data-placement="top"
+														th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${closedFiles.id})}">
+															<p  th:text="${closedFiles.inwardFileNumber}"></p>
+													</a>
+													</td>
+													<!-- <td th:text="${closedFiles.postMaster.postname}"></td> -->
+
+													<td>
+														<span th:text="${closedFiles.postMaster.postname}" ></span>
+														<span th:if="${closedFiles.postMaster.employeeMaster} != null ">
+															( <span th:text="${closedFiles.postMaster.employeeMaster.employeefirstname}"></span>
+																<span th:text="${closedFiles.postMaster.employeeMaster.employeelastname}"></span>
+															)
+														</span>
+														<span th:if="${closedFiles.postMaster.employeeMaster} == null ">
+															( )
+														</span>
+													</td>
+													<td th:text="${closedFiles.subject}"></td>
+													<td th:text="${#dates.format(closedFiles.lastModifiedDate,'dd/MM/yyyy hh:mm a')}"></td>
+												</tr>
+
+											</tbody>
+
+										</table>
+									</div>
+
+									<!-- File Movement Report Start-->
+									<div th:if="${fileMovement} == 6" class="col-sm-7"
+										style="margin-left: 5%;">
+										<!-- <div class="btn btn-success btn-block margin-bottom">
+											<h3>File Movement Report </h3>
+										</div> -->
+										<form method="post" class="form-narrow form-horizontal"
+											th:action="@{/efilesuite/fileMovementReport}"
+											th:object="${notefileDetailsDTO}" id="notefileDetailsDTO">
+											<table border="1"
+												class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+												width="100%">
+												<caption>File Movement Report</caption>
+												<tr>
+													<th colspan="3">File Movement Report</th>
+												</tr>
+												<tr>
+													<td>Search<label for="searchWord"
+														class="col-lg-2 control-label"></label></td>
+													<td><input type="text" name="searchWord"
+														class="form-control" maxlength="100" id="searchWord"
+														placeholder="keywords,subject,content & file number . . " />
+													</td>
+												</tr>
+												<tr>
+													<td></td>
+													<td><input type="submit" value="Search"
+														class="btn btn-info" /> <input type="reset" value="Reset"
+														class="btn" /></td>
+
+												</tr>
+
+											</table>
+											<div th:if="${noteFileMovementListCount} == false"
+												class="col-sm-15">
+												<table border="1"
+													class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+													width="100%">
+													<thead class="table-primary" >
+														<tr>
+															<th>#</th>
+															<th>Note File Number</th>
+															<th>Initiator</th>
+															<th>Present Owner</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr
+															th:each="movements, iterStat : ${noteFileMovementList}">
+
+															<td><span th:text="${iterStat.count}"></span></td>
+															<td><a role="button" aria-pressed="false"
+																data-toggle="modal" data-target="#commonModal"
+																data-placement="top"
+																th:attr="data-url=@{/efilesuite/filemovementReport/{currentNumber}'(currentNumber=${movements.notefileNumber})}">
+																	<p th:text="${movements.notefileNumber}"></p>
+															</a></td>
+															<td th:text="${movements.notefileFrom}"></td>
+															<td th:text="${movements.notefileTo}"></td>
+														</tr>
+
+													</tbody>
+												</table>
+											</div>
+										</form>
+									<!-- </div>
+								</div> -->
+							</div>
+							</span>
+							
+							<span th:if="${additionalChargePost} == true">
+							<div class="card  bg-transparent mb-0 card-shadow ">
+								<div class="card-body py-0 bg-white"
+									style="_min-height: calc(100vh - 130px);">
+									<div id="accesdenied">
+										<h6 id="accessdeniedhead">
+											<spam id="redx">X</spam>
+											Access Denied
+										</h6>
+										<p id="accessdeniedpara">
+											Your files given to some other post<br />
+											<br /> <small id="accessdeniedlines">
+												---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</small>
+										</p>
+									</div>
+								</div>
+							</div>
+						</span>
+						
+						
+						</div>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<th:block layout:fragment="scripts">
+<!-- <script type="text/javascript" src="../../../resources/js/tinymce.min.js" th:src="@{/resources/js/tinymce.min.js}"></script> -->
+
+<script type="text/javascript">
+        $(document).ready(function() {
+
+        	///InBox
+        	var table = $('#inwardInboxTable').DataTable({
+			    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+				 columns: [
+
+					 { width:'1%', targets: 0 },
+	                    { width: '10%', targets: 1 },
+	                   { width:'20%', targets: 2 },
+	                   { width: '30%', targets: 3, className: "px-1" },
+	                     { width: '15%', targets: 4, className: "px-1" },
+	                   { width: '1%', targets: 5, "orderable": false, className: "px-1" }
+
+				],
+				buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'csvHtml5',
+                        text:      '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                ],
+				fixedHeader: {
+					header: true,
+					headerOffset: 48
+				}
+			});
+
+
+        	///SentBox
+        	var table = $('#inwardSentboxTable').DataTable({
+			    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+				 columns: [
+
+					 { width:'1%', targets: 0 },
+	                    { _width: '28%', targets: 1 },
+	                   { _width:'25%', targets: 2 },
+	                   { width: '20%', targets: 3, className: "px-1" },
+	                     { width: '30%', targets: 4, className: "px-1" }
+
+
+				],
+				buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'csvHtml5',
+                        text:      '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                ],
+				fixedHeader: {
+					header: true,
+					headerOffset: 48
+				}
+			});
+
+        	///Save
+        	var table = $('#inwardSaveboxTable').DataTable({
+			    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+				 columns: [
+
+					 { width:'1%', targets: 0 },
+	                    { width: '15%', targets: 1 },
+	                   { width:'25%', targets: 2 },
+	                   { width: '22%', targets: 3, className: "px-1" },
+	                   { width: '1%', targets: 5, "orderable": false, className: "px-1" }
+
+
+				],
+				buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'csvHtml5',
+                        text:      '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                ],
+				fixedHeader: {
+					header: true,
+					headerOffset: 48
+				}
+			});
+
+        	///SentBox
+        	var table = $('#inwardClosedTable').DataTable({
+			    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+				 columns: [
+
+					 { width:'1%', targets: 0 },
+	                    { _width: '28%', targets: 1 },
+	                   { _width:'25%', targets: 2 },
+	                   { width: '30%', targets: 3, className: "px-1" },
+	                     { width: '16%', targets: 4, className: "px-1" }
+
+
+				],
+				buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'csvHtml5',
+                        text:      '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                ],
+				fixedHeader: {
+					header: true,
+					headerOffset: 48
+				}
+			});
+
+			 $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+});
+			/*function onSwitch(id,status)= {
+
+			}*/
+		</script>
+    </th:block>
+
+</body>
+</html>

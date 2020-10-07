@@ -1,0 +1,35 @@
+
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+
+
+<div class="modal-header">
+	<h5 class="modal-title">Edit Role Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="roleForm" class="custom-form" method="POST" th:action="@{'/roleEdit/{id}/'(id=${id})}"  th:object="${roleForm}"  autocomplete="off">
+		
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        
+		<div class="form-row">
+			<div class="form-group col-sm-12">
+				<label for="roleName" class="col-form-label col-form-label-sm">Role Name <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="roleName" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" 
+					 id="roleName" th:field="*{roleName}" required="required" >
+				<div class="text-danger" th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}">role Name Error</div>
+			</div>
+			
+		</div>
+	</form>
+</div>

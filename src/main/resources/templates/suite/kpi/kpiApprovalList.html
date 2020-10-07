@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+<title th:text="#{view.index.title}">KPI approval List</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!-- <div class="col-md-12">
+						<div class="card mt-4">
+							<div class="card-header py-2">
+								<h5 class="card-title mb-0">KPI Approval</h5>
+								<div class="container" align="right">
+									<input type="button" class="btn btn-primary" value="Back" onclick="goBack()">
+								</div>
+							
+							</div>
+							<div class="card-block p-0 ">
+								<div class="table-responsive"> -->
+
+
+		<div class="container-fluid">
+
+			<div class="animated fadeIn">
+
+				<div class="row">
+
+					<div class="col-sm-12 _col-md-10 _offset-md-1">
+
+						<div class="card  card-accent-primary bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+
+							<div
+								class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+
+								<h5 class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">
+									KPI Approval</h5>
+							</div>
+
+							<div class="card-body py-0 bg-white">
+
+								<div class="table-responsive _px-3">
+
+									<table id="kpiApprovalReportTable"
+										class=" table compact table-bordered table-hover table-striped table-sm mb-0"
+										cellspacing="0" width="100%">
+
+										<thead class="table-primary">
+											<tr>
+												<th>S.NO.</th>
+												<th>Employee ID</th>
+												<th>Employee Name</th>
+												<th>Designation</th>
+												<th>Submitted Date</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody>
+
+											<!-- <p th:each="anItem, iterStat : ${keyAreaList}"> -->
+
+											<tr th:each="anItem , sNo: ${abstractList}">
+
+												<td th:text="${sNo.count}"></td>
+												<td th:text="${anItem[1]}"></td>
+												<td><span th:text="${anItem[2]}"></span>&nbsp;<span
+													th:text="${anItem[4]}"></span></td>
+												<td th:text="${anItem[6]}"></td>
+												<td th:text="${anItem[5]}"></td>
+												<td><a
+													class="btn btn-sm btn-raised btn-success text-white"
+													role="button"
+													th:href="@{'/kpiApprovalForm/{initId}/' (initId=${anItem[0]})}">
+														<i class="fa fa-edit"> View </i>
+												</a></td>
+
+
+											</tr>
+											<!-- </p> -->
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<th:block layout:fragment="scripts">
+
+        <script>
+
+			$(document).ready(function() {
+
+				var table = $('#kpiApprovalReportTable').DataTable({
+
+				    language: {
+
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                        paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: true,
+					scrollResize: false,
+					//scrollY:         'calc( 100vh - 330px )',
+                    scrollCollapse: false,
+                    paging:         true,
+					"pagingType": "simple_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					columns: [
+
+                       { width:'1%', targets: 0 },
+
+                        { _width: '10%', targets: 1 },
+
+                        { _width:'90%', targets: 2 },
+
+                        { _width:'90%', targets: 3 },
+
+                        { _width:'90%', targets: 4 },
+
+                        { width: '1%', targets: 5, "orderable": false, className: "px-1" } 
+
+					],
+
+					buttons: [
+
+                        {
+
+                            extend:    'copyHtml5',
+
+                            text:      '<i class="fa fa-files-o"></i>',
+
+                            titleAttr: 'Copy'
+
+                        },
+
+                        {
+
+                            extend:    'excelHtml5',
+
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+
+                            titleAttr: 'Excel'
+
+                        },
+
+                        {
+
+                            extend:    'csvHtml5',
+
+                            text:      '<i class="fa fa-file-text-o"></i>',
+
+                            titleAttr: 'CSV'
+
+                        },
+
+                        {
+
+                            extend:    'pdfHtml5',
+
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+
+                            titleAttr: 'PDF'
+
+                        }
+
+                    ],
+
+					fixedHeader: {
+
+						header: true,
+
+						headerOffset: 48
+
+					}
+
+				});
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+			});
+			</script>
+		</th:block>
+
+</body>
+</html>

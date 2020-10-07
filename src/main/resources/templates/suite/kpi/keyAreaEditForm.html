@@ -1,0 +1,33 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Edit Key Area Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="keyAreaForm" class="custom-form" method="POST" th:action="@{'/keyAreaEdit/{id}/'(id=${id})}"  th:object="${keyAreaForm}"  autocomplete="off">
+
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        <th:block th:if="${failureMessage != null}">
+            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+        </th:block>
+
+		<div class="form-row">
+			<div class="form-group col-sm-12">
+				<label for="keyArea" class="col-form-label col-form-label-sm">Key Area Name<span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="keyArea" id="keyArea" th:field="*{keyArea}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);"  onchange="trimValue(this);" required="required"  >
+				<div class="text-danger" th:if="${#fields.hasErrors('keyArea')}" th:errors="*{keyArea}">key Area Error</div>
+			</div>
+
+		</div>
+	</form>
+</div>

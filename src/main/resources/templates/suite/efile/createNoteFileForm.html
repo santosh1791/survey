@@ -1,0 +1,504 @@
+
+<style>
+.mce-path, .mce-wordcount {
+	padding: 0 1.25rem !important;
+}
+
+.redText {
+	color: red;
+}
+</style>
+<div class="modal-header">
+	<p class="modal-title modal-form-title h4">
+		<i class="mdi mdi-file-plus"></i>&nbsp; Create Note File
+	</p>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<form method="post" class=" custom-form form-narrow form-horizontal"
+	th:action="@{/efilesuite/creatingEfile}"
+	th:object="${notefileDetailsDTO}" enctype="multipart/form-data"
+	id="notefileDetailsDTO">
+	<!-- <form method="post" th:action="@{/efilesuite/creatingEfile}" th:object="${notefileDetailsDTO}" enctype="multipart/form-data" id="notefileDetailsDTO"> -->
+	<input type="hidden" name="notefileNumber" value="null"> <input
+		type="hidden" name="inwardNumber" th:value="null">
+
+	<div class="modal-body">
+
+
+		<div class="form-group row">
+			<label for="notefileCategoryMasterId" class="col-md-2 col-form-label">Category <span class="text-danger">*</span></label>
+			<div class="col-md-10">
+				<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+				<select class="custom-select custom-selct-sm"
+					name="notefileCategoryMasterId" size="1"
+					id="notefileCategoryMasterId" required="required">
+					<option value="0">select category</option>
+					<option th:each="category: ${categoryList}"
+						th:value="${category.id}" th:text="${category.categoryName}"></option>
+				</select>
+
+
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="subject" class="col-md-2 col-form-label">Subject <span class="text-danger">*</span></label>
+			<div class="col-md-10">
+				<input type="text" name="subject" class="form-control" id="subject"
+					placeholder="Enter Subject " required="required" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="keywords" class="col-md-2 col-form-label">Keywords <span class="text-danger">*</span></label>
+			<div class="col-md-10">
+				<input type="text" name="keywords" class="form-control"
+					id="keywords" placeholder="Enter Keywords " required="required" />
+			</div>
+		</div>
+
+		<div class="form-group row ">
+			<label for="content" class="col-lg-2 control-label">Description</label>
+			<!--</div>
+									<div class="form-group row">-->
+			<!-- <label for="description" class="col-lg-2 control-label">Description</label> -->
+			<div class="col-md-12">
+				<textarea rows="5" cols="51" class="form-control" id="content"
+					name="content" placeholder="Enter description"></textarea>
+			</div>
+		</div>
+
+		<!-- <fieldset>
+			<div class="form-group row mb-1">
+				<label for="attachments" class="col-md-2  col-form-label">Attachments
+				</label>
+				<div class="col-md-10">
+					<figure class="figure mb-0 w-100">
+						<input type="file" class="form-control" id="attachments" onchange="javascript:validateFiles();"
+							multiple="multiple" name="attachments"   />
+						<figcaption class="figure-caption" style="color: #fd1414;">
+							<small>You can select multiple files</small>
+							<strong class="help-text text-muted d-inline-block"><span
+						class="text-info">You can select multiple files. (Supported Formats :jpg, jpeg, png, pdf, doc, docx, xls, xlsx )</span> </strong>
+							</strong>
+						</figcaption>
+					</figure>
+				</div>
+			</div>
+		</fieldset> -->
+
+		<div class="form-group form-row">
+				<div class="col-lg-2 ">
+					<label class="col-form-label col-form-label-sm"
+						for="uploadFile"> Attachments <span
+						class="red">*</span>
+					</label>
+				</div>
+				<div class="col-md-10">
+				 	<input type="file" name="attachments"  value=""  onchange="javascript:validateFiles();"
+						id="attachments" class="form-control form-control-sm"
+						style="height: 65px;" multiple="multiple" required> <small
+						style="position: absolute; bottom: 5px; width: 100%; text-align: center; padding: 0 10px; left: 0; color: #804008b0 !important; font-size: 11px;"
+						class="help-text text-muted d-inline-block">You can select multiple files.(Supported Formats :jpg, jpeg, png, pdf, doc, docx, xls, xlsx )</small>
+				</div>
+			</div>
+
+
+		<div class="form-group row">
+			<label for="attachments" class="col-md-2  col-form-label"
+				style="text-align: left;">Send To <span class="text-danger">*</span></label>
+			<div class="col-md-10" align="center">
+				<div id="sendto">
+					<figure class="figure mb-0 w-100">
+						<select class="custom-select auto-complete-select"
+							name="efileOwnerPostMaster" id="posts" size="1"
+							required="required">
+							<!-- <option value="0">--Select--</option>
+						<option th:each="postsList : ${postsMasterList}"
+							th:text="${postsList.postname}" th:value="${postsList.id}"></option> -->
+							<option value="0">--Select--</option>
+							<span th:each="postsList : ${postsMasterList}"> <span
+								th:if="${postsList.employeeMaster} != null">
+									<option th:value="${postsList.id}"><span
+											th:text="${postsList.employeeMaster.employeefirstname}"></span>
+										<span th:text="${postsList.employeeMaster.employeelastname}"></span>
+										<span th:text="${postsList.postname}"></span> <span
+											th:if="${postsList.sectionMaster}!=null"> <span
+											th:text="${postsList.sectionMaster.sectionname}"></span>
+										</span> <span th:if="${postsList.sectionMaster}==null"> </span> <span
+											th:text="${postsList.officeMaster.officename}"></span>
+									</option>
+							</span> <span th:if="${postsList.employeeMaster} == null">
+									<option class="redText" th:value="${postsList.id}"><span
+											th:text="${postsList.postname}"></span> <span
+											th:if="${postsList.sectionMaster}!=null"> <span
+											th:text="${postsList.sectionMaster.sectionname}"></span>
+										</span> <span th:if="${postsList.sectionMaster}==null"> </span> <span
+											th:text="${postsList.officeMaster.officename}"></span>
+									</option>
+							</span>
+						</span>
+						</select>
+					</figure>
+					<small class="help-text text-muted d-inline-block">
+							<span class="text-info">EmployeeName &nbsp; Post &nbsp; Section &nbsp; Office</span></small>
+					<!-- <figcaption class="figure-caption" style="color: #fd1414;">
+						<small>You can select multiple files</small>
+						<strong class="help-text text-muted d-inline-block"><span
+							class="text-info">(EmployeeName PostName SectionName
+								OfficeName )</span> </strong>
+					</figcaption> -->
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="card-footer">
+		<div class="form-group row mb-0">
+			<div class="col-md-12 text-right">
+				<button type="submit" name="save" value="Save"
+					class="btn btn-outline-primary mr-2"
+					onclick="javascript:return formValidationSave();">
+					<i class="fa fa-save"></i>&nbsp; Save
+				</button>
+
+				<button type="submit" name="send" value="Send"
+					class="btn btn-primary"
+					onclick="javascript:return formValidation();">
+					<i class="icon-paper-plane"></i>&nbsp; Send
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script type="text/javascript">
+  $('.auto-complete-select').select2({
+        dropdownParent: $('#sendto'),
+        templateResult: function(state) {
+            return state.text;
+        }
+    });
+
+//In your Javascript (external .js resource or <script> tag)
+
+    function generateParagraphNumbers() {
+         var content = $('#content').val();
+            $content = $('<div>'+content+'</div>');
+
+        $content.children('p:not(.blank)').each(function(i, e){
+            var num = i+1;
+                paraNum = $(this).children('span.para-num');
+            if (paraNum.length==0) {
+                $(this).prepend('<span class="para-num">'+num+'. </span>');
+            } else {
+                paraNum.text(num + '. ');
+            }
+        });
+
+        $('#content').val($content.html());
+    }
+
+	function formValidation(){
+		//bootbox.alert(tinyMCE.activeEditor.getContent());
+		if($("#notefileCategoryMasterId").val()==0){
+			bootbox.alert("Please select category");
+			$("#notefileCategoryMasterId").focus();
+			return false;
+		}else if($("#subject").val()==""){
+			bootbox.alert("Please enter subject");
+			$("#subject").focus();
+			return false;
+		}else if($("#keywords").val()==""){
+			bootbox.alert("Please enter keywords");
+			$("#keywords").focus();
+			return false;
+		}else if($("#posts").val()==0){
+			bootbox.alert("Please select Recipient");
+			$("#posts").focus();
+			return false;
+		}else{
+		     generateParagraphNumbers();
+			return true;
+		}
+
+	}
+	function formValidationSave(){
+		if($("#notefileCategoryMasterId").val()==0){
+			bootbox.alert("Please select category");
+			$("#notefileCategoryMasterId").focus();
+			return false;
+		}else if($("#subject").val()==""){
+			bootbox.alert("Please enter subject");
+			$("#subject").focus();
+			return false;
+		}else if($("#keywords").val()==""){
+			bootbox.alert("Please enter keywords");
+			$("#keywords").focus();
+			return false;
+		}/* else if(tinyMCE.activeEditor.getContent()=="" || tinyMCE.activeEditor.getContent()==null){
+			bootbox.alert("Please enter content");
+			//$("#content").focus();
+			return false;
+		} */else{
+			return true;
+		}
+
+	}
+</script>
+<script>
+
+$(document).ready(function() {
+   var content_style = "\
+            body#tinymce.mce-content-body  {\
+                counter-reset: note-new; \
+                margin-left: 40px; \
+            }\
+            body#tinymce.mce-content-body > p {\
+        _color: red;\
+    }\
+    body#tinymce.mce-content-body > p.blank {\
+        _outline: 1px dashed blue;\
+    }\
+    body#tinymce.mce-content-body > p:not(.blank) {\
+       _background-color: yellow; \
+    }\
+    body#tinymce.mce-content-body > p:not(.blank) > span.para-num {\
+       display: none; \
+    }\
+    body#tinymce.mce-content-body > p:not(.blank)::before {\
+        counter-increment:  note-new; \
+        content: counter(note-new)  '.' '\\A0'; \
+        width: 40px; \
+        _background-color: lightgray; \
+        display: inline-block; \
+        text-align: right; \
+        position: absolute; \
+        left: 0; \
+    }\
+    ";
+
+	$('#content').tinymce({
+
+        menubar: false,
+		branding: false,
+
+		height: 100,
+
+		max_height: 400,
+
+		theme: 'modern',
+
+		toolbar: false,
+                    toolbar_items_size: 'small',
+                    plugins: ['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace wordcount visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality','emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'],
+
+                    toolbar1: 'insert | undo redo |  styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons | fullscreen | table',
+
+		image_advtab: true,
+
+		templates: [{
+
+				title: 'Test template 1',
+
+				content: 'Test 1'
+
+			},
+
+			{
+
+				title: 'Test template 2',
+
+				content: 'Test 2'
+
+			}
+
+		],
+
+		content_css: [
+
+
+		],
+		content_style: content_style,
+		init_instance_callback: function (editor) {
+            editor.on('keyup', function (e) {
+              var node = this.selection.getNode(),
+                  text = '';
+              if (e.keyCode == 13) {
+                node = $(node).prev()[0];
+              }
+              if (node.nodeName == 'P') {
+                text = tinymce.trim(node.innerText);
+                this.dom.toggleClass(node, 'blank', text.length == 0);
+              }
+            });
+		}
+
+	});
+
+});
+
+/*
+	// Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+
+	var previewNode = document.querySelector("#template");
+
+	previewNode.id = "";
+
+	var previewTemplate = previewNode.parentNode.innerHTML;
+
+	previewNode.parentNode.removeChild(previewNode);
+
+
+
+	var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+
+		url: "/target-url", // Set the url
+
+		thumbnailWidth: 80,
+
+		thumbnailHeight: 80,
+
+		parallelUploads: 20,
+
+		previewTemplate: previewTemplate,
+
+		autoQueue: false, // Make sure the files aren't queued until manually added
+
+		previewsContainer: "#previews", // Define the container to display the previews
+
+		clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+
+	});
+
+
+
+	myDropzone.on("addedfile", function(file) {
+
+		// Hookup the start button
+
+		file.previewElement.querySelector(".start").onclick = function() {
+
+			myDropzone.enqueueFile(file);
+
+		};
+
+	});
+
+
+
+	// Update the total progress bar
+
+	myDropzone.on("totaluploadprogress", function(progress) {
+
+		document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+
+	});
+
+
+
+	myDropzone.on("sending", function(file) {
+
+		// Show the total progress bar when upload starts
+
+		document.querySelector("#total-progress").style.opacity = "1";
+
+		// And disable the start button
+
+		file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+
+	});
+
+
+
+	// Hide the total progress bar when nothing's uploading anymore
+
+	myDropzone.on("queuecomplete", function(progress) {
+
+		document.querySelector("#total-progress").style.opacity = "0";
+
+	});
+
+
+
+	// Setup the buttons for all transfers
+
+	// The "add files" button doesn't need to be setup because the config
+
+	// `clickable` has already been specified.
+
+	document.querySelector("#actions .start").onclick = function() {
+
+		myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+
+	};
+
+	document.querySelector("#actions .cancel").onclick = function() {
+
+		myDropzone.removeAllFiles(true);
+
+	};
+
+
+*/
+
+/* jQuery(document).ready(function() {
+	//File Validation
+	  $('#attachments').change(function() {
+		      var originalfiles = $("#attachments");
+		      var fileLength = originalfiles[0].files.length; // get length
+		      var file =originalfiles[0].files;
+
+		      var exts = [ 'jpg' , 'png' , 'jpeg' , 'pdf', 'doc', 'docx', 'txt', "xls", "xlsx" ];
+		      // first check if file field has any value
+		      if ( fileLength > 0 ) {
+		    	  for(var i=0;i<fileLength;i++){
+			        // split file name at dot
+			        var get_ext = file[i].name.split('.');
+			        // reverse name to check extension
+			        get_ext = get_ext.reverse();
+			        // check file type is valid as given in 'exts' array
+			        if ( $.inArray ( get_ext[0].toLowerCase(), exts ) > -1 ){
+			          $("#filaNames").html("<li>"+file[i].name+"</li>" );
+			        } else {
+			        	bootbox.alert("Please Upload .jpg , .png, .jpeg , .pdf, doc, docx, xls, xlsx files only");
+			        	$("#attachments").val('');
+			        }
+		    	  }
+		      }
+
+	  });
+}); */
+
+function validateFiles() {
+	//alert("4444");
+    //var modelname=$("#inputmodelname").val();
+    for (var i = 0; i < $("#attachments").get(0).files.length; ++i) {
+        var file1=$("#attachments").get(0).files[i].name;
+		//alert("File NAme : "+file1);
+        if(file1){
+            var file_size=$("#attachments").get(0).files[i].size;
+            if(file_size<5242880){
+                var ext = file1.split('.').pop().toLowerCase();
+                if($.inArray(ext,["pdf","PDF","png","jpg","jpeg","gif","xls","xlsx", "doc","docx"])===-1){
+                    bootbox.alert("Invalid file extension. File Name : "+file1);
+                    $("#attachments").val('');
+                    return false;
+                }
+
+            }else{
+                bootbox.alert("File size should be less than 5 MB. File Name : "+file1);
+                $("#attachments").val('');
+                return false;
+            }
+        }else{
+            bootbox.alert("Please upload file");
+            return false;
+        }
+    }
+};
+
+</script>
+
+</th:block>

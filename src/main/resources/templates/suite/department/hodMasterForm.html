@@ -1,0 +1,209 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 600px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Create HOD/Sub Department</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+
+<div class="modal-body">
+	<form class="custom-form" name="hodMasterForm" id="hodMasterForm" method="post"  th:action="@{/efilesuite/hod}"  th:object="${hodMasterForm}"  autocomplete="off" >
+	    <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+	   <div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label class="col-form-label col-form-label-sm" for="stateMaster">State<span class="text-danger">*</span> </label>
+		    <select id="stateMaster"  name="stateMaster" class="custom-select custom-select-sm" _onchange="javascript:getDepartments();">
+		    	<option value="0">--Select State--</option>
+		    	
+					 
+					<th:block th:object="${statesList}">
+											<p th:each="anItem : ${statesList}">
+											<option  th:value="${anItem.id}"><span th:text="${anItem.statename}"></span></option>
+	
+											</p>
+						</th:block>
+		    </select>
+		    <div class="text-danger" th:if="${#fields.hasErrors('stateMaster')}" th:errors="*{stateMaster}">State Error</div>
+		    </div>
+	    <div  class="form-group col-md-6">
+	     <label class="col-form-label col-form-label-sm" for="departmentMaster">Department <span class="text-danger">*</span></label>
+	     <select id="departmentMaster"  name="departmentMaster" class="custom-select custom-select-sm">
+	    	<option value="0">--Select Department--</option>
+				<th:block th:object="${departmentsList}">
+						<p th:each="anItem : ${departmentsList}">
+						<option  th:value="${anItem.id}"><span th:text="${anItem.departmentname}"></span></option>
+						</p>
+				</th:block>
+	    </select>
+	     <div class="text-danger" th:if="${#fields.hasErrors('departmentMaster')}" th:errors="*{departmentMaster}">State Error</div>
+	 	 </div>
+	 </div>
+	 <div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label class="col-form-label col-form-label-sm" for="hodid">Sub Department/HOD Id<span class="text-danger">*</span></label>
+		    <input type="text" class="form-control form-control-sm" id="hodid" name="hodid" placeholder="Sub Department/HOD Id">
+		      <span id="hodidspan" class="text-danger"></span>
+		     <div class="text-danger" th:if="${#fields.hasErrors('hodid')}" th:errors="*{hodid}">State Error</div>
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label class="col-form-label col-form-label-sm" for="hodname">Sub Department/HOD Name<span class="text-danger">*</span></label>
+		    <input type="text" class="form-control form-control-sm latterUpperCase" id="hodname" name="hodname" placeholder="Sub Department/HOD Name" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+		    <div class="text-danger" th:if="${#fields.hasErrors('hodname')}" th:errors="*{hodname}">State Error</div>
+		  </div>
+	</div>
+	 <div class="row">
+		   <div class="form-group col-md-6">
+		    <label class="col-form-label col-form-label-sm" for="hodshortname">Sub Department/HOD Short Name<span class="text-danger">*</span></label>
+		    <input type="text" class="form-control form-control-sm latterUpperCase" id="hodshortname" name="hodshortname" placeholder="Sub Department/HOD Short Name" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+		      <span id="hodshortnamespan" class="text-danger"></span>
+		    <div class="text-danger" th:if="${#fields.hasErrors('hodshortname')}" th:errors="*{hodshortname}">State Error</div>
+		  </div>
+   </div>
+<!-- 	  <button type="submit" class="btn btn-primary" onclick="javascript:return validate();" id="submit">Submit</button> -->
+	</form>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $('#stateMaster').change(function(){
+    	var context = "[[@{/}]]";
+        var stateid= $(this).val();
+        //alert("State ID : "+stateid);
+        var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		if(stateid ==null || stateid == "" || stateid =="0" )
+			return false; 
+        $.ajax({
+            url : context + "efilesuite/departmentsInState/" + stateid,
+            success : function(data) {
+            	$("#departmentMaster").html(data);
+            },
+            error : function(data) {
+                alert("Error");
+            }
+        }); 
+    })
+})</script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#submit').click(function(){
+	     var stateid=$("#stateMaster").val();
+	     var departmentMaster=$("#departmentMaster").val();
+	     var hodid=$("#hodid").val();
+	     var hodname=$("#hodname").val();
+	     var hodshortname=$("#hodshortname").val();
+	     if(stateid==null || stateid==0)
+    	 {
+			alert("Please select state");  
+			$("#stateMaster").focus();
+			return false;
+    	 }
+	     if(departmentMaster==null || departmentMaster==0)
+    	 {
+			alert("Please select HOD/Sub Department");  
+			$("#departmentMaster").focus();
+			return false;
+    	 }
+	     if(hodid==null || hodid.trim()=="" )
+    	 {
+			alert("Please Enter HOD/Sub Department Id");  
+			$("#hodid").focus();
+			return false;
+    	 }
+	     if(hodname==null || hodname.trim()=="" )
+    	 {
+			alert("Please Enter HOD/Sub Department Name");  
+			$("#hodname").focus();
+			return false;
+    	 }
+	     if(hodshortname==null || hodshortname.trim()=="" )
+    	 {
+			alert("Please Enter HOD/Sub Department Short Name");  
+			$("#hodshortname").focus();
+			return false;
+    	 }
+        return true;
+    }) 
+    var max_chars = 10;
+
+	$("#hodid").keyup(function() {
+
+		$("#hodid").val(this.value.match(/[0-9]*/));
+
+		if ($(this).val().length >= max_chars) {
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+	});
+})
+</script>
+<script>
+
+	var context = "[[@{/}]]";
+	
+	 var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	 
+	$( "#hodid" ).on('input' ,function() {
+		$("#hodidspan").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var hodid = $( "#hodid" ).val();
+		if(hodid ==null || hodid == ""  ){
+			return false; 
+		}else if(parseInt(hodid) == 0){
+			alert("Invalid Department ID");
+			$( "#hodid" ).val("");
+			return false;
+		}
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkHodIdExist/"+hodid+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#hodidspan").html("Hod ID: "+hodid+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					} 
+		}); 
+	
+	});
+	
+	
+	$( "#hodshortname" ).on('input' ,function() {
+		$("#hodshortnamespan").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var hodshortname = $( "#hodshortname" ).val();
+		if(hodshortname ==null || hodshortname == ""  ){
+			return false; 
+		}
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkHodShortNameExist/"+hodshortname+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#hodshortnamespan").html("HOD/Sub Department Short Name: "+hodshortname.toUpperCase()+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					} 
+		}); 
+	
+	});
+	
+	
+</script>

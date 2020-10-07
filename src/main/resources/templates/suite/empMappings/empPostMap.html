@@ -1,0 +1,45 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i>Employee Post Mapping</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="employeePostMapForm" name="employeePostMapForm" method="post" th:action="@{/empPostMap}"  th:object="${employeePostMapForm}"  autocomplete="off" >
+		 
+		 <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+		
+		<div class="row">
+				<div class="form-group col-md-6">
+					<label for="employeeMaster">Employee<span class="text-danger">*</span></label>
+					<select  style="min-width: 200px; text-align: left!important;"  name="employeeMaster" id="employeeMaster"
+							class="text-left form-control _mt-1 js-example-basic-single">
+						<option value="0">--Select Employee--</option>
+						<th:block th:object="${employeeList}">
+							<p th:each="anItem : ${employeeList}">
+							<option th:value="${anItem.id}">
+							<span th:text="${anItem.employeefirstname}"></span></option> - 
+							<span th:text="${anItem.employeelastname}"></span>
+							</p>
+						</th:block>
+					</select>
+				</div>
+				<div class="form-group col-md-6">	
+					 <div class="text-danger" th:if="${#fields.hasErrors('employeeMaster')}" th:errors="*{employeeMaster}">EmployeeMaster  Error</div>
+					<label for="postMaster">Post<span class="text-danger">*</span></label>
+					<select  style="min-width: 200px; text-align: left!important;"  name="postMaster" id="postMaster"
+							class="text-left form-control _mt-1 js-example-basic-single">
+						<option value="0">--Select Post--</option>
+						<th:block th:object="${postList}">
+							<p th:each="anItem : ${postList}">
+							<option th:value="${anItem.id}"><span th:text="${anItem.postname}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					 <div class="text-danger" th:if="${#fields.hasErrors('postMaster')}" th:errors="*{postMaster}">Post Master Error</div>
+			</div>
+		</div>
+	</form>
+</div>

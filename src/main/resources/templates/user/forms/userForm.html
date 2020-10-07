@@ -1,0 +1,120 @@
+
+				<div class="modal-header border-bottom-0">
+					<h5 class="modal-title text-primary"><i class="icon-user-follow"></i> New User</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close _text-white"></i></span>
+				</button>
+				</div>
+				<div class="modal-body">
+					<form id="newTaskForm" method="post" th:object="${user}" th:action="@{/users/register}" autocomplete="off">
+						<div class="row">
+			<div th:if="${#fields.hasErrors()}" class="col-sm-12 alert alert-danger">
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+                <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login error</div>
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+            </div>
+						
+							<div class="col-sm-6">
+								<div class="card">
+									<h6 class="mb-0 text-inverse formTitle" style="width: auto;">Profile</h6>
+
+
+									<div class="card-block pt-0">
+
+										<div class="form-group">
+											<label for="form-login">Login<span class="text-danger">*</span></label>
+											<input type="text" class="form-control"  
+												name="login" th:field="*{login}"
+												required="required" autofocus="autofocus" id="form-login" placeholder="login">
+										</div>
+										<div class="form-group">
+											<label for="form-firstname">First Name<span class="text-danger">*</span></label>
+											<input type="text" class="form-control"  
+												name="firstName" th:field="*{firstName}"
+												required="required" id="form-firstname" placeholder="First Name">
+										</div>
+										<div class="form-group">
+											<label for="form-lastname">Last Name<span class="text-danger">*</span></label>
+											<input type="text" th:field="*{lastName}" class="form-control" name="lastName" id="form-lastname" placeholder="Last Name">
+										</div>
+										<div class="form-group">
+											<label for="form-email">Email<span class="text-danger">*</span></label>
+											<input name="email" th:field="*{email}" required="required" type="email" class="form-control" id="form-email" placeholder="email id">
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="card">
+
+
+									<h6 class="mb-0 text-inverse formTitle" style="width: auto;">Authentication</h6>
+									<div class="card-block pt-0">
+
+									<div class="form-check">
+									<label class="form-check-label" for="is_ldap_user">
+								  <input type="checkbox" id="is_ldap_user" name="is_ldap_user" class="form-check-input" value="1">
+								  &nbsp;Remote user
+								</label>
+								<p class="form-help mb-0"><small>If checked, this user will use a third-party system for authentication.</small></p>
+								</div>
+
+
+
+										<div class="form-group">
+											<label for="form-password">Password</label>
+											<input type="password" class="form-control" name="password" id="form-password" placeholder="Password">
+											<small class="form-help">The password is necessary only for local users.</small>
+										</div>
+										<div class="form-group">
+											<label for="form-confirmation">Confirmation</label>
+											<input type="password" class="form-control" name="confirmation" id="form-confirmation" placeholder="retPassword">
+
+										</div>
+									</div>
+								</div>
+								<!-- .card end-->
+							</div>
+							<div class="col-sm-6">
+								<div class="card">
+
+
+									<h6 class="mb-0 text-inverse formTitle" style="width: auto;">Security</h6>
+									<div class="card-block pt-0">
+
+
+
+										<label for="form-role">Role</label>
+										<select name="role_" id="form-role" class="_selectpicker">
+											<option value="app-admin">Administrator</option>
+											<option value="app-manager">Manager</option>
+											<option value="app-user" selected="selected">User</option></select>
+
+										<label><input type="checkbox" name="disable_login_form" class="" value="1">&nbsp;Disallow login form</label>
+									</div>
+								</div>
+								<!-- .card end-->
+							</div>
+							<div class="col-sm-6">
+								<div class="card">
+
+
+									<h6 class="mb-0 text-inverse formTitle" style="width: auto;">Projects</h6>
+									<div class="card-block pt-0">
+										<label for="form-role">Add this person to this project</label>
+                                        <select name="project_id" id="form-project_id" class="">
+                                            <option value="0">None</option>
+                                            <option value="1">Project 1</option>
+                                            <option value="2">Project 2</option>
+                                        </select>
+
+										<label><input type="checkbox" name="disable_login_form" class="" value="1">&nbsp;Disallow login form</label>
+									</div>
+								</div>
+								<!-- .card end-->
+							</div>
+
+						</div>
+					</form>
+				</div>

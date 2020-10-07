@@ -1,0 +1,150 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 600px;
+        }
+    }
+</style>
+
+<div class="modal-header">
+	<h5 class="modal-title">Edit Mandal Details</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="mandalMasterForm" class="custom-form" method="post" th:action="@{'/editMandalDetails/{initId}'(initId=${id})}"  th:object="${mandalMasterForm}"  autocomplete="off" >
+		<input type="hidden" th:value="*{mandalID}" id="mandalTempID"/>
+		<input type="hidden" th:value="*{mandalName}" id="mandalNTempID"/>
+		<input type="hidden" th:value="*{mandalShortName}" id="mandalSNTempID"/>
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+		
+		<div class="form-row">
+				
+				<div class="form-group col-md-6">
+					<label for="stateIDTitle" class="col-form-label col-form-label-sm">State<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select  name="stateMaster"  id="stateID" class="custom-select custom-select-sm">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${statesList}">
+							<p th:each="anItem : ${statesList}">
+								<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${stateID1})"><span th:text="${anItem.statename}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('stateMaster')}" th:errors="*{stateMaster}">stateID Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="stateIDTitle" class="col-form-label col-form-label-sm">District<span class="text-danger">*</span></label>
+					<!-- <input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title"> -->
+					<select  class="custom-select custom-select-sm"  name="districtMaster" id="districtID">
+						<option value="0">-- Select --</option>
+						<th:block th:object="${districtsList}">
+							<p th:each="anItem : ${districtsList}">
+								<option  th:value="${anItem.id}" th:selected="( ${anItem.id} == ${districtID1})"><span th:text="${anItem.districtname}"></span></option>
+							</p>
+						</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('districtMaster')}" th:errors="*{districtMaster}">districtMaster ID Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="mandalIDTitle" class="col-form-label col-form-label-sm">Mandal ID<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm" name="mandalID" id="mandalIDTitle" placeholder="Mandal ID" th:field="*{mandalID}" onkeypress="javascript:return integersOnly(event);" >
+					<span class="text-danger" id="mandalSpanID"></span> 
+					<div class="text-danger" th:if="${#fields.hasErrors('mandalID')}" th:errors="*{mandalID}">mandalID Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="mandalNameTitle" class="col-form-label col-form-label-sm">Mandal Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="mandalName" id="mandalNameTitle" placeholder="Mandal Name" th:field="*{mandalName}" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('mandalName')}" th:errors="*{mandalName}">mandalName Error</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="mandalShortNameTitle" class="col-form-label col-form-label-sm">Mandal Short Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm latterUpperCase" name="mandalShortName" id="mandalShortNameTitle" placeholder="Mandal Short Name" th:field="*{mandalShortName}" onkeypress="javascript:return alphabetsOnly(event);" onchange="trimValue(this);" _onkeyup="toUpper(this);">
+					<div class="text-danger" th:if="${#fields.hasErrors('mandalShortName')}" th:errors="*{mandalShortName}">mandalShortName Error</div>
+				</div>
+
+			</div>
+	</form>
+</div>
+<script>
+var context = "[[@{/}]]";	
+	var max_chars = 6;
+
+	$("#mandalIDTitle").keyup(function() {
+
+		$("#mandalIDTitle").val(this.value.match(/[0-9]*/)); 
+
+		if ($(this).val().length >= max_chars) { 
+
+		        $(this).val($(this).val().substr(0, max_chars));
+
+		    }
+	});
+	var token = $("meta[name='_csrf']").attr("content");
+	 var header = $("meta[name='_csrf_header']").attr("content");
+	
+	$( "#mandalIDTitle" ).on('input' ,function() {
+		$("#mandalSpanID").html("");
+		$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+		var mandalIDVal = $( "#mandalIDTitle" ).val();
+		var stateVal = $( "#stateID" ).val();
+		var districtVal = $( "#districtID" ).val();
+		if(stateVal==null || stateVal =="0" || districtVal== null || districtVal =="0")
+			return false;
+		if(mandalIDVal ==null || mandalIDVal == "" || parseInt(mandalIDVal) == 0 ){
+			$( "#mandalIDTitle" ).val("");
+			return false; 
+		}
+		if( $("#mandalTempID").val() == mandalIDVal )
+			return false; 
+		
+		 $.ajax ({
+					type: "POST",
+					url: context + "checkMandalIDExist/"+mandalIDVal+"/"+districtVal+"/"+stateVal+"/",
+					beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+					success: function(html) {
+						if(html == "Y"){
+							$("#modalBlank .modal-footer button.btn.btn-primary").attr("disabled", "disabled");
+							$("#mandalSpanID").html("Mandal ID: "+mandalIDVal+" already exists");
+						}else{
+							$("#modalBlank .modal-footer button.btn.btn-primary").removeAttr("disabled");
+						}
+					} 
+		}); 
+	
+	});
+	
+	
+</script>
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script>
+	var context = "[[@{/}]]";	
+		$( "#stateID" ).change(function() {
+			 
+			var stateVal = $( "#stateID" ).val();
+			if(stateVal ==null || stateVal == "" || stateVal =="0" )
+				return false; 
+			
+			 var token = $("meta[name='_csrf']").attr("content");
+			 var header = $("meta[name='_csrf_header']").attr("content");
+			 $.ajax ({
+						type: "POST",
+						url: context + "getAllDistrictsUnderStateAJAX/"+$( "#stateID" ).val(),
+						beforeSend: function(xhr){xhr.setRequestHeader(header, token);},
+						success: function(html) {
+							html = "<option value='0'>-- Select --</option>"+html;
+							$("#districtID").html(html);
+						} 
+			}); 
+		
+		});
+		
+		
+	</script>
+</head>

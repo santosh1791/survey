@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title _th:text="#{view.index.title}">Welcome!</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+	<link href="../../../resources/css/virtuoSuiteMain.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/virtuoSuiteMain.min.css}" />
+	<link href="../../../resources/css/shubCustom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/shubCustom.css}" />
+<style>
+		body{
+
+			background: url([[@{/resources/img/office.jpg}]]) no-repeat center center / cover;
+		}
+		.login-footer {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            color: white;
+        }
+        .login-footer p{
+            font-size: 14px;
+        }
+        .login-footer p a:hover{
+           color:  #c4d6ee!important;
+               text-decoration: none;
+        }
+        .text-white{
+            color: white;
+        }
+	</style>
+</head>
+
+
+<body  class="app flex-row align-items-center">
+
+ <div class="container">
+
+    <!-- <th:block th:if="${param.error != null}">
+        <div th:replace="fragments/components :: alert (type='danger', message='${param.error}')">Alert</div>
+    </th:block> -->
+    <th:block th:if="${param.message != null}">
+        <div th:replace="fragments/components :: alert (type='success', message='${param.message}')">Alert</div>
+    </th:block>
+
+
+
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="card-group mb-0">
+
+					<div class="card bg-primary bg-primary py-3 hidden-lg-down _d-none" style="width:64%">
+						<div class="card-block d-flex align-items-center text-center">
+							<div>
+								<p class="m-0"> 
+								survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey survey 
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="card card-outline-primary" style="_border-top-width: 4px;">
+                        <form autocomplete="off" class="_form-narrow form-horizontal" action="#" method="post" th:action="@{/api/authentication}">
+
+						<div class="card-block">
+							<img width="150" class="text-center d-block mx-auto" src="../../../resources/public/resources/img/survey.png" th:src="@{/resources/img/survey.png}"/>
+							<p class="text-center"><!--Virtuo--> </p>
+
+
+                            <th:block th:if="${param.error != null}">
+                                <div th:replace="fragments/components :: alert (type='danger', message='Invalid credentials. Please try again.')">Alert</div>
+                            </th:block>
+
+								<fieldset class="px-3">
+
+                                    <div class="input-group mb-1">
+                                        <!--<div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="icon-user"></i></div>
+
+                                        </div>-->
+										<input  autocomplete="off" type="text" class="form-control ml-0" id="inputEmail" placeholder="Username" name="j_username" />
+									</div>
+
+									<div class="input-group mb-1">
+										<!--<div class="input-group-prepend  text-primary">
+                                            <div class="input-group-text"><i class="icon-lock"></i></div>
+                                        </div>-->
+										<input  autocomplete="off" type="password" class="form-control ml-0" id="inputPassword" placeholder="Password" name="j_password" />
+									</div>
+
+									<!--<div class="_row _px-1">
+									<div class="col-12">
+										<div class="checkbox">
+											<label>
+									  <input type="checkbox" name="_spring_security_remember_me" />  Remember me
+									</label>
+										</div>
+										</div>
+									</div>-->
+
+								</fieldset>
+
+
+						</div>
+                        <div class="card-footer mt-2 bg-white">
+                            <div class="row text-center ">
+
+                                <div class="col-12 mx-auto text-center">
+                                    <button type="submit" class="btn  btn-outline-primary  _px-2">SIGN IN</button>
+                                </div>
+                                <!--<div class="col-12  mt-2">
+								<button type="button" class="btn btn-link px-0">Forgot password?</button>
+							</div>-->
+
+                            </div>
+                        </div>
+                        </form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+ <div class="login-footer">
+     
+ </div>
+
+
+
+
+
+<script type="text/javascript" src="../../../resources/js/virtuoMain.min.js" th:src="@{/resources/js/virtuoMain.min.js}"></script>
+<script type="text/javascript" src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
+
+ <script th:if="${key} and ${url}">
+     $(function(){
+
+        var login = "[[@{/api/login}]]";
+        var url = "[[@{'{url}'(url=${url})}]]";
+        var key = "[[${key}]]";
+        var token = $('#_csrf').attr('content');
+        var header = $('#_csrf_header').attr('content');
+        //console.log(header, token);
+
+        $.ajax({
+            url: login,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN' : token,
+                'X-XSRF-TOKEN' : token,
+                'X-CGG-VIRTUO-URL' : url,
+                //header : token,
+                'Authorization': key
+            },
+            contentType: 'application/json',
+            success: function (result) {
+               console.log('success');
+               window.location.href=url;
+            },
+            error: function (error) {
+               console.log('error');
+            }
+        });
+
+     });
+ </script>
+
+<!--<script th:inline="javascript" type="text/javascript">
+    /* Fill in modal with content loaded with Ajax */
+    $(document).ready(function () {
+        $('#signup').on('click', function () {
+            $("#signup-modal").modal();
+            $("#signup-modal-body").text("");
+            $.ajax({
+                url: "signup",
+                cache: false
+            }).done(function (html) {
+                $("#signup-modal-body").append(html);
+            });
+        })
+    });
+</script>-->
+<!-- Signup modal -->
+<div th:replace="fragments/components :: modal(id='signup-modal', title='Signup')"></div>
+</body>
+</html>

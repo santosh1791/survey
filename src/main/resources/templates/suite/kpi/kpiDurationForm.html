@@ -1,0 +1,126 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 400px;
+        }
+    }
+</style>
+<div class="modal-header">
+	<h5 class="modal-title">Add KPI Duration</h5>
+	<font color="red"><p th:text="${fMessage}" ></p></font>
+	<font color="green"><p th:text="${sMessage}"  ></p></font>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="kpiDurationForm" class="custom-form" method="POST" th:action="@{/kpiDurationForm}"  th:object="${kpiDurationForm}"  autocomplete="off">
+
+		 <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+        <th:block th:if="${failureMessage != null}">
+            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+        </th:block>
+
+		<div class="form-row">
+
+			<div class="form-group col-sm-12">
+				<label for="financialYear" class="col-form-label col-form-label-sm">Financial Year <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-sm" name="financialYear" id="financialYear" th:field="*{financialYear}" readonly="readonly">
+				<div class="text-danger" th:if="${#fields.hasErrors('financialYear')}" th:errors="*{financialYear}">financialYear Error</div>
+			</div>
+
+			<div class="form-group col-sm-12">
+		    <label for="startDate" class="col-form-label col-form-label-sm">Start Date<span class="text-danger">*</span></label>
+		    <input type="text" class="form-control form-control-sm datePicker datePickerClassStartDate" id="startDate" name="startDate">
+		    <div class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Start Date Error</div>
+		  </div>
+
+		  <div class="form-group col-sm-12">
+		    <label for="endDate" class="col-form-label col-form-label-sm">End Date<span class="text-danger">*</span></label>
+		    <input type="text" class="form-control  form-control-sm datePicker datePickerClassEndDate" id="endDate" name="endDate">
+		    <div class="text-danger" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">End Date Error</div>
+		  </div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+//var start = new Date(parseInt(yearsArr[1]),0,1);
+//var end = new Date(parseInt(yearsArr[1]),2,31);
+
+// $(document).ready(function() {
+//     var m = new Date(10/06/2014);
+$("input.datePickerClassStartDate").daterangepicker({
+	parentEl: ".modal .modal-body",
+	//singleDatePicker: true,
+	//minDate: moment(),
+	// 	format: 'yyyy-mm-dd,
+	 locale: {
+	      format: 'DD/MM/YYYY'
+	    },
+	showDropdowns: false,
+	"singleDatePicker": true,
+    "autoApply": true,
+    "autoUpdateInput": false,
+    "minDate": "[[${minDate}]]",
+    "maxDate": "[[${maxDate}]]"
+	});
+
+
+
+$("input.datePickerClassEndDate").daterangepicker({
+	parentEl: ".modal .modal-body",
+	//singleDatePicker: true,
+// 	minDate: "07/03/2018",
+	//format: 'yyyy-mm-dd,
+	 locale: {
+	      format: 'DD/MM/YYYY'
+	    },
+	showDropdowns: false,
+	"singleDatePicker": true,
+    "autoApply": true,
+    "autoUpdateInput": false,
+    "minDate": "[[${minDate}]]",
+    "maxDate": "[[${maxDate}]]"
+	});
+
+$('input.datePicker').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('DD/MM/YYYY'));
+
+});
+
+$('input.datePicker').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+});
+
+
+/* $('input.datePickerClassEndDate').data('daterangepicker').setEndDate('07/03/2018');
+
+ $('input.datePickerClassEndDate').daterangepicker({ "singleDatePicker": true, minDate: $("input.datePickerClassStartDate").val(), maxDate: $("input.datePickerClassStartDate").val()});
+ */
+ $("input.datePickerClassStartDate").on('hide.daterangepicker', function(ev, picker) {
+	  //do something, like clearing an input
+	  //$('#daterange').val('');
+	  alert(123);
+	  //$(this).val(picker.startDate.format('DD/MM/YYYY'));
+	  //$('input.datePickerClassEndDate').data('daterangepicker').setMaxDate("20/04/2018");
+	  //var picker = $('input.datePickerClassStartDate').data('daterangepicker'); 
+	  //alert(picker.container.options);
+	  //picker.options.maxDate='20/04/2018';
+	  //$('input.datePickerClassEndDate').daterangepicker({ "singleDatePicker": true,  minDate: $("input.datePickerClassStartDate").val() || moment() });
+	  //alert($("input.datePickerClassStartDate").val());
+	  
+	  $scope.datePicker = {
+              date : {
+                  startDate: new Date(),
+                  endDate: new Date()
+              }
+          };
+	}); 
+	
+</script>
+
+
+

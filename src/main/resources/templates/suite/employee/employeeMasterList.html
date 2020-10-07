@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html layout:decorator="layouts/main">
+
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Employee Master</title>
+</th:block>
+<th:block layout:fragment="_styles">
+    <style>
+
+
+</style>
+</th:block>
+<body _class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+		<div class="container-fluid">
+            <div class="animated fadeIn">
+               <!-- <div class="container">-->
+                <div class="row">
+                    <div class="col-md-12 _offset-md-1">
+                        <div class="card  card-accent-primary bg-transparent mt-3 mb-3 border-left-0 border-right-0 border-bottom-0 card-shadow master-list-card">
+                            <div class="card-header bg-light _border-bottom-0 border-secondary d-flex pb-2">
+                                <h5 class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">Employee Master</h5>
+							<a class="btn btn-sm btn-primary d-inline-block ml-auto mt-1" role="button" th:href="@{/employeeMstForm}"><i class="fa fa-plus"></i>&nbsp; Add</a> &nbsp;&nbsp;
+							</div>
+						<div class="card-body py-0 bg-white" style="width: 100%;">
+					<div class="form-row">  
+						 <th:block th:if="${statusMessage != null}">
+				            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+				        </th:block>
+				        <th:block th:if="${failureMessage != null}">
+				            <div th:replace="fragments/components :: alert (type='danger', message=${failureMessage})">Alert</div>
+				        </th:block>
+					</div>
+                    <div class="table-responsive" _style="padding: 0 1rem 1rem;">
+					<table id="employeeMasterTable" class="mx-auto table table-bordered table-hover table-striped table-sm _mb-0" cellspacing="0" width="100%">
+					<thead class="table-primary">
+										<tr>
+											<th>&nbsp;</th>
+											<th>#</th>
+											<th>Employee ID </th>
+											<th>Employee Name </th>
+											<th>Date of Birth</th>
+											<th>Mobile Number</th>
+											<th>e-Mail </th>
+											<th>Aadhar Number </th>
+											<!-- <th>Permanent Address</th> -->
+											<th class="text-center">Enable</th>
+											<th class="text-center">Edit</th>
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:object="${officeMasterList}">
+
+											<tr th:each="anItem, iterStat : ${employeeMasterList}">
+                                                <td>&nbsp;</td>
+												<td><span th:text="${iterStat.count}" ></span></td>
+												<td>
+													<!--/* <span th:if="${anItem.photopath} !=null">
+														<img th:src="@{'/profilePhotoIcon/{profilePath}'(profilePath=${anItem.photopath})}" class="img-circle" >
+													</span> */-->
+													<span th:text="${anItem.employeeid}"></span>
+
+												</td>
+												<td><span th:text="${anItem.employeefirstname}"></span>&nbsp;<span th:text="${anItem.employeelastname}"></span></td>
+												<td>
+													<p th:if="${anItem.dob !=null}">
+														<span th:text="${#temporals.format(anItem.dob, 'dd/MM/yyyy')}"></span>
+													</p>
+												</td>
+												<td><span th:text="${anItem.phoneNumber}"></span></td>
+												<td><span th:text="${anItem.employeeemail}"></span></td>
+												<td><span th:text="${anItem.aadharnumber}"></span></td>
+												<!--/* <td>
+													<span th:text="${anItem.employeepermanentaddress}"></span><br/>
+													Pincode:<span th:text="${anItem.pinCodePermanent}"></span>
+												</td> -->
+												<!-- <td>
+													<a class="btn btn-sm btn-raised btn-warning text-white" role="button" th:href="@{'/editEmployeeDetails/{id}/'(id=${anItem.id})}"><i class="fa fa-edit"></i> Edit</a>
+
+													<span th:if="${anItem.isactive} == true">
+														<a class="btn btn-sm btn-raised btn-success text-white" onclick="javascript: return confirm('Do you want to disable?');" th:href="@{'/disableEmployee/{initId}/' (initId=${anItem.id})}">
+															Disable
+														</a>
+													</span>
+													<span th:if="${anItem.isactive} == false">
+														<a class="btn btn-sm btn-raised btn-danger text-white" onclick="javascript: return confirm('Do you want to enable?');" th:href="@{'/enableEmployee/{initId}/' (initId=${anItem.id})}">
+																Enable
+															</a>
+													</span>
+
+
+												</td> */-->
+
+
+												<td align="center"><label
+													class="switch switch-xs switch-text mt-1 switch-success actionSwitch"
+													th:attr="data-id=${anItem.id}" data-toggle="tooltip"
+													data-placement="top" title=""> <input
+														type="checkbox" class="switch-input"
+														th:checked="${anItem.isactive}"> <span
+														class="switch-label" data-on="On" data-off="Off"></span>
+														<span class="switch-handle"></span>
+												</label></td>
+
+												<td align="center">
+													<span th:if="${anItem.isactive}==false">
+													
+														</span>
+														<span th:if="${anItem.isactive}==true">
+												
+															<a
+																class="btn btn-sm btn-link text-primary" role="button"
+																aria-pressed="false"
+																th:href="@{'/editEmployeeDetails/{id}/'(id=${anItem.id})}">
+																	<!--/* <span data-toggle="tooltip" data-placement="top"
+															title="Edit"> <i class="fa fa-lg fa-edit"></i></span> */-->
+														
+														
+															<span   data-toggle="tooltip" data-placement="top"
+															title="Edit"> <i class="fa fa-lg fa-edit"></i></span>
+														</a>
+														
+												</span>
+												
+												</td>
+											</tr>
+
+
+									</th:block>
+									</tbody>
+							</table>
+						</div>
+						</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	<!-- main-fragment-->
+
+
+
+<th:block layout:fragment="scripts">
+        <script>
+			$(document).ready(function() {
+
+				var table = $('#employeeMasterTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+                       { width:'1%', targets: 0, "orderable": false, className: "control" },
+                       { width:'1%', targets: 1, className: "" },
+                        { _width: '10%', targets: 2 },
+                        { _width:'90%', targets: 3 },
+                        { _width:'90%', targets: 4 },
+                        { _width:'90%', targets: 5 },
+                        { _width:'90%', targets: 6 },
+                        { _width:'90%', targets: 7 },
+
+                        { width: '1%', targets: 8, "orderable": false, className: "px-1" },
+                        { width: '1%', targets: 9, "orderable": false ,className: "px-1" }
+					],
+					order: [ 1, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy',
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                            }
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel',
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                            }
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV',
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                            }
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF' ,
+                                exportOptions: {
+                                	columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                                } 
+                        } ,
+                        {
+                            extend:    'print',
+                            text:      '<i class="fa fa-print"></i>',
+                            titleAttr: 'print',
+                            exportOptions: {
+                            	columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                            }
+                        } 
+                    ]
+				});
+
+                $('table').on('click','.actionSwitch', function(e){
+                    var $this = $(this);
+                    var $input = $this.find('.switch-input');
+                    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+                    e.preventDefault();
+                    e.stopPropagation();
+                    bootbox.confirm({
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-outline-primary'
+                            }
+                        },
+                        callback: function (result) {
+                            var context = "[[@{/}]]";
+                            var isChecked = $input.prop("checked")
+                            var url = isChecked ? "disableEmployee" : "enableEmployee";
+                            var id = $this.data('id');
+                            console.log('This was logged in the callback: ' + result);
+                            if(result){
+                                $.get(context + url + '/' + id + '/' , function(data){
+                                	if(data=='successfully updated'){
+                                		toastr["success"](data);
+                                		$input.prop('checked',!isChecked);
+                                	}
+                                	else{
+                                		toastr["error"](data);
+                                	}
+                                });
+                            }
+                        }
+                    });
+                });
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+			});
+			/*function onSwitch(id,status)= {
+
+			}*/
+		</script>
+    </th:block>
+</body>
+
+</html>

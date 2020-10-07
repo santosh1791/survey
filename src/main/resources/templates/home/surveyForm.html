@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+
+<head>
+	<title _th:text="#{view.index.title}">Welcome!</title>
+</head>
+	<th:block layout:fragment="links">
+		<link rel="stylesheet" href="../../../resources/vendors/billboard/billboard.css" th:href="@{/resources/vendors/billboard/billboard.css}">
+
+    </th:block>
+
+
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+	<div layout:fragment="content">
+
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active"><!-- <i class="icon-speedometer"></i> -->  SURVEY FORM</li>
+		</ol>
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<!-- <div th:text="${questionsList}"></div> -->
+				<form class="custom-form" id="surveyForm" method="post" name="surveyForm" th:action="@{/student/survey}" 
+                                        th:object="${surveyForm}" autocomplete="off">
+				
+				<div th:each="question, sno: ${questionsList}">
+					<div class="row">
+			                    <div class="col-sm-12 col-md-12">
+			                        
+			                        <div class="card _card-accent-primary _bg-transparent mt-3 mb-0 border-left-0 border-right-0 border-bottom-0 card-shadow ">
+			                        	
+			                        	
+			                        	<div class="row">
+			                        	<div class="col-1"><span th:text="${sno.count}"></span>.  </div>
+			                        	<div class="col-11"><span style="margin-left: -80px" th:text="${question.question}"></span></div>
+			                        	</div>
+			                        	<div class="row">
+			                        	<div class="col-1">
+			                        	</div>
+			                        	<div class="col-2">
+			                        	<input type="radio" th:text="${question.optionOne}" th:value="4" 
+			                        	_th:field="*{'answers[' + question.id + ']'}" th:name="${'answers[' + question.id + ']'}"/>
+			                        	</div>
+			                        	<div class="col-2">
+			                        	<input type="radio" th:text="${question.optionTwo}" th:value="3" 
+			                        	_th:field="*{'answers[' + question.id + ']'}" th:name="${'answers[' + question.id + ']'}" _th:name="${question.id}" />
+			                        	</div>
+			                        	<div class="col-2">
+			                        	<input type="radio" th:text="${question.optionThree}" th:value="2" 
+			                        	_th:field="*{'answers[' + question.id + ']'}" th:name="${'answers[' + question.id + ']'}" _th:name="${question.id}" />
+			                        	</div>
+			                        	<div class="col-2">
+			                        	<input type="radio" th:text="${question.optionFour}" th:value="1" 
+			                        	_th:field="*{'answers[' + question.id + ']'}" th:name="${'answers[' + question.id + ']'}" _th:name="${question.id}" />
+			                        	</div>
+			                        	<div class="col-2">
+			                        	<input type="radio" th:text="${question.optionFive}" th:value="0" 
+			                        	_th:field="*{'answers[' + question.id + ']'}" th:name="${'answers[' + question.id + ']'}" _th:name="${question.id}" />
+			                        	</div>
+			                        	</div>
+			                        </div>
+			                    </div>
+			        </div>	
+        		</div>
+        		
+        		<button style="width: 80px;" type="submit" name="Submit"
+											value="Submit" 
+											class="btn btn-sm btn-primary d-inline-block ml-auto"
+											>Submit</button>
+											
+												
+				</form>
+				
+
+			</div>
+
+
+
+
+		<!-- /.conainer-fluid -->
+	</div>
+	</div>
+	<!-- main-fragment-->
+
+
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript" src="../../../resources/js/jquery-ui.min.js" th:src="@{/resources/js/jquery-ui.min.js}"></script>
+		<!-- Load D3.js -->
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+
+	<!-- Load billboard.js with style -->
+	<script type="text/javascript" src="../../../resources/vendors/billboard/billboard.js" th:src="@{/resources/vendors/billboard/billboard.js}"></script>
+	<!-- <script src="billboard.js"></script> -->
+		
+
+
+
+	</th:block>
+</body>
+
+</html>

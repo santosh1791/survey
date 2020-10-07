@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html _layout:decorator="layouts/main">
+
+<head>
+    <link href="../../../resources/css/virtuoSuiteMain.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/virtuoSuiteMain.min.css}"/>
+    <!-- Above link is for Base Framework Stylesheet which includes FontAwosone, SImple line Icons, -->
+
+
+    <style>
+      /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+      body {
+  background: #cccccc;
+}
+
+page[size="A4"] {
+  background: white;
+  width: 21cm;
+  min-height: 29.7cm;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+page[size="A4"]:first-child {
+  /*background: linear-gradient(to bottom, rgba(0, 164, 219, 0.7), rgba(0, 164, 219, 0.99)), url("https://i.imgur.com/aWb7cn9.png") no-repeat center center fixed;
+  background-size: cover;*/
+}
+page[size="A4"]:first-child .title-text {
+  color: white;
+  font-family: sans-serif;
+  font-size: 4rem;
+  display: block;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 0 auto;
+}
+
+@media print {
+  body, page[size="A4"] {
+    margin: 0;
+    box-shadow: none;
+  }
+  a{
+        text-decoration: none;
+     }
+     .avatar img{
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+     }
+
+     .table{
+        width: 100%;
+        }
+        .pull-right{
+
+        float: right;
+        }
+}
+
+    .hide{
+     display: block;
+     }
+     .card{
+        border: 0px solid white;
+     }
+     *{
+        color: black!important;
+
+     }
+
+    </style>
+
+</head>
+<th:block _layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>eFile Print</title>
+</th:block>
+<th:block _layout:fragment="_styles">
+
+</th:block>
+<body onload="window.print()"
+	_class="app header-fixed sidebar-fixed sidebar-minimized aside-menu-fixed _aside-menu-off-canvas aside-menu-hidden">
+<page size="A4">
+		<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div
+							class="card border-0 bg-transparent ">
+							<div
+								class="  d-flex p-0">
+                                <h4>
+								eFile Detailed Print of : <span th:text="${currentNumber}" ></span>
+                                </h4>
+							</div>
+
+							<!--Inward Details  Start Here-->
+												<div class="box box-warning box-solid" th:if="${efileInwardMasters} != null">
+													<div _id="accordionInward"
+														class="card mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header collapsed"
+															id="notesHeader" data-toggle="collapse"
+															href="#inwardBody" role="button" aria-expanded="true">
+															<a class="p-0 btn-link d-block mr-auto">
+																<h4 class="mb-0">
+																	 Inward Details
+																</h4>
+															</a>
+														</div>
+														<div id="inwardBody" class="" role="tabpanel"
+															aria-labelledby="headingInward"
+															_data-parent="#accordionInward">
+															<div class="card-body bg-white text-dark p-2">
+																<div id="exampleAccordion" data-children=".item">
+																	<div class="box-header with-border">
+																		<div class="card p-2 pl-3 mb-0">
+
+																			<h4 class="font-weight-bold text-primary">
+
+																			<a class="btn btn-outline-default " role="button" aria-pressed="false"
+																				data-toggle="modal" data-target="#commonModal"
+																				data-placement="top"
+																				th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${efileInwardMasters.inwardFileNumber})}">
+																					<p  th:text="${efileInwardMasters.inwardFileNumber}"></p>
+																			</a>
+
+																				<!--1/GEN///2017-18 - AMC for 500KVA and 250KVA Generators-->
+																			</h4>
+																			<p th:text="${efileInwardMasters.subject}"></p>
+																			<p>
+																				<!--<i class="mdi mdi-18px mdi-account-edit"></i>&nbsp;-->
+																				<span class="avatar "> <img
+																					src="../../../resources/img/avatars/8.jpg"
+																					th:src="@{/resources/img/avatars/8.jpg}"
+																					class="img-avatar" alt="">
+																				</span>
+																				<!--File Initiator:-->
+																				<span th:if="${efileInwardMasters.postMaster.employeeMaster}!=null">
+																					<span th:text="${efileInwardMasters.postMaster.employeeMaster.employeefirstname}"></span>&nbsp;&nbsp;
+																					<span th:text="${efileInwardMasters.postMaster.employeeMaster.employeelastname}"></span>&nbsp;
+																				</span>
+																				<span th:if="${efileInwardMasters.postMaster.employeeMaster}==null">
+																					<span class="redText">N/A</span>
+																				</span>
+																				<span
+																					class="badge badge-info badge-pill  text-white"
+																					th:text="${efileInwardMasters.postMaster.postname}">
+																					<!-- Manager -->
+																				</span>
+																			</p>
+																			<!-- <span th:text="${postMasters.postname}"></span> (<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  <span th:text="${postMasters.employeeMaster.employeelastname}"></span> )&nbsp; <span class="badge badge-info badge-pill  text-white">Manager</span></p> -->
+
+																			<small><i
+																				class="mdi mdi-18px mdi-calendar-clock"></i>&nbsp; <span
+																				class="mailbox-read-time"
+																				th:text="${#dates.format(efileInwardMasters.createdDate,'dd/MM/yyyy HH:MM')}">
+																			</span></small>
+
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+												<!--Inward Details  Ends Here-->
+
+												<!-- ==================<span th:text="${inwardAddedToeFile}"></span> -->
+												<!--eFile Added Inward Details  Start Here -->
+												<div class="box box-warning box-solid" th:if="${inwardAddedToeFile} != null">
+													<div _id="accordionInwardAdd"
+														class="card   mb-2  card-shadow"
+														role="tablist">
+
+														<div
+															class="card-header  p-0 eFile-accordion-header collapsed"
+															id="notesHeader" data-toggle="collapse"
+															href="#inwardBodyAdd" role="button" aria-expanded="true">
+															<a class="py-1 px-2 btn-link d-block mr-auto">
+																<h6 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Added eFile To Inward Details<!--  =<span th:text="${inwardAddedToeFile}"></span> -->
+																</h6>
+															</a>
+														</div>
+														<div id="inwardBodyAdd" class="collapse hide" role="tabpanel"
+															aria-labelledby="headingInwardAdd"
+															data-parent="#accordionInwardAdd">
+															<div class="card-body bg-white text-dark p-2">
+																<div id="exampleAccordion" data-children=".item">
+																	<div class="box-header with-border">
+																		<div class="card p-2 pl-3 mb-0">
+
+																			<h4 class="font-weight-bold text-primary">
+
+																			<a class="btn btn-outline-default " role="button" aria-pressed="false"
+																				data-toggle="modal" data-target="#commonModal"
+																				data-placement="top"
+																				th:attr="data-url=@{'/efilesuite/inwardDetails/{currentNumber}'(currentNumber=${inwardAddedToeFile.inwardFileNumber})}">
+																					<p  th:text="${inwardAddedToeFile.inwardFileNumber}"></p>
+																			</a>
+
+																				<!--1/GEN///2017-18 - AMC for 500KVA and 250KVA Generators-->
+																			</h4>
+																			<p th:text="${inwardAddedToeFile.subject}"></p>
+																			<p>
+																				<!--<i class="mdi mdi-18px mdi-account-edit"></i>&nbsp; -->
+																				<span class="avatar "> <img
+																					src="../../../resources/img/avatars/8.jpg"
+																					th:src="@{/resources/img/avatars/8.jpg}"
+																					class="img-avatar" alt="">
+																				</span>
+																				<!--File Initiator: -->
+																				<span th:if="${inwardAddedToeFile.postMaster.employeeMaster}!=null">
+																					<span th:text="${inwardAddedToeFile.postMaster.employeeMaster.employeefirstname}"></span>&nbsp;&nbsp;
+																					<span th:text="${inwardAddedToeFile.postMaster.employeeMaster.employeelastname}"></span>&nbsp;
+																				</span>
+																				<span th:if="${inwardAddedToeFile.postMaster.employeeMaster}==null">
+																					<span class="redText">N/A</span>
+																				</span>
+																				<span
+																					class="badge badge-info badge-pill  text-white"
+																					th:text="${inwardAddedToeFile.postMaster.postname}">
+																					<!-- Manager -->
+																				</span>
+																			</p>
+																			<!-- <span th:text="${postMasters.postname}"></span> (<span th:text="${postMasters.employeeMaster.employeefirstname}"></span>  <span th:text="${postMasters.employeeMaster.employeelastname}"></span> )&nbsp; <span class="badge badge-info badge-pill  text-white">Manager</span></p>-->
+
+																			<small><i
+																				class="mdi mdi-18px mdi-calendar-clock"></i>&nbsp; <span
+																				class="mailbox-read-time"
+																				th:text="${#dates.format(inwardAddedToeFile.createdDate,'dd/MM/yyyy HH:MM')}">
+																			</span></small>
+
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+												<!--eFile Added Inward Details  End Here-->
+
+
+													<!--Notes -->
+													<div _id="accordionThree"
+														class="card mb-2  card-shadow"
+														role="tablist">
+
+														<!--<div
+															class="card-header  p-0 eFile-accordion-header collapsed"
+															id="notesHeader" data-toggle="collapse" href="#notesBody"
+															role="button" aria-expanded="true">
+															<a class="py-1 px-2 btn-link d-block mr-auto">
+																<h2 class="mb-0">
+																	<i class="icon-docs"></i>&nbsp; Notes
+																</h2>
+															</a>
+
+
+														</div>-->
+
+														<div id="notesBody" class="collapse hide" role="tabpanel"
+															aria-labelledby="headingThree"
+															data-parent="#accordionThree">
+															<div class="card-body bg-white text-dark p-2">
+																<div id="exampleAccordion" data-children=".item">
+																	<div class="item"
+																		th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+																		<div
+																			th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 ">
+																		</div>
+																		<div
+																			th:if="${itrStatee.count} != ${notesSizeMinusOne}+1 ">
+																			<h3>
+																			<a data-toggle="collapse" role="button"
+																				aria-expanded="true"
+																				th:attr="href=@{#exampleAccordion}+${itrStatee.count} ,data-parent=exampleAccordion+${itrStatee.count} ,aria-controls=exampleAccordion+${itrStatee.count}">
+                                                                                Note : <span th:text="${itrStatee.count}"></span>
+																			</a>
+																			</h3>
+																		</div>
+																		<!-- <span th:text="${itrStatee.count}"></span> == <span th:text="${notesSize}"></span> -->
+
+																		<div th:if="${itrStatee.count} != ${notesSize} ">
+																			<div th:attr="id=exampleAccordion+${itrStatee.count}"
+																				class="collapse hide" role="tabpanel">
+																				<p class="mb-3 text-dark"
+																					th:utext="${movementDetails.content}"></p>
+																				<span class="pull-right text-muted " th:text="${movementDetails.fileMovementPostMasterFrom.postname}"></span><br/>
+																				<span class="pull-right text-muted " th:text="${#dates.format(movementDetails.entryDate,'dd/MM/yyy hh:mm a')}"></span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+														</div>
+
+
+
+													</div>
+													<!--Notes -->
+													<div _id="accordionFour"
+														class="card  mb-2  card-shadow"
+														role="tablist">
+
+														<!--<div class="card-header p-0 eFile-accordion-header"
+															id="latestNotesHeader" data-toggle="collapse"
+															href="#latestNotesBody" role="button"
+															aria-expanded="true" aria-controls="collapseFour">
+															<a class="py-1 px-2 btn-link d-block ">
+																<h2 class="mb-0">
+																	<i class="icon-envelope-letter"></i>&nbsp; Latest Note
+																</h2>
+															</a>
+														</div>-->
+
+
+														<div id="latestNotesBody"
+															class="card-body bg-white collapse show p-2"
+															data-parent="#accordionFour">
+															<div id="exampleAccordion" data-children=".item">
+																<div class="item  text-dark"
+																	th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+																	<div
+																		th:if="${itrStatee.count} == ${notesSizeMinusOne}+1 ">
+                                                                        <h3>
+																		<a data-toggle="collapse" role="button"
+																			aria-expanded="true"
+																			th:attr="href=@{#exampleAccordion}+${itrStatee.count} ,data-parent=exampleAccordion+${itrStatee.count} ,aria-controls=exampleAccordion+${itrStatee.count}">
+                                                                           Notes : <span th:text="${itrStatee.count}"></span>
+																		</a>
+                                                                        </h3>
+																		<!-- <span th:text="${itrStatee.count} !=  ${notesSizeMinusOne}+1 "></span> -->
+
+																		<div th:attr="id=exampleAccordion+${itrStatee.count}"
+																			class="collapse show  text-dark text-right" role="tabpanel">
+																			<p class="mb-3  text-dark"
+																				th:utext="${movementDetails.content}"></p>
+																				<span class="pull-right text-muted " th:text="${movementDetails.fileMovementPostMasterFrom.postname}"></span><br/>
+																				<span class="pull-right text-muted " th:text="${#dates.format(movementDetails.entryDate,'dd/MM/yyy hh:mm a')}"></span>
+																		</div>
+																	</div>
+
+
+																</div>
+															</div>
+
+														</div>
+													</div>
+													<!--Notes  Ends -->
+
+
+
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+
+		</div>
+</page>
+</body>
+</html>
+

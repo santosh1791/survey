@@ -1,0 +1,135 @@
+<div class="modal-header">
+	<h5 class="modal-title">
+		<i class="fa fa-tasks"></i> Create Draft
+	</h5>
+	<button type="button" class="close" data-dismiss="modal"
+		aria-label="Close">
+		<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+
+<style>
+.redText {
+	color: red;
+}
+
+#commonModal .modal-footer {
+	display: none;
+}
+
+.mce-wordcount {
+	padding: 0 35px;
+}
+
+.mce-flow-layout-item, .mce-path {
+	margin: 0 1rem;
+	padding: 0;
+}
+</style>
+<div class="card card-accent-primary modal-form mb-0">
+	<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+
+	<!-- <form    enctype="multipart/form-data" method="get"> -->
+	<form method="post" class="custom-form" name="notefileDraftForm"
+		th:action="@{/efilesuite/notefileDraft}"
+		th:object="${notefileDraftForm}" enctype="multipart/form-data"
+		id="notefileDraftForm">
+		 
+		 <input type="hidden" name="notefileId" th:value="${notefileId}">
+
+ 
+		<div class="card-body" >
+			 
+
+			<div class="form-group form-row">
+				<div class="col-md-2">
+					<label for="subject" class="col-form-label font-weight-bold">Draft Name : 
+						<span style="color: red;">*</span>
+					</label>
+				</div>
+
+				<div class="col-md-10">
+					<input type="text" name="draftSubject" class="form-control" id="draftSubject"
+						placeholder="Enter draft name " th:field="*{draftSubject}" required />
+				</div>
+				<div class="text-danger"  th:if="${#fields.hasErrors('draftSubject')}"
+                 th:errors="*{draftSubject}">Draft name Should not be empty</div>
+
+			</div>
+
+			 
+
+			<div class="form-group form-row" >
+
+				<div class="form-group col-md-12 mb-0">
+					<label for="content" class="col-form-label font-weight-bold">Description : <span
+						style="color: red;">*</span></label>
+					<!--</div>
+                                            <div class="form-group col-md-12 mb-0">-->
+					<div class="w-100">
+						<textarea _rows="25" _cols="25" class="form-control" id="content" th:field="*{content}"
+							name="content" placeholder="Enter description"></textarea>
+						
+						<div class="text-danger"  th:if="${#fields.hasErrors('content')}"
+                 th:errors="*{content}">Content Should not be empty</div>
+
+					</div>
+				</div>
+			</div>
+
+			   
+		<!-- <div class="card-footer">
+			<div class="form-group row mb-0">
+				<div class="col-md-12 text-right">
+					<button type="submit" name="save" value="Save"
+						class="btn btn-outline-primary mr-2"
+						onclick="javascript:return formValidationSave();">
+						<i class="fa fa-save"></i>&nbsp; Save
+					</button>
+
+					<button type="submit" name="send" value="Send"
+						class="btn btn-primary"
+						onclick="javascript:return formValidation();">
+						<i class="icon-paper-plane"></i>&nbsp; Send
+					</button>
+				</div>
+			</div>
+		</div> -->
+		</div>
+	</form>
+</div>
+ <th:block layout:fragment="script-links">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>  
+    
+<script type="text/javascript">
+	
+	//jQuery(document).ready(function() {
+	tinymce.init({
+		selector: '#content',
+        menubar: false,
+		branding: false,
+		height: 100,
+		max_height: 400,
+		theme: 'modern',
+		toolbar: false,
+                    toolbar_items_size: 'small',
+                    plugins: ['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace wordcount visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality','emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'],
+                    toolbar1: 'insert | undo redo |  styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons | fullscreen | table',
+		image_advtab: true,
+		templates: [{
+				title: 'Test template 1',
+				content: 'Test 1'
+			},
+			{
+				title: 'Test template 2',
+				content: 'Test 2'
+			}
+		],
+		content_css: [
+
+		]
+	});
+</script>
+</th:block>

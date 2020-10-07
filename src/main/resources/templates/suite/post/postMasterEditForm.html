@@ -1,0 +1,94 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 600px;
+        }
+    }
+</style>
+
+<div class="modal-header">
+	<h5 class="modal-title"><!--<i class="fa fa-tasks"></i> -->Edit Post</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form id="postMasterForm" class="custom-form"  method="post" th:action="@{'/postEdit/{id}/'(id=${id})}"  th:object="${postMasterForm}">
+		
+		<th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+		
+		<div class="form-row">
+				
+				<div class="form-group col-md-12">
+					<label for="officeMaster" class="col-form-label col-form-label-sm">Office<span class="text-danger">*</span></label>
+					<!-- <input type="text" disabled class="form-control" name="officeMaster" id="officeMaster"
+					th:value="${officeList.officename}"> -->
+					
+					<select  style="min-width: 200px; text-align: left!important;"  name="officeMaster" id="officeMaster" _th:field="*{officeMaster}" size="1" required=""
+					class="text-left form-control _mt-1 js-example-basic-single">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${officeList}">
+										<p th:each="anItem : ${officeList}">
+										<option th:value="${anItem.id}"   th:selected="(${officeId} == ${anItem.id})"><span th:text="${anItem.officename}"></span></option>
+
+										</p>
+					</th:block>
+<!-- 					<div class="text-danger" th:if="${#fields.hasErrors('officeMaster')}" th:errors="*{officeMaster}">officeMaster Error</div>
+ -->					
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('officeMaster')}" th:errors="*{officeMaster}">officeMaster Error</div>
+					
+					
+					
+				</div>
+				<div class="form-group col-md-12">
+					<label for="caderMaster" class="col-form-label col-form-label-sm">Cadre<span class="text-danger">*</span></label>
+										
+					<select name="caderMaster" id="caderMaster" _th:field="*{caderMaster}" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true" disabled="disabled" >Please select</option>
+					<th:block th:object="${caderList}">
+										<p th:each="anItem : ${caderList}">
+										<option   th:value="${anItem.id}" th:selected="(${caderId} == ${anItem.id})"><span th:text="${anItem.cadername}"
+										></span></option>
+
+										</p>
+					</th:block>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('caderMaster')}" th:errors="*{caderMaster}">cadreMaster Error</div>
+					
+					
+				</div>
+				
+				
+				<div class="form-group col-md-12">
+					<label for="superiorpostid" class="col-form-label col-form-label-sm">Superior Post</label>
+										
+					<select name="superiorpostid" id="superiorpostid" _th:field="*{postMaster}" class="custom-select custom-select-sm">
+					<option th:value=0 default selected="true"  >Please select</option>
+					<th:block th:object="${postList}">
+										<p th:each="anItem : ${postList}">
+										<option th:value="${anItem.id}"  th:selected="(${postId} == ${anItem.id})" >
+										<span th:text="${anItem.postname}"></span></option>
+
+										</p>
+					</th:block>
+					</select>
+					
+				</div>
+				
+				<div class="form-group col-md-12">
+					<label for="postname" class="col-form-label col-form-label-sm">Post Name<span class="text-danger">*</span></label>
+					<input type="text" class="form-control form-control-sm"  name="postname" id="postname" th:field="*{postname}">
+					<div class="text-danger" th:if="${#fields.hasErrors('postname')}" th:errors="*{postname}">postname Error</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+
+

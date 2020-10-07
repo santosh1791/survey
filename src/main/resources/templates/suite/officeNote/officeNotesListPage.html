@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>Office Note Sent</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+    z-index: 999;
+    border-top: 2px solid #3d70b2 !important;
+    color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+</style>
+</th:block>
+
+<body>
+
+	<div layout:fragment="content">
+
+        <ol class="breadcrumb pr-0 py-0 mb-2">
+            <!--/*<li class="breadcrumb-item"><i class="icon-home"></i><i class="fa fa-home"></i> </li>*/-->
+            <li class="breadcrumb-item"><i class="mdi mdi mdi-file-tree"></i>&nbsp;Office Note </li>
+            <li class="breadcrumb-item active text-primary">Sent</li>
+            <li class="breadcrumb-menu">
+            </li>
+            <li class="breadcrumb-menu pr-3">
+                <div class="btn-group " role="group" aria-label="Basic example">
+
+                    <button style="height: 34px;" type="button" class="btn bg-primary text-white"
+                            data-toggle="modal" data-target="#commonModal"
+                            data-placement="top"
+                            th:attr="data-url=@{/officeNote}" title="Create New Office Note">
+                        <i class="mdi mdi-file-plus"></i><span class="icon-btn-text">&nbsp; Create</span></button>
+
+                </div>
+            </li>
+        </ol>
+
+
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="w-100">
+						<div class="row mt-1">
+							<div class="col-8">
+
+								<ul class="nav nav-tabs border-bottom-0 eFile-tabs" role="tablist">
+
+
+									<li class="nav-item"><a
+										class="nav-link border-top-info " _data-toggle="tab"
+										th:href="@{/officeNotesData}" _role="tab"
+										aria-controls="home" aria-selected="true"><i
+											class="icon-drawer"></i>&nbsp; <span class="d-md-down-none">Inbox</span>
+											&nbsp; <span class="badge badge-pill badge-info text-white"
+											th:text="${inboxCount}"></span></a></li>
+									<li class="nav-item "><a
+										class="nav-link border-top-warning active" _data-toggle="tab"
+										th:href="@{/officeNotesList}" _role="tab"
+										aria-controls="messages" aria-selected="false"><i
+											class="icon-paper-plane"></i>&nbsp; <span class="d-md-down-none">Sent</span>&nbsp;<span
+											class="badge badge-pill badge-warning text-white" th:text="${savedFilesCount}" ></span></a>
+									</li>
+									<!--/* <li class="nav-item"><a
+										class="nav-link border-top-info " _data-toggle="tab"
+										th:href="@{/officeNote}" _role="tab"
+										aria-controls="home" aria-selected="true"><i
+											class="icon-drawer"></i>&nbsp; <span class="d-md-down-none">Create Note</span>
+											&nbsp; <span class="badge badge-pill badge-info text-white"
+											th:text="${inboxCount}"></span></a></li> */-->
+
+								</ul>
+							</div>
+							<div class="col-4 mt-1 d-none">
+								<ul class="nav nav-pills justify-content-end">
+									<li class="nav-item dropdown eFile-dropdown">
+										<div class="btn-group">
+											<button type="button"
+												class="btn btn-primary dropdown-toggle mt-1 eFile-float-btn"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false"
+												>
+												<i class="fa fa-lg_ fa-file-o "></i>&nbsp; Office Note
+												<!--File-->
+											</button>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<!--/*<h6 class="dropdown-header bg-inverse">eFile</h6>*/-->
+												<button class="dropdown-item" type="button"
+													data-toggle="modal" data-target="#commonModal"
+													data-placement="top"
+													th:attr="data-url=@{/officeNote}"><i class="mdi mdi-file-plus"></i>&nbsp;Create</button>
+
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div
+							class="card  bg-transparent mb-0 card-shadow ">
+
+							<div class="card-body py-0 bg-white"
+								style="_min-height: calc(100vh - 130px);">
+
+
+
+							<!--/* <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+								<h5 class="d-inline-block mb-0 mt-1 font-weight-bold header-title text-primary">
+									Office Notes List
+								</h5>
+								<a class="btn btn-sm btn-primary_ btn-outline-primary d-inline-block ml-auto mt-1"
+									th:href="@{/officeNote}"> <i class="fa fa-file"></i>
+									office Note
+								</a>
+							</div> */-->
+								<div class="card-body p-0 bg-white"
+									_style="min-height: calc(100vh - 130px); width: 100%;">
+
+									<div class="table-responsive _px-3">
+
+										<table id="officeNotesListTable"
+											class=" table compact table-bordered table-hover table-striped table-sm mb-0"
+											cellspacing="0" width="100%">
+											<thead class="table-primary">
+												<tr>
+													<th>S.No</th>
+													<th>Created By</th>
+													<th>Created Date</th>
+													<th>Subject</th>
+													<th>File Download</th>
+													<th>Sent to</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each=" officeNotes, sNo : ${officeNotesList}">
+													<td th:text=${sNo.count}></td>
+													<td th:text="${officeNotes.createdBy}"></td>
+													<td th:text="${#dates.format(officeNotes.createdDate,'dd/MM/yyyy hh:mm a')}"></td>
+													<td th:text="${officeNotes.subject}"></td>
+													<td>
+														<span th:if="${officeNotes.generatedFileName} == null">
+															N/A
+														</span>
+														<span th:if="${officeNotes.generatedFileName} == ''">
+															N/A
+														</span>
+														<span th:if="${officeNotes.generatedFileName} != null ">
+
+															 <a class="btn btn-link  _btn-outline-primary"
+																th:href="@{'/downloads/{eFileName}?name={orgFileName}'(eFileName=${officeNotes.generatedFileName} , orgFileName=${officeNotes.originalFileName})}"
+																style="color: black;"> <span><i
+																	class="fa fa-download"></i>&nbsp; Download</span>
+															</a>
+
+
+														</span>
+													</td>
+														<!--/* <td><span th:text="${officeNotesEmpMappList.postMaster.postname}"></span></td> */-->
+													<td >
+													<p  class="badge bg-info btn-team" style="cursor: pointer;" data-trigger="hover"
+													  data-toggle="tooltip" _th:title="${officeNotesEmpMappList}"
+
+													   _data-toggle="tooltip" data-placement="left"
+													   onmouseover="$('#teamListShow').show();" onmouseout="$('#teamListShow').hide();"  >
+													 <b>Team</b>
+													</p>
+													<div style="display: none;" id="teamListShow" >
+														<span th:if="${officeNotesEmpMappList} !=null">
+															<span th:each="officeNotesEmpMap, sNo : ${officeNotesEmpMappList}">
+																<ul class="">
+																	<li>
+																		<span th:text="${sNo.count}"> </span>).
+																		<span th:text="${officeNotesEmpMap.postMaster.postname}"></span>
+																		<span th:if="${officeNotesEmpMap.postMaster.employeeMaster} != null">
+																			( <span th:text="${officeNotesEmpMap.postMaster.employeeMaster.employeefirstname}"></span> ),
+																		</span>
+																		<span th:if="${officeNotesEmpMap.postMaster.employeeMaster} == null">
+																			<span>( ),</span>
+																		</span>
+
+																	</li>
+																</ul>
+															</span>
+														</span>
+													</div>
+													</td>
+												</tr>
+												<!--/* <tr>
+													<td><span th:text="${officeNotesEmpMappList.postMaster.postname}"></span></td>
+												</tr> */-->
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+							<!-- .card-block-->
+
+						</div>
+						<!--  main > .w-100 >.card -->
+
+					</div>
+					<!-- main > .w-100 -->
+				</div>
+				<!-- main > .row -->
+			</div>
+			<!-- main > .animated.fadeIn -->
+		</div>
+		<!-- main > .container-fluid -->
+
+	</div>
+
+	<th:block layout:fragment="scripts">
+
+        <script>
+        /*$(document).ready(function() {
+        	var table = $('#eFileSentBoxFileTable').DataTable({
+			    language: {
+			        search: "_INPUT_",
+                    searchPlaceholder: "Search..."
+                 },
+			    "dom":"<'row'<'col-sm-3'f><'col-sm-9 text-right'lB>>",
+				responsive: false,
+				paging: false,
+				//"pagingType": "full_numbers"
+				lengthChange: false,
+				 columns: [
+
+					 { width:'1%', targets: 0 },
+	                    { _width: '10%', targets: 1 },
+	                   { _width:'90%', targets: 2 },
+	                   { width: '22%', targets: 3, className: "px-1" },
+	                     { width: '20%', targets: 4, "orderable": false, className: "px-1" }
+
+				],
+				buttons: [
+                    {
+                        extend:    'copyHtml5',
+                        text:      '<i class="fa fa-files-o"></i>',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'csvHtml5',
+                        text:      '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    }
+                ],
+				fixedHeader: {
+					header: true,
+					headerOffset: 48
+				}
+			});*/
+
+
+			$(document).ready(function() {
+				var table = $('#officeNotesListTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+
+					columns: [
+					{ width:'1%', targets: 0 },
+	                    { width: '18%', targets: 1 },
+	                    { _width:'20%', targets: 2 },
+	                    { _width:'20%', targets: 3 },
+
+	                   { width: '16%', targets: 4, className: "px-1" },
+	                   { width: '16%', targets: 5, className: "px-1" }
+
+
+
+					],
+					order: [ 1, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+
+                /*$('table').on('click','.actionSwitch', function(e){
+                    var $this = $(this);
+                    var $input = $this.find('.switch-input');
+                    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+                    e.preventDefault();
+                    e.stopPropagation();
+                    bootbox.confirm({
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-outline-primary'
+                            }
+                        },
+                        callback: function (result) {
+                            var context = "[[@{/}]]";
+                            var isChecked = $input.prop("checked")
+                            var url = isChecked ? "disableEmployee" : "enableEmployee";
+                            var id = $this.data('id');
+                            console.log('This was logged in the callback: ' + result);
+                            if(result){
+                                $.get(context + url + '/' + id + '/' , function(){
+                                    $input.prop('checked',!isChecked);
+                                });
+                            }
+                        }
+                    });
+                });*/
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm")
+
+
+
+			});
+			/*function onSwitch(id,status)= {
+
+			}*/
+		</script>
+    </th:block>
+
+</body>
+</html>

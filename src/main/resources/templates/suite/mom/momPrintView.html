@@ -1,0 +1,497 @@
+<html _layout:decorator="layouts/main" xmlns="http://www.w3.org/1999/html">
+
+<head></head>
+<th:block _layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>Minutes of Meeting</title>
+</th:block>
+
+<th:block _layout:fragment="styles">
+    <style>
+        .btn {
+
+            _border-width: 2px;
+        }
+        h6[role="button"]{
+            cursor: pointer;
+        }
+    </style>
+</th:block>
+
+<body onload="window.print()">
+<div _layout:fragment="content">
+
+    <div class="container-fluid px-3">
+        <div class="animated fadeIn">
+            <div class="row">
+	            <div class="col-md-12">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">Minutes of Meeting View</h5>
+                        </div>
+                        <!--<div class=""></div>-->
+                            <div class="card-block bg-white py-4 ">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                       <!--  <form class="custom-form" id="momMasterForm" method="post" name="momMasterForm" th:action="@{'/updateMomDetails/{id}/'(id=${id})}" enctype="multipart/form-data"
+                                        	th:object="${momMasterForm}" autocomplete="off">
+											<input type="hidden" name="submitType" id="submitType"></input>  -->
+                                            <div class="card card-block p-0 border-0 mb-0" id="momContent">
+
+
+                                                <!--###### Minutes of Meeting Details ######-->
+                                                <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-1" aria-expanded="false" aria-controls="collapseExample">1.Details</h6>
+
+                                                    <section id="section-1" class="show">
+                                                    <table class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+                                                            	<thead>
+                                                            	<tr>
+                                                            		<th colspan="6">Details</th>
+                                                            	</tr>
+                                                            	</thead>
+                                                            	<tbody>
+                                                            		<tr>
+                                                            			<th>Meeting Type:</th>
+                                                            			<td>
+                                                            				<span  th:if="${momMasterForm.internalMeeting == false}">External</span>
+                                                                			<span  th:if="${momMasterForm.internalMeeting == true}">Internal</span>
+                                                               			</td>
+                                                               			<th>Is New Meeting:</th>
+                                                            			<td>
+                                                            				 <span  th:if="${momMasterForm.newMeeting == false}">No</span>
+                                                               				<span  th:if="${momMasterForm.newMeeting == true}">Yes</span>
+                                                               			</td>
+                                                               			<th>
+                                                               			 <div class="form-group col-lg-8 col-md-6" id="search" th:if="${momMasterForm.newMeeting == false}" >
+                                                               				Previous MOM Number:
+                                                               			</div>
+                                                               			</th>
+                                                               			<td> 
+                                                               			 <div class="form-group col-lg-8 col-md-6" id="search" th:if="${momMasterForm.newMeeting == false}" >
+                                                               			<span th:text="${momMasterForm.prevMomMaster.momNumber}"></span>
+                                                               			</div>
+                                                               			</td>
+                                                               			
+                                                            		</tr>
+                                                            		<tr>
+                                                            			<th align="left">Venue</th>
+                                                            			<th align="left" colspan="2">Subject</th>
+                                                            			<th align="left"> Conducted by</th>
+                                                            			<th align="left">Designation</th>
+                                                            			<th align="left">Organization</th>
+                                                            		</tr>
+                                                            		<tr>
+                                                            			
+                                                            			<td> <div th:text="${momMasterForm.meetingVenue}"></div></td>
+                                                            			<td colspan="2"> <div th:text="${momMasterForm.purpose}"></div></td>
+                                                            			<td><div th:text="${momMasterForm.conductedBy}"></div></td>
+                                                            			<td> <div  th:text="${momMasterForm.conductedByDesignation}"></div></td>
+                                                            			<td><div th:text="${momMasterForm.organization}"></div></td>
+                                                            		</tr>
+                                                            		<tr>
+                                                            			<th align="left">Meeting start time</th>
+                                                            			<th align="left" >Meeting End time</th>
+                                                            			<th align="left">Recorded By</th>
+                                                            			<!-- <th align="left">Attachment</th>
+                                                            			<th align="left">Approved Attachment</th> -->
+                                                            		</tr>
+                                                            		<tr>
+                                                            			
+                                                            			<td>  <div th:text="${#temporals.format(momMasterForm.startTime, 'dd/MM/yyyy HH:mm a')}"></div></td>
+                                                            			<td><div th:text="${#temporals.format(momMasterForm.endTime, 'dd/MM/yyyy HH:mm a')}"></div></td>
+                                                            			<td>
+                                                            				 <div>
+		                                                                    	 <span th:text="${momMasterForm.recordedBy.employeefirstname}"></span>&nbsp;<span th:text="${momMasterForm.recordedBy.employeelastname}"></span>
+		                                                                    </div>
+                                                            			</td>
+                                                            			<!-- <td> <div  th:text="${momMasterForm.conductedByDesignation}"></div></td>
+                                                            			<td><div th:text="${momMasterForm.organization}"></div></td> -->
+                                                            		</tr>
+                                                            	</tbody>
+                                                            </table>
+                                                    
+                                                       <!--  <div id="meetingDetails" class="card-block pt-0" style="border-color: grey;">
+                                                            <div class="form-row">
+                                                            
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"></label>
+                                                              
+                                                            </div>
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  >Is New Meeting:</label>
+                                                                <span  th:if="${momMasterForm.newMeeting == false}">No</span>
+                                                                <span  th:if="${momMasterForm.newMeeting == true}">Yes</span>
+                                                            </div>
+                                                            
+                                                            
+                                                             <div class="form-group col-lg-8 col-md-6" id="search" th:if="${momMasterForm.newMeeting == false}" >
+                                                                     <label class="col-form-label col-form-label-sm" for="recordedBy">Previous MOM Number:</label>
+                                                                     <span th:text="${momMasterForm.prevMomMaster.momNumber}"></span>
+                                                                            
+                                                              </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="meetingVenue">Venue</label>
+                                                                <div th:text="${momMasterForm.meetingVenue}"></div>
+                                                            </div>
+                                                            <div class="form-group col-lg-4 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="purpose">Subject</label>
+                                                                <div th:text="${momMasterForm.purpose}"></div>
+                                                                
+                                                            </div>
+															
+                                                            
+                                                            <div class="form-group col-lg-2 col-md-3 mb-0">
+                                                                <label class="col-form-label col-form-label-sm"  for="conductedBy">conducted by</label>
+                                                                <div th:text="${momMasterForm.conductedBy}"></div>
+                                                                
+                                                            </div>
+                                                            <div class="form-group col-lg-2 col-md-3" th:if="${momMasterForm.conductedByDesignation!=null and !momMasterForm.conductedByDesignation.isEmpty() }">
+                                                                            <label class="col-form-label col-form-label-sm" for="conductedByDesignation">Designation</label>
+                                                                           <div  th:text="${momMasterForm.conductedByDesignation}"></div>
+                                                                            
+                                                              </div>
+															
+															 <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm"  for="organization">Organization</label>
+                                                                <div th:text="${momMasterForm.organization}"></div>
+                                                            </div>
+                                                            
+															
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm" for="startTime">Meeting start time</label>
+                                                                <div th:text="${#temporals.format(momMasterForm.startTime, 'dd/MM/yyyy HH:mm a')}"></div>
+                                                            </div>
+                                                            <div class="form-group col-lg-2 col-md-3">
+                                                                <label class="col-form-label col-form-label-sm" for="endTime">Meeting End time</label>
+                                                                <div th:text="${#temporals.format(momMasterForm.endTime, 'dd/MM/yyyy HH:mm a')}"></div>
+                                                            </div>
+															
+															<div class="form-group col-lg-2 col-md-3">
+                                                                    <label class="col-form-label col-form-label-sm" for="recordedBy">Recorded By</label>
+                                                                    <div>
+                                                                    	 <span th:text="${momMasterForm.recordedBy.employeefirstname}"></span>&nbsp;<span th:text="${momMasterForm.recordedBy.employeelastname}"></span>
+                                                                    </div>
+                                                                         
+                                                              </div>
+															  
+                                                              <div th:if="*{momDocumentGeneratedName!=null and !momDocumentGeneratedName.isEmpty()}" class="form-group col-lg-2 col-md-3">
+                                                                	<label class="col-form-label col-form-label-sm" for="endTime">Attachment<span class="text-danger"></span></label><br/>
+                                                                	<input type="hidden" name="oldDocument" id='oldDocumnet' th:value="*{momDocumentOriginalName}"></input>
+                                                                	<a target="_blank" th:href="@{'/loadMomDoc/{id}/'(id=*{momDocumentGeneratedName})}"><span th:text="*{momDocumentOriginalName}"></span> </a>
+                                                                
+                                                           	  </div>
+                                                              <div th:if="*{approvedDocumentGeneratedName!=null and !approvedDocumentGeneratedName.isEmpty()}" class="form-group col-lg-2 col-md-3">
+                                                                	<label class="col-form-label col-form-label-sm" for="endTime">Approved Attachment<span class="text-danger"></span></label><br/>
+                                                               		 <a target="_blank" th:href="@{'/loadMomDoc/{id}/'(id=*{approvedDocumentGeneratedName})}"><span th:text="*{approvedDocumentOriginalName}"></span> </a>
+                                                                
+                                                          	</div>
+                                                              
+                                                            
+                                                            
+                                                           
+                                                        </div># meetingDetails > .form-row
+                                                    </div> -->
+                                                </section><!-- # section-1-->
+                                            </div><!-- .card one-->
+
+
+                                            <!--###### Paticipants ######-->
+                                                <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-2" aria-expanded="false" aria-controls="collapseExample">2. List of Participants</h6>
+
+
+                                                    <section id="section-2" class="show">
+                                                        <div class="card-block pt-0" style="border-color: grey;">
+                                                            <div id="participantsDetails">
+                                                            	<span th:if="${momParticipantsList}!=null">
+																<table id="participantsDetails" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+																	<thead class="thead-table">
+																		<tr>
+																			<th>S.No</th>
+																			<th>Participant</th>
+																			<th>Designation</th>
+																			<th>Organization</th>
+																			<th>Mobile</th>
+																			<th>e-Mail</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<th:block  th:object="${momParticipantsList}" >
+																			<tr  th:each="anItem, iterStat : ${momParticipantsList}">
+																				<td th:text="${iterStat.count}"></td>
+																				<td>
+																					<span th:if="${anItem.participantName!=null and  !anItem.participantName.isEmpty()}" th:text="${anItem.participantName}" ></span>
+																					<span th:if="${anItem.participantName==null }">N/A</span>
+																				</td>
+																				<td>
+																					<span th:if="${anItem.designation!=null and  !anItem.designation.isEmpty()}" th:text="${anItem.designation}" ></span>
+																					<span th:if="${anItem.designation==null }">N/A</span>
+																				</td>
+																				<td>
+																					<span th:if="${anItem.organizationName!=null and  !anItem.organizationName.isEmpty()}" th:text="${anItem.organizationName}" ></span>
+																					<span th:if="${anItem.organizationName==null or anItem.organizationName==''}">N/A</span>
+																				</td>
+																				<td>
+																					<span th:if="${anItem.mobileNumber!=null and  !anItem.mobileNumber.isEmpty()}" th:text="${anItem.mobileNumber}" ></span>
+																					<span th:if="${anItem.mobileNumber==null}">N/A</span>
+																				</td>
+																				<td>
+																					<span th:if="${anItem.email!=null and  !anItem.email.isEmpty()}" th:text="${anItem.email}" ></span>
+																					<span th:if="${anItem.email==null  }">N/A</span>
+																					
+																				</td>
+																			</tr>
+																		</th:block>
+																	</tbody>
+																</table>
+																</span>
+                                                                    
+
+                                                            </div>
+                                                        </div>
+
+                                                    </section>
+                                                </div>
+                                                
+                                                 <div class="card border-primary">
+                                                <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                       style="width: auto;" data-toggle="collapse" data-target="#section-2" aria-expanded="false" aria-controls="collapseExample">3. Deliberations  & Decisions</h6>
+                                                   <section id="section-2" class="show">
+                                                       <div class="card-block pt-0" style="border-color: grey;">
+                                                          <div class="form-row" >
+                                                              <div class="form-group col-md-6 col-lg-6">
+                                                                  <label class="col-form-label col-form-label-sm" for="deliberations">Deliberation<span class="text-danger">*</span></label>
+                                                                  <span th:text="${momMasterForm.deliberations}"></span>
+                                                              </div>
+                                                              <div class="form-group col-md-6 col-lg-6">
+                                                                  <label class="col-form-label col-form-label-sm" for="desicions">Decisions<span class="text-danger">*</span></label>
+                                                                  <span th:text="${momMasterForm.desicions}"></span>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                   </section>
+                                                </div>
+                                                
+                                                
+  		   										<!--##### Action Points of Previous Meeting ######-->
+												<span th:if="${prevDiscussions}!=null">
+													
+												   <div class="card border-primary">
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-3" aria-expanded="false" aria-controls="collapseExample"> Action points of previous meeting (if applicable)</h6>
+
+                                                    <section id="section-3" class="show">
+
+                                                            <div class="card-block pt-0" style="border-color: grey;">
+                                                            <div class="form-group" id="prevMeetingDetails">
+                                                            <div id="prevMeetingDetails">
+                                                            
+                                                            <table id="CurrentMmeetingDetails" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+																	<thead class="thead-table">
+																		<tr>
+																			<th>S.No</th>
+																			<th>Action needed</th>
+																			<th>Responsible Person</th>
+																			<th>Designation</th>
+																			<th>Target date</th>
+																		</tr>
+																	</thead>
+																<tbody>
+																	<th:block th:object="${prevDiscussions}">
+																		<tr th:each="anItem , iterStat : ${prevDiscussions}">
+																			<td th:text="${iterStat.count}"></td>
+																			<td>
+																				<span th:if="${anItem.pointsDiscussed!=null and  !anItem.pointsDiscussed.isEmpty()}" th:text="${anItem.pointsDiscussed}" ></span>
+																				<span th:if="${anItem.pointsDiscussed==null }">N/A</span>
+																			</td>
+																			<td>
+																				<span th:if="${anItem.responsibilityName!=null and  !anItem.responsibilityName.isEmpty()}" th:text="${anItem.responsibilityName}" ></span>
+																				<span th:if="${anItem.responsibilityName==null }">N/A</span>
+																			</td>
+																			<td>
+																				<span th:if="${anItem.designation!=null and  !anItem.designation.isEmpty()}" th:text="${anItem.designation}" ></span>
+																				<span th:if="${anItem.designation==null }">N/A</span>
+																			
+																			</td>
+																			<td>
+																				<span th:if="${anItem.targetDate!=null}"  th:text="${#temporals.format(anItem.targetDate, 'dd/MM/yyyy')}"></span>
+																				<span th:if="${anItem.targetDate==null }">N/A</span>
+																				
+																			</td>
+																		</tr>
+																	</th:block>
+																</tbody>
+															</table>
+                                                            
+                                                            </div>
+                                                            </div>
+                                                         
+
+                                                    </section>
+                                                </div> 
+												</span>
+                                       
+                                            
+
+
+                                            <!--###### Discussions Held Meeting ######-->
+                                                <div class="card border-primary">
+
+
+                                                        <h6 role="button"	class="mb-0 text-inverse formTitle font-weight-bold text-primary"
+                                                               style="width: auto;" data-toggle="collapse" data-target="#section-4" aria-expanded="false" aria-controls="collapseExample">4. Discussions Held In the Meeting</h6>
+
+                                                    <section id="section-4" class="show">
+
+                                                    <div class="card-block pt-0" style="border-color: grey;">
+                                                        <div id="discussions">
+                                                        <span th:if="${momDiscussionsList}!=null">
+                                                        	<table id="participantsDetails" class="compact table table-hover table-bordered table-responsive-sm table-sm  mb-0" cellspacing="0" width="100%">
+																	<thead class="thead-table">
+																		<tr>
+																			<th>S.No</th>
+																			<th>Action needed</th>
+																			<th>Responsible Person</th>
+																			<th>Designation</th>
+																			<th>Target date</th>
+																			<th>Status<span class="text-danger" th:if="${isToAllowUpdateStatus == true}" >*</span></th>
+																		</tr>
+																	</thead>
+																<tbody>
+																	<th:block th:object="${momDiscussionsList}">
+																		<tr th:each="anItem , sNo : ${momDiscussionsList}">
+																			<td th:text="${sNo.count}"></td>
+																			<td>
+																				<span th:if="${anItem.pointsDiscussed!=null and  !anItem.pointsDiscussed.isEmpty()}" th:text="${anItem.pointsDiscussed}" ></span>
+																				<span th:if="${anItem.pointsDiscussed==null }">N/A</span>
+																			</td>
+																			<td>
+																				<span th:if="${anItem.responsibilityName!=null and  !anItem.responsibilityName.isEmpty()}" th:text="${anItem.responsibilityName}" ></span>
+																				<span th:if="${anItem.responsibilityName==null }">N/A</span>
+																			</td>
+																			<td>
+																				<span th:if="${anItem.designation!=null and  !anItem.designation.isEmpty()}" th:text="${anItem.designation}" ></span>
+																				<span th:if="${anItem.designation==null }">N/A</span>
+																			
+																			</td>
+																			<td>
+																				<span th:if="${anItem.targetDate!=null }"  th:text="${#temporals.format(anItem.targetDate, 'dd/MM/yyyy')}"></span>
+																				<span th:if="${anItem.targetDate==null }">N/A</span>
+																				
+																			</td>
+																			<td>
+			                                                                        	
+			                                                                         			                                                                         
+			                                                                          
+			                                                                       <div  th:if="${anItem.momStatusMaster==null}" >
+			                                                                       		Not Updated
+			                                                                       </div>
+			                                                                        <div  th:if="${anItem.momStatusMaster!=null && anItem.momStatusMaster.id != 5}" >
+			                                                                       		<div th:text="${anItem.momStatusMaster.momStatus}"></div>
+			                                                                       </div>
+			                                                                        <div  th:if="${anItem.momStatusMaster!=null && anItem.momStatusMaster.id == 5}" >
+			                                                                       		Closed
+			                                                                       </div>                                                                  
+			                                                                       <!-- <div  th:if="${anItem.momStatusMaster!=null && anItem.momStatusMaster.id == 5}" >
+			                                                                       		<div th:text="${anItem.momStatusMaster.momStatus}"></div>
+			                                                                       </div> -->
+																					
+																					<!-- <div th:if="${isToAllowUpdateStatus == false and !(anItem.momStatusMaster!=null && anItem.momStatusMaster.id == 5) }">
+																						Not yet updated
+																					</div> -->
+																			
+																			</td>
+																		</tr>
+																	</th:block>
+																</tbody>
+																</table>
+														
+                                                         </span><!-- end of condtion check of discussions -->
+                                                    </div>
+	                                                    
+                                                    </div>
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </div><!-- #momContent -->
+                                        <div class="card-footer bg-white py-2 w-100" th:if="${isToAllowUpdateStatus == true}">
+                                            <div class="row">
+                                                <div class="col-md-12 text-right">
+                                                	<input type="hidden" th:value="${discussionsCount}" id="addDis"></input>
+                                                    <button style="width: 130px;" type="button" class="btn btn-sm btn-primary" id="updateStatus" >Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                    </div>
+                                </div><!-- .card-block .form-row -->
+
+                            </div><!-- .card-block .bg-white .py-4-->
+
+                    </div><!-- .card -->
+		        </div><!-- .col-md-12 -->
+            </div><!-- /.row -->
+        </div><!-- /.animated.fadeIn -->
+    </div><!--/.main .container-fluid -->
+
+</div>
+<!-- END FRAGMENT: "content" -->
+
+
+<th:block layout:fragment="scripts">
+	<script>
+	$(document).ready(function(){
+		
+		function validateData()
+		{
+			
+			var dis=$("#addDis").val();
+			for(var i=0;i<dis;i++)
+			{
+				var status=$("#momDiscussions_momStatusMaster"+i);
+				//alert(status.val());
+				if(status.val()!=undefined && (status.val()==null || status.val()=="" || status.val()=="0" ))
+				{
+					alert("please choose satus to update")
+					status.focus();
+					return false;
+				}
+				//return true;
+			}
+			return true;
+		}
+		
+		
+		$("#updateStatus").click(function(){
+			
+			//$("#submitType").val("saveOrDraft");
+			var flag = validateData();
+			if(flag && confirm("Do you want to update the status?")){
+				$("#momMasterForm").submit();
+			}
+			
+		});
+		
+		
+		
+
+	});
+	</script>
+
+</th:block>
+
+</body>
+</html>
+

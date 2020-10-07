@@ -1,0 +1,126 @@
+<style>
+    .mce-path, .mce-wordcount {
+    padding: 0 1.25rem!important;
+}
+</style>
+<div class="modal-header">
+	<p class="modal-title modal-form-title h4"><i class="mdi mdi-file-plus"></i>&nbsp; Create Office Note</p>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+
+					<form class="custom-form" id="officeNoteForm" method="post" name="officeNoteForm"
+						th:action="@{/officeNote}" enctype="multipart/form-data"
+						th:object="${officeNoteForm}" autocomplete="off">
+						<div class="col-12">
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label class="col-form-label col-form-label-sm" for="type">Subject<span class="text-danger">*</span></label>
+								<input type="text" class="form-control form-control-sm" name="subject" id="subject" required="required"  placeholder="Enter Subject" />
+								<div class="text-danger" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}">subject Error</div>
+							</div>
+						<div class="form-group col-md-6">
+							<label class="col-form-label col-form-label-sm" for="upload">Attach File<span class="text-danger">*</span>(.png,
+								.jpg, .jpeg, .pdf)
+							</label> <input type="file" class="form-control form-control-sm" name="upload"
+								id="upload" onchange="javascript:validateFiles();"
+								placeholder="upload"   required="required" >
+						</div>
+						<div class="form-group col-md-12 mb-0">
+							<label for="content" class="col-form-label font-weight-bold">Description<span style="color: red;">*</span></label>
+							<div class="w-100">
+								<textarea  class="form-control" id="content"
+									name="content" placeholder="Enter description"  required="required" ></textarea>
+							</div>
+							<div class="text-danger"
+											th:if="${#fields.hasErrors('content')}"
+											th:errors="*{content}">Content Error</div>
+						</div>
+						<div class="form-group col-md-12 scrollabletextbox">
+							<label class="col-form-label col-form-label-sm" for="issuedBy">Send to<span class="text-danger">*</span></label>
+							<div class="form-row"  style="overflow-y: scroll;height:200px;">
+							<th:block th:object="${postList}" >
+								
+								<div class="form-row form-group col-md-6" th:each="anItem : ${postList}" >
+									<!-- <div class="form-row form-group col-md-3" th:text="${anItem.postname}"/> -->
+									<!-- <input type="checkbox" name="postMaster" th:value="${anItem.id}" class="form-row form-group col-md-3" /> -->
+									<div class="custom-control custom-checkbox custom-inner-checkbox">
+										<input _class="custom-control-input" name="postMaster" type="checkbox" th:value= "${anItem.id}" th:text="${anItem.postname}"/>
+									</div>
+								</div>
+								
+							</th:block>
+							</div>
+							<div class="text-danger"
+											th:if="${#fields.hasErrors('postMaster')}"
+											th:errors="*{postMaster}">postMaster Error</div>
+						<!-- </select> -->
+						</div>
+						</div>
+
+						<div class="form-group col-md-12">
+							<div class="col-12 text-center">
+							<button type="submit" class="btn btn-primary" id="submit"
+								onclick="javascript:return validateDetails();">Submit</button>
+							</div>
+						</div></div>
+					</form>
+				
+</div>
+
+
+
+<script type="text/javascript">
+
+function validateDetails(){
+	if($("#subject").val()==""){
+		alert("Please enter subject");
+		$("#subject").focus();
+		return false;
+	}else if($("#upload").val()==""){
+		alert("Please select Attachment");
+		$("#upload").focus();
+		return false;
+	}else if(tinyMCE.activeEditor.getContent()=="" || tinyMCE.activeEditor.getContent()==null){
+		alert("Please enter content");
+		return false;
+	} /* else if(!($("postMaster").prop('checked'))){
+		alert("Please select post");
+		$("postMaster").focus();
+		return false;
+	} */else{
+		return true;		
+	} 
+	
+}
+
+function validateFiles() {
+	//alert("4444");
+    //var modelname=$("#inputmodelname").val();
+    for (var i = 0; i < $("#upload").get(0).files.length; ++i) {
+        var file1=$("#upload").get(0).files[i].name;
+		//alert("File NAme : "+file1);
+        if(file1){                        
+            var file_size=$("#upload").get(0).files[i].size;
+            if(file_size<5242880){
+                var ext = file1.split('.').pop().toLowerCase();                            
+                if($.inArray(ext,["pdf","PDF","png","jpg","jpeg"])===-1){
+                    alert("Invalid file extension. File Name : "+file1);
+                    $("#upload").val('');
+                    return false;
+                }
+
+            }else{
+                alert("File size should be less than 5 MB. File Name : "+file1);
+                $("#upload").val('');
+                return false;
+            }                        
+        }else{
+            alert("Please upload file");         
+            return false;
+        }
+    }
+};	
+</script>

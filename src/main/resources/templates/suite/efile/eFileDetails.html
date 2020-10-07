@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head>
+</head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>eFile Details</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+<style type="text/css">
+.font {
+	color: black;
+}
+ul>li {
+	list-style: none;
+}
+p {
+	color: blue;
+}
+</style>
+
+</th:block>
+<th:block layout:fragment="links">
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+<script type="text/javascript">
+		function getDeptArr()
+			{
+				var emp=document.getElementById("posts");
+				//dynaProperty("+key+")
+				var empList = new Array(emp.options.length);
+				for(idx = 0;idx < emp.options.length;idx++)
+				{
+					empList[idx] = emp.options[idx].text;
+				}
+				return  this.department_name = empList;
+			}
+
+	</script>
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+    	var notefileNumber = $("#notefileNumber").val();
+         $.ajax({url: "/efilesuite/linkingeFile/"+notefileNumber, success: function(result){
+        	alert(result);
+            //$("#div1").html(result);
+        }});
+    });
+});
+ /*
+$(document).ready(function(){
+    $('#stateMaster').change(function(){
+        var stateid= $(this).val();
+        $.ajax({
+            url : "/efilesuite/departmentsInState/" + stateid,
+            success : function(data) {
+            	$("#departmentMaster").html(data);
+            },
+            error : function() {
+                alert("Error");
+            }
+        });
+    })
+}) */</script>
+</th:block>
+<body>
+	<div layout:fragment="content">
+		<div>
+			<input type="hidden" name="org.apache.struts.taglib.html.TOKEN"
+				value="f04ae4fa6d250990ad506e6349f0f48c">
+		</div>
+		<input type="hidden" name="method" value="" id="method">
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="card card-block "
+					style="padding: 0.5rem 1rem 1.2rem; margin-top: 2%;">
+					<div
+						class="d-flex flex-row flex-wrap justify-content-around  no-gutters">
+						<div style="overflow: auto; width: 100%; margin-top: 2%;">
+							<!-- <div class="container" style="width: 100%;"> -->
+
+							<div class="row">
+							<div class="col-8">
+
+								<ul class="nav nav-tabs " role="tablist">
+									<li class="nav-item">
+										<a class="nav-link border-top-info active" data-toggle="tab" href="#home4" role="tab" aria-controls="home" aria-selected="true"><i class="icon-drawer"></i>&nbsp; <span class="d-md-down-none">Inbox</span> &nbsp;<span class="badge badge-pill badge-info text-white">40</span></a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link border-top-success" data-toggle="tab" href="#profile4" role="tab" aria-controls="profile" aria-selected="false"><i class="icon-paper-plane"></i>&nbsp; <span class="d-md-down-none">Sent</span> &nbsp;<span class="badge badge-pill badge-success">29</span></a>
+									</li>
+									<li class="nav-item ">
+										<a class="nav-link border-top-warning" data-toggle="tab" href="#messages4" role="tab" aria-controls="messages" aria-selected="false"><i class="icon-layers"></i>&nbsp; <span class="d-md-down-none">Created files</span>&nbsp;<span class="badge badge-pill badge-warning text-white">140</span></a>
+									</li>
+
+
+								</ul>
+
+							</div>
+							<div class="col-4 ">
+								<ul class="nav nav-pills justify-content-end">
+									<li class="nav-item dropdown">
+										<div class="btn-group">
+											<button type="button" class="btn btn-primary dropdown-toggle _dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position: fixed; bottom: 60px; right: 60px; border-radius: 50%!important; height: 55px; width: 55px; ">
+												<i class="fa fa-2x fa-file-o "></i> <!--File-->
+											  </button>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<!--<h6 class="dropdown-header bg-inverse">eFile</h6>-->
+												<button class="dropdown-item" type="button" data-toggle="modal" data-target="#largeModal">Create</button>
+												<button class="dropdown-item" type="button">Close</button>
+												<button class="dropdown-item" type="button">RE-Open</button>
+												<button class="dropdown-item" type="button">Movement</button>
+												<button class="dropdown-item" type="button">Transfer</button>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+
+								<div class="row">
+
+									<!-- Saved Files List -->
+									<div th:if="${savedFilesListCount} == false" class="col-sm-10">
+											<table border="1"
+												class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+												width="100%">
+												<thead>
+													<tr>
+														<th>S.No</th>
+														<th>Note File Number</th>
+														<th>Received From</th>
+														<th>Keywords</th>
+														<th>Entry Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+													<!-- <select class="form-control" name="category" >
+														<option value="0"> select category</option>
+														<option th:each="category: ${savedFilesList}" th:value="${category.notefileNumber}"th:text="${category.keywords}"></option>
+													</select> -->
+
+													<tr th:each="savedFiles, sNo : ${savedFilesList}">
+														<td th:text="${sNo.count}"></td>
+														<td><a  role="button"
+															th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${savedFiles.notefileNumber})}">
+																<p th:text="${savedFiles.notefileNumber}"></p>
+														</a></td>
+														<td th:text="${savedFiles.notefileRecievedFrom}"></td>
+														<td th:text="${savedFiles.subject}"></td>
+														<td th:text="${savedFiles.entryDate}"></td>
+													</tr>
+												</tbody>
+											</table>
+									</div>
+									<!-- sent Files List -->
+									<div th:if="${sentFilesListCount} == false" class="col-sm-10">
+											<table border="1"
+												class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+												width="100%">
+												<thead>
+													<tr>
+														<th>S.No</th>
+														<th>Note File Number</th>
+														<th>Received From</th>
+														<th>Keywords</th>
+														<th>Entry Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+													<!-- <select class="form-control" name="category" >
+														<option value="0"> select category</option>
+														<option th:each="category: ${savedFilesList}" th:value="${category.notefileNumber}"th:text="${category.keywords}"></option>
+													</select> -->
+
+													<tr th:each="sentFiles , sNo : ${sentFilesList}">
+														<td th:text="${sNo.count}"></td>
+														<td><a   role="button"
+															th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${sentFiles.notefileNumber})}">
+																<p th:text="${sentFiles.notefileNumber}"></p>
+														</a></td>
+														<td th:text="${sentFiles.notefileRecievedFrom}"></td>
+														<td th:text="${sentFiles.subject}"></td>
+														<td th:text="${sentFiles.entryDate}"></td>
+													</tr>
+
+												</tbody>
+											</table>
+									</div>
+									<!-- Inbox Files List -->
+									<div th:if="${inboxFilesListCount} == false" class="col-sm-10">
+											<table border="1"
+												class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+												width="100%">
+												<thead>
+													<tr>
+														<th>S.No</th>
+														<th>Note File Number</th>
+														<th>Received From</th>
+														<th>Keywords</th>
+														<th>Entry Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+													<!-- <select class="form-control" name="category" >
+														<option value="0"> select category</option>
+														<option th:each="category: ${savedFilesList}" th:value="${category.notefileNumber}"th:text="${category.keywords}"></option>
+													</select> -->
+
+													<tr th:each="inboxFiles, sNo : ${inboxFilesList}">
+														<td th:text="${sNo.count}"></td>
+														<td><a  role="button"
+															th:href="@{'/efilesuite/editeFile/{currentNumber}'(currentNumber=${inboxFiles.notefileNumber})}">
+																<p th:text="${inboxFiles.notefileNumber}"></p>
+														</a></td>
+														<td th:text="${inboxFiles.notefileRecievedFrom}"></td>
+														<td th:text="${inboxFiles.subject}"></td>
+														<td th:text="${inboxFiles.entryDate}"></td>
+													</tr>
+
+												</tbody>
+											</table>
+									</div>
+
+										<!-- File Movement Report Start-->
+									<div th:if="${fileMovement} == 6" class="col-sm-7" style="margin-left: 5%;">
+										<!-- <div class="btn btn-success btn-block margin-bottom">
+											<h3>File Movement Report </h3>
+										</div> -->
+										<form method="post" class="form-narrow form-horizontal" th:action="@{/efilesuite/fileMovementReport}" th:object="${notefileDetailsDTO}"
+												id="notefileDetailsDTO">
+										<table border="1"
+												class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"  width="100%">
+													<caption>File Movement Report </caption>
+													<tr>
+													<th colspan="3">File Movement Report </th>
+													</tr>
+													<tr>
+														<td>Search<label for="searchWord" class="col-lg-2 control-label"></label></td>
+														<td><input type="text" name="searchWord" class="form-control" maxlength="100"
+														id="searchWord" placeholder="keywords,content & file number . . " />
+														</td>
+														</tr>
+														<tr>
+															<td>
+														</td>
+														<td>
+
+														<input type="submit" value="Search" class="btn btn-info"  />
+														<input type="reset" value="Reset" class="btn" />
+
+														</td>
+
+													</tr>
+
+											</table>
+											<div th:if="${noteFileMovementListCount} == false" class="col-sm-15">
+											<table border="1"
+												class="table table-fixed table-bordered table-striped table-condensed _table-col-2-right mb-0"
+												width="100%">
+												<thead>
+													<tr>
+														<th>S.NO.</th>
+														<th>Note File Number</th>
+														<th>Initiator</th>
+														<th>Present Owner</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="movements, iterStat : ${notefileList}">
+
+														<td><span th:text="${iterStat.count}"></span></td>
+														<td><a
+
+																role="button" aria-pressed="false" data-toggle="modal"
+																data-target="#commonModal" data-placement="top"
+																th:attr="data-url=@{'/efilesuite/filemovementReport/{currentNumber}'(currentNumber=${movements.notefileNumber})}">
+																<p th:text="${movements.notefileNumber}"></p></a>
+
+														</td>
+														<td th:text="${movements.notefileRecievedFrom}"></td>
+														<td th:text="${movements.presentOwner}"></td>
+													</tr>
+
+												</tbody>
+											</table>
+											</div>
+											</form>
+										</div>
+										<!-- File Movement Report End-->
+
+									<div th:if="${dispalyNoteFileForm} == 11" class="col-sm-7" style="margin-left: 5%;">
+										<form method="post" class="form-narrow form-horizontal" th:action="@{/efilesuite/creatingEfile}" th:object="${notefileDetailsDTO}" enctype="multipart/form-data"
+								id="notefileDetailsDTO">
+								<!-- <form method="post" th:action="@{/efilesuite/creatingEfile}" th:object="${notefileDetailsDTO}" enctype="multipart/form-data" id="notefileDetailsDTO"> -->
+									<input type="hidden" name="notefileNumber" value="null">
+									<input  type="hidden" name="inwardNumber" th:value="null" >
+
+									<div class="form-group flex-container">
+										<label for="category" class="col-lg-1 control-label">Category</label>
+										<div class="col-lg-10">
+											<!-- <select class="form-control" name="category"th:field="*{categoryList}" > -->
+											<select class="form-control" name="notefileCategoryMasterId" size="1">
+												<option value="0">select category</option>
+												<option th:each="category: ${categoryList}"
+													th:value="${category.id}"
+													th:text="${category.categoryName}"  ></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group flex-container">
+										<label for="subject" class="col-lg-1 control-label">Subject</label>
+										<div class="col-lg-10">
+											<input type="text" name="subject" class="form-control"
+												id="subject" placeholder="Enter Subject " />
+										</div>
+									</div>
+									<div class="form-group flex-container">
+										<label for="keywords" class="col-lg-1 control-label">Keywords</label>
+										<div class="col-lg-10">
+											<input type="text" name="keywords" class="form-control"
+												id="keywords" placeholder="Enter Keywords " />
+										</div>
+									</div>
+									<div class="form-group flex-container">
+										<!-- <label for="description" class="col-lg-2 control-label">Description</label> -->
+										<div class="col-lg-12">
+											<textarea rows="5" cols="51" class="form-control" id="description"
+												name="content" placeholder="Enter description"></textarea>
+										</div>
+									</div>
+
+									<fieldset>
+										<div class="form-group flex-container">
+											<label for="attachments" class="col-lg-3 control-label">Attachments
+											</label>
+											<div class="col-lg-9">
+												<figure class="figure">
+													<input type="file" class="form-control" id="attachments"
+														multiple="multiple" name="attachments" />
+													<figcaption class="figure-caption text-right"
+														style="color: #fd1414;">
+														<b>You can select multiple files</b>
+													</figcaption>
+												</figure>
+											</div>
+										</div>
+									</fieldset>
+
+									<div class="form-group flex-container">
+										<label for="attachments" class="col-lg-3 control-label"
+											style="text-align: left;">Recipient</label>
+										<div class="col-lg-9" align="center">
+											<div id="sendto" >
+												<select class="form-control" name="postMaster" id="posts" size="1">
+													<option value="0">--Select--</option>
+													<option th:each="postsList : ${postsMasterList}" th:text="${postsList.postname}" th:value="${postsList.id}" ></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-lg-12" align="center">
+											<input type="submit" name="save" value="Save"
+												class="btn btn-info" /> <input type="submit" name="send"
+												value="Send" class="btn btn-info" />
+										</div>
+									</div>
+							</form>
+									</div>
+
+
+									<!-- All files eFile Editing here -->
+
+									<div th:if="${editingFormDisplay} == 5" class="col-sm-9">
+										<form method="post" class="form-narrow form-horizontal" th:action="@{/efilesuite/updatingEfile}" th:object="${notefileDetailsDTO}" enctype="multipart/form-data" id="notefileDetailsDTO">
+											<div>
+												<input type="hidden"
+													name="org.apache.struts.taglib.html.TOKEN"
+													value="f595497ec4f2d8c875d1c40473bd34ec">
+											</div>
+											<input type="hidden" th:value="${notefileNumber}" name="notefileNumber" id="notefileNumber" />
+											<!-- <input type="hidden" name="property(attachmentCount)"
+												value="1" id="attachmentCount"> <input type="hidden"
+												name="mode" value="generatedNotefileDetails"> <input
+												type="hidden" name="id" value=""> <input
+												type="hidden" name="property(notefile_number)"
+												value="CGG/PRJ/7973/2017-18" id="notefile_number"> <input
+												type="hidden" name="property(project)" value=""
+												id="project_id"> <input type="hidden"
+												name="property(new_project_name)" value=""> <input
+												type="button" value="Print" onclick="printData()"> -->
+
+											<div id="printDiv">
+
+												<!-- Note File Details Start-->
+												<div class="row"
+													th:each="notefileDetails : ${responseNotefileDetailsEntity}">
+
+													<div class="box box-warning box-solid">
+														<!-- Note File Details Start-->
+														<div class="box-header with-border" >
+															<h3 class="box-title">File Details</h3>
+														</div>
+														<!-- /.box-header -->
+														<div class="box-body no-padding">
+															<div class="mailbox-read-info">
+																<div style="display: flex;">
+																	<h3 th:text="${notefileDetails.notefileNumber}"
+																		style="padding-right: 1%;"></h3>
+																	-
+																	<h3 th:text="${notefileDetails.subject}"
+																		style="margin-left: 1%;"></h3>
+																</div>
+																<h5>
+																	File Initiator:
+																	<h3 th:text="${notefileDetails.presentOwner}"></h3>
+																	<span class="mailbox-read-time pull-right"
+																		th:text="${notefileDetails.createdDate}"> </span>
+																</h5>
+															</div>
+														</div>
+
+													</div>
+
+												</div>
+												<!-- Note File Details End-->
+												<!--Inward Details Shown below  Start  efileInwardMasters-->
+												<div class="row">
+												<div class="box box-warning box-solid" th:if="${showInwardDetails} == true">
+													<div class="box-header with-border" >
+															<h3 class="box-title">Inward Details</h3>
+													</div>
+													<div class="box-body no-padding">
+													<div class="mailbox-read-info">
+														<div style="display: flex;">
+															<h3 th:text="${efileInwardMasters.inwardFileNumber}"
+																style="padding-right: 1%;"></h3>
+															-
+															<h3 th:text="${efileInwardMasters.subject}"
+																style="margin-left: 1%;"></h3>
+														</div>
+														<h5>
+															File Initiator:
+															<h3 th:text="${efileInwardMasters.postMaster.postname}"></h3>
+															<span class="mailbox-read-time pull-right"
+																th:text="${efileInwardMasters.createdDate}"> </span>
+														</h5>
+													</div>
+												</div>
+												</div>
+
+												</div>
+
+												<!--Inward Details Ends  efileInwardMasters-->
+												<!-- Attachments Start-->
+												<div class="row"></div>
+												<div class="row">
+
+
+													<div class="box box-success box-solid">
+														<div class="box-header">
+															<h3 class="box-title">Attachments</h3>
+															<div class="box-tools pull-right">
+																<button type="button" class="btn btn-box-tool"
+																	data-widget="collapse">
+																	<i class="fa fa-minus"></i>
+																</button>
+															</div>
+														</div>
+														<div class="box-body">
+															<table border="0" width="100%">
+
+																<tr
+																	th:each="attachemtnsDetails,sNo : ${notefileAttachmentDetails}">
+																	<td width="3%" align="center" th:text="${sNo.count}">	</td>
+																	<td><a
+																		th:href="${attachemtnsDetails.attachmentFileName}"
+																		target="iframe1"
+																		th:text="${attachemtnsDetails.attachmentFileName}">
+																	</a></td>
+																	<td width="10%"
+																		th:text="${attachemtnsDetails.createdDate}"></td>
+
+																</tr>
+															</table>
+														</div>
+													</div>
+
+
+												</div>
+												<div class="row"></div>
+												<div class="row">
+													<div class="box box-warning">
+														<div class="box-header">
+															<h3 class="box-title">Notes</h3>
+															<div class="box-tools pull-right">
+																<button type="button" class="btn btn-box-tool"
+																	data-widget="collapse">
+																	<i class="fa fa-plus"></i>
+																</button>
+															</div>
+															<!-- /.box-tools -->
+														</div>
+														<!-- /.box-header -->
+														<div class="box-body">
+
+															<bean:size id="colSize" name="generated_notefileDetails" />
+															<!-- <logic:iterate id="rows" name="generated_notefileDetails" indexId="j"> -->
+															<div
+																th:each="movementDetails,itrStatee : ${notefileMovementDetails}">
+																<span th:text="${movementDetails.content}"></span>
+
+																<div class="box box-info box-solid ">
+																	<div class="box-header with-border">
+																		<h3 class="box-title">Note :<span th:text="${itrStatee.count}"></span></h3>
+																		<div class="box-tools pull-right">
+																			<button type="button" class="btn btn-box-tool"
+																				data-widget="collapse">
+																				<i class="fa fa-minus"></i>
+																			</button>
+																		</div>
+																		<!-- /.box-tools -->
+																	</div>
+																	<!-- /.box-header -->
+																	<div class="box-body">
+																		<html> <body th:text="${movementDetails.notefileFrom}"> </body></html>
+																		<div style="text-align: right; font-weight: bold";>
+																			<span class="mailbox-read-time pull-right"
+																				th:text="${movementDetails.notefileFrom}"> <br />
+																				<br /></span><span
+																				th:text="${movementDetails.createdDate}"> </span>
+																		</div>
+																	</div>
+																	<!-- /.box-body -->
+																</div>
+																<!-- /.box -->
+
+															</div>
+															<!-- /.box-body -->
+														</div>
+													</div>
+												</div>
+												<div class="row"></div>
+												<div class="row">
+												<!-- Notes End Here -->
+													<div class="box-body no-padding" style="width: 100%;">
+													<!-- tabs -->
+
+													<!-- tabs end -->
+
+
+														<div class="box box-primary">
+															<div class="box-header">
+																<h3 class="box-title">
+																	Write Note
+																	<!-- <small>Advanced and full of features</small> -->
+																</h3>
+															</div>
+															<!-- /.box-header -->
+														</div>
+
+														<div class="box-body pad" th:if="${#session.getAttribute('sentFlag')} == false" >
+															<div class="form-group" style="display: flex;">
+																<label for="keywords" class="col-sm-1">Keywords:</label>
+																<div class="col-11">
+																	<input class="form-control" name="keywords"  id="keywords" placeholder="Enter keywords "/><!--th:value="${notefileMovementDetails.keywords}"  -->
+
+																</div>
+															</div>
+
+															<textarea    class="form-control ckeditor"  name="content"  id="content"  > </textarea>
+														</div>
+												</div>
+												</div>
+												<div class="row"></div>
+												<div  th:if="${#session.getAttribute('sentFlag')} == false" >
+												<div class="row">
+													<div class="form-group flex-container">
+														<label for="attachments" class="col-lg-3 control-label">Attachments
+														</label>
+														<div class="col-lg-9">
+														<figure class="figure">
+															<input type="file" class="form-control btn btn-default" id="attachments"
+																multiple="multiple" name="attachments" />
+															<figcaption class="figure-caption text-right"
+																style="color: #fd1414;">
+																<b>You can select multiple files</b>
+															</figcaption>
+														</figure>
+														</div>
+												   </div>
+												  </div>
+												 <!--  <div class="row"  th:each="notefileDetails : ${responseNotefileDetailsEntity}" > th:if="${LinkFileFlag}==false"
+												  	<a class="btn btn-info"   aria-pressed="false" data-toggle="modal" data-target="#commonModal"
+														data-placement="top" th:attr="data-url=@{'/efilesuite/linkingeFile/{id}'(id=${notefileDetails.presentOwner})}"> Link File</a>
+												  </div> -->
+												  <div class="row">
+													<div class="form-group flex-container">
+														<label for="attachments" class="col-lg-3 control-label"
+															style="text-align: left;">Recipient </label>
+														<div class="col-lg-9" align="center">
+
+															<div id="sendto" >
+																<select class="form-control" name="postMaster" id="posts" size="1">
+																	<option value="0">--Select--</option>
+																	<option th:each="postsList : ${postsMasterList}" th:text="${postsList.postname}" th:value="${postsList.id}" ></option>
+																</select>
+															</div>
+															<script>
+											          		 actb(document.getElementById('posttext'),new getDeptArr());
+											   			 </script>
+														</div>
+													</div>
+													</div>
+												  <div class="row" >
+													<div class="col-lg-12" align="center">
+														<input type="submit" name="save" value="Save"
+															class="btn btn-info" />
+
+														<input type="submit" name="send" value="Send"
+															class="btn btn-info" />
+													</div>
+												</div>
+											</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							<!-- </div> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script-links">
+		<script type="text/javascript" src="../../../resources/vendors/tinymce/js/tinymce.min.js" th:src="@{/resources/js/tinymce.min.js}"></script>
+		<script type="text/javascript" src="../../../resources/js/cgg/actb.js" th:src="@{/resources/js/cgg/actb.js}"></script>
+		<script type="text/javascript" src="../../../resources/js/cgg/common.js" th:src="@{/resources/js/cgg/common.js}"></script>
+    </th:block>
+
+
+<th:block layout:fragment="scripts">
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+
+
+
+
+	tinymce.init({
+
+		selector: '#description',
+
+		branding: false,
+
+		height: 200,
+
+		max_height: 400,
+
+		theme: 'modern',
+
+		toolbar: false,
+
+		plugins: [
+
+			'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+
+			'searchreplace wordcount visualblocks visualchars code fullscreen',
+
+			'insertdatetime media nonbreaking save table contextmenu directionality',
+
+			'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'
+
+		],
+
+		toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons | fullscreen',
+
+		image_advtab: true,
+
+		templates: [{
+
+				title: 'Test template 1',
+
+				content: 'Test 1'
+
+			},
+
+			{
+
+				title: 'Test template 2',
+
+				content: 'Test 2'
+
+			}
+
+		],
+
+		content_css: [
+
+			'//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+
+			'//www.tinymce.com/css/codepen.min.css'
+
+		]
+
+	});
+
+
+
+	// Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+
+	var previewNode = document.querySelector("#template");
+
+	previewNode.id = "";
+
+	var previewTemplate = previewNode.parentNode.innerHTML;
+
+	previewNode.parentNode.removeChild(previewNode);
+
+
+
+	var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+
+		url: "/target-url", // Set the url
+
+		thumbnailWidth: 80,
+
+		thumbnailHeight: 80,
+
+		parallelUploads: 20,
+
+		previewTemplate: previewTemplate,
+
+		autoQueue: false, // Make sure the files aren't queued until manually added
+
+		previewsContainer: "#previews", // Define the container to display the previews
+
+		clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+
+	});
+
+
+
+	myDropzone.on("addedfile", function(file) {
+
+		// Hookup the start button
+
+		file.previewElement.querySelector(".start").onclick = function() {
+
+			myDropzone.enqueueFile(file);
+
+		};
+
+	});
+
+
+
+	// Update the total progress bar
+
+	myDropzone.on("totaluploadprogress", function(progress) {
+
+		document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+
+	});
+
+
+
+	myDropzone.on("sending", function(file) {
+
+		// Show the total progress bar when upload starts
+
+		document.querySelector("#total-progress").style.opacity = "1";
+
+		// And disable the start button
+
+		file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+
+	});
+
+
+
+	// Hide the total progress bar when nothing's uploading anymore
+
+	myDropzone.on("queuecomplete", function(progress) {
+
+		document.querySelector("#total-progress").style.opacity = "0";
+
+	});
+
+
+
+	// Setup the buttons for all transfers
+
+	// The "add files" button doesn't need to be setup because the config
+
+	// `clickable` has already been specified.
+
+	document.querySelector("#actions .start").onclick = function() {
+
+		myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+
+	};
+
+	document.querySelector("#actions .cancel").onclick = function() {
+
+		myDropzone.removeAllFiles(true);
+
+	};
+
+
+
+
+
+
+
+
+
+});
+</script>
+
+</th:block>
+</body>
+
+
+</html>

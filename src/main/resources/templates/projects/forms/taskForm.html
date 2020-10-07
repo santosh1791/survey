@@ -1,0 +1,162 @@
+<div class="modal-header">
+	<h5 class="modal-title"><i class="fa fa-tasks"></i> New Task</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="icon-close"></i></span>
+				</button>
+</div>
+<div class="modal-body">
+	<form id="newTaskForm" method="post" th:action="@{/taskForm}" autocomplete="off">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="cggProjectTaskTitle">Task Title<span class="text-danger">*</span></label>
+					<input type="text" class="form-control" name="title" id="cggProjectTaskTitle" placeholder="Title">
+				</div>
+				<div class="form-group">
+					<label for="cggProjectTaskDescription">Description</label>
+					<textarea class="form-control" name="description" id="cggProjectTaskDescription" rows="6" placeholder="Description"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="cggProjectTaskTags">Tags</label>
+					<select style="width: 100%" type="text" class="form-control" name="tags" id="cggProjectTaskTags" placeholder="tags"></select>
+				</div>
+
+				<div class="form-check">
+					<label class="form-check-label" for="CreateAnotherTask">
+								  <input type="checkbox" id="CreateAnotherTask" name="another_task" class="form-check-input">
+								  Create another task
+								</label>
+				</div>
+
+
+				<div class="form-check">
+					<label class="form-check-label" for="DuplicateToMultipleProjects">
+								  <input type="checkbox" id="DuplicateToMultipleProjects" name="duplicate_multiple_projects" class="form-check-input">
+								  Duplicate to multiple projects
+								</label>
+				</div>
+
+
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+
+
+					<div class="col-sm-6">
+
+						<div class="form-group">
+							<label for="cggProjectTaskColorSelect">Color</label>
+							<select class="form-control" name="color_id" id="cggProjectTaskColorSelect">
+											  <option>Yellow</option>
+											  <option>Blue</option>
+											  <option>Green</option>
+											  <option>Purple</option>
+											  <option>Red</option>
+											  <option>Orange</option>
+											  <option>Grey</option>
+											  <option>Brown</option>
+			<!--								  <option>Deep Orange</option>-->
+											</select>
+						</div>
+
+					</div>
+					<div class="col-sm-6">
+
+						<div class="form-group">
+							<label for="cggProjectTaskAssignee">Assignee</label>
+							<select class="form-control selectpicker" name="owner_id" id="cggProjectTaskAssignee">
+										  <option>Admin</option>
+										  <option>Manager</option>
+										  <option>User</option>
+										</select>
+						</div>
+
+					</div>
+					<div class="col-sm-6">
+
+						<div class="form-group">
+							<label for="cggProjectTaskColumn">Column</label>
+							<select class="form-control" name="column_id" id="cggProjectTaskColumn">
+								  <option>To Do</option>
+								  <option>Work In progress</option>
+								  <option>Testing</option>
+								  <option>Done</option>
+								</select>
+						</div>
+
+
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="cggProjectTaskPriority">Priority</label>
+							<select class="form-control" name="priority" id="cggProjectTaskPriority">
+								  <option>0</option>
+								  <option>1</option>
+								  <option>2</option>
+								  <option>3</option>
+								</select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+
+						<div class="form-group">
+							<label for="cggProjectTaskStartDate">Start Date</label>
+							<div class="input-group input-append date">
+								<input type="text" class="form-control" name="date_started" id="cggProjectTaskStartDate" placeholder="Start date">
+								<span class="input-group-addon addon"><i class="fa fa-calendar"></i></span>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+
+							<label for="cggProjectTaskDueDate">Due Date</label>
+							<div class="input-group input-append date">
+								<input type="text" class="form-control" name="date_due" id="cggProjectTaskDueDate" placeholder="Due date">
+								<span class="input-group-addon addon"><i class="fa fa-calendar"></i></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+
+						<div class="form-group">
+							<label for="cggProjectTaskOriginalEstimate">Original estimate <small>(hours)</small></label>
+							<div class="input-group">
+								<input type="number" class="form-control" name="time_estimated" id="cggProjectTaskOriginalEstimate" placeholder="Original estimate">
+								<span class="input-group-addon addon"><i class="fa fa-hourglass-1"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="cggProjectTaskTimeSpent">Time spent <small>(hours)</small></label>
+							<div class="input-group">
+								<input type="number" class="form-control" name="time_spent" id="cggProjectTaskTimeSpent" placeholder="Time spent">
+								<span class="input-group-addon addon"><i class="fa fa-hourglass-end"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="cggProjectTaskComplexity">Complexity</label>
+							<input type="number" class="form-control" name="score" id="cggProjectTaskComplexity" placeholder="Complexity">
+						</div>
+					</div>
+
+
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="cggProjectTaskReference">Reference</label>
+							<input type="text" class="form-control" name="reference" id="cggProjectTaskReference" placeholder="Reference">
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</form>
+</div>

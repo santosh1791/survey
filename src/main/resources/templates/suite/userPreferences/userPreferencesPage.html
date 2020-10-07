@@ -1,0 +1,249 @@
+<html layout:decorator="layouts/main" xmlns="http://www.w3.org/1999/html">
+
+<head></head>
+<th:block layout:fragment="metas">
+    <meta charset="ISO-8859-1">
+    <title>User Preferences</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+    <style>
+        .btn {
+
+            border-width: 2px;
+        }
+        h6[role="button"]{
+            cursor: pointer;
+        }
+
+        .custom-inner-checkbox{
+        	margin: 5px 15px 5px 0px !important;
+        }
+        .custom-control-input{
+	        border-radius: 50%  !important;
+        }
+        .card-columns .card {
+            margin-bottom: .75rem;
+            margin-top: 15px;
+        }
+        .custom-control-label:before {
+            background-color: #edf1f891;
+            border: 1px solid #507dba;
+        }
+    </style>
+</th:block>
+
+<body class="app header-fixed sidebar-fixed sidebar-minimized _brand-minimized  preferences-page">
+<div layout:fragment="content">
+
+    <div class="container-fluid px-3 role-service-mapping">
+        <div class="animated fadeIn">
+            <div class="row">
+	            <div class="col-lg-12 col-xl-8 offset-xl-2">
+	            	 <form class="custom-form" id="userPreferencesForm" method="post" name="userPreferencesForm" th:action="@{/userPreferences}"   th:object="${userPreferencesForm}"  _onsubmit="return validateMe();" autocomplete="off">
+                    <div class="card card-accent-primary bg-transparent mt-3 border-left-0 border-right-0 border-bottom-0 card-shadow">
+
+                        <div class="card-header bg-light border-bottom-0 border-secondary d-flex pb-2">
+                            <span class="head-top-line">
+                            <h5
+                                class="d-inline-block mb-0 mt-1 _text-primary font-weight-bold">User Preferences</h5>
+                            </span>
+                        </div>
+                        <!--<div class=""></div>-->
+
+                            <div class="card-block bg-white pb-3 pt-3 ">
+                                <div class="row">
+                                    <div class="col-12">
+                                            <div class="card card-block p-0 border-0 mb-0" >
+                                            	<th:block th:if="${sMessage != null}">
+										            <div th:replace="fragments/components :: alert (type='success', message=${sMessage})">Alert</div>
+										        </th:block>
+										        <th:block th:if="${fMessage != null}">
+										            <div  th:replace="fragments/components :: alert (type='danger', message=${fMessage})">Alert</div>
+										        </th:block>
+
+
+                                            </div>
+                                      </div>
+                                      <div class="col-12">
+                                      		<table class="table table-sm table-striped table-bordered ">
+                                      			<thead class="table-primary">
+                                      				<tr>
+                                      					<th class="w-75">Preference Name</th>
+                                      					<th class="w-25">Value</th>
+                                      				</tr>
+                                      			</thead>
+                                      			<tbody>
+                                      			<th:block th:each="anItem,iter : ${userPreferencesForm.userPreferenceList}">
+
+                                      				<th:block th:switch="${anItem.key}">
+                                      				<tr th:case="'theme'">
+                                      					<!--/* <td>
+                                      					<span th:text="${iter.index}"></span> |
+                                      					<span th:text="${anItem.key}"></span> |
+                                      					<span th:text="${anItem.value}"></span>
+                                      					</td> */-->
+                                      					<td>
+                                      						<input class="custom-select" type="hidden" th:name="'userPreferenceList[' + ${iter.index} + '].id'" th:value="${anItem.id}">
+                                      						<input type="hidden" id="key0" th:name="'userPreferenceList[' + ${iter.index} + '].key'" value="theme">
+                                      						Theme
+                                      					</td>
+                                      					<td>
+                                      						<select class="custom-select mb-1" id="value0" th:name="'userPreferenceList[' + ${iter.index} + '].value'">
+                                      							<option value="" selected disabled class="d-none">Select</option>
+                                      							<option th:each="theme : ${themeValues}" th:value="${theme}" th:utext="${theme}"
+                                      							th:selected="( ${theme} == ${anItem.value})"
+                                      							></option>
+                                      							<!-- <option value="Blue">Blue</option>
+                                      							<option value="Red">Red</option>
+                                      							<option value="Green">Green</option> -->
+                                      						</select>
+                                      					</td>
+                                      				</tr>
+                                      				
+                                      				<tr th:case="'defaultLandingPage'">
+                                      					<!--/* <td>
+                                      					<span th:text="${iter.index}"></span> |
+                                      					<span th:text="${anItem.key}"></span> |
+                                      					<span th:text="${anItem.value}"></span>
+                                      					</td> */-->
+                                      					<td>
+                                      						<input class="custom-select" type="hidden" th:name="'userPreferenceList[' + ${iter.index} + '].id'" th:value="${anItem.id}">
+                                      						<input type="hidden" id="key0" th:name="'userPreferenceList[' + ${iter.index} + '].key'" value="defaultLandingPage">
+                                      						Default Landing Page
+                                      					</td>
+                                      					<td>
+                                      						<select class="custom-select mb-1" id="value0" th:name="'userPreferenceList[' + ${iter.index} + '].value'">
+                                      							<option value="" selected disabled class="d-none">Select</option>
+                                      							<option value="efilesuite/home" text="Dashboard" >Dashboard</option>
+                                      							<option value="efilesuite/inwardreport" text="Inward Report" th:if="${#authorization.expression('hasRole(''ROLE_INWARD_INBOX'')')}">Inward Report</option>
+                                      							<option value="efilesuite/inboxFilesList" text="eFile Inbox" th:if="${#authorization.expression('hasRole(''ROLE_EFILE'')')}">eFile Inbox</option>
+                                      							<option value="gosAndCircularsList" text="GO's and Circulars" th:if="${#authorization.expression('hasRole(''ROLE_GOS_CIRCULARS_REPORT'')')}" >GO's and Circulars</option>
+                                      							<!--
+                                      								th:if="${#authorization.expression('hasRole(''ROLE_MISCELLANEOUS_SCHEDULER'')')}"
+                                      							 "efilesuite/inwardreport", "efilesuite/inboxFilesList", "dispatchedFileReport","gosAndCircularsList","momList", "kpiReportList", "efilesuite/inboxFilesList" ); -->
+                                      							<option th:each="defaultLandingPage : ${degaultPageValues}" th:value="${defaultLandingPage}" th:utext="${defaultLandingPage}"
+                                      							th:selected="( ${defaultLandingPage} == ${anItem.value})"
+                                      							></option>
+                                      							<!-- <option value="Blue">Blue</option>
+                                      							<option value="Red">Red</option>
+                                      							<option value="Green">Green</option> -->
+                                      						</select>
+                                      					</td>
+                                      				</tr>
+
+                                     				<!--/* <tr th:case="'fontsize'">
+                                     					<td>
+                                     						<input type="hidden" th:name="'userPreferenceList[' + ${iter.index} + '].id'" th:value="${anItem.id}">
+                                     						<input type="hidden" id="key1" th:name="'userPreferenceList[' + ${iter.index} + '].key'" value="fontsize">
+                                     						Font Size
+                                     					</td>
+                                     					<td>
+                                     						<select id="value1" th:name="'userPreferenceList[' + ${iter.index} + '].value'">
+                                     							<option value="">Select</option>
+                                     							<option th:each="font : ${fontValues}" th:value="${font}" th:utext="${font}"
+                                     							th:selected="( ${font} == ${anItem.value})"
+                                     							></option>
+                                     						</select>
+                                     					</td>
+                                     				</tr> */-->
+
+                                      				<tr th:case="'dashboardLayout'" style="display: none;">
+                                     					<td>
+                                     						<input type="hidden" th:name="'userPreferenceList[' + ${iter.index} + '].id'" th:value="${anItem.id}">
+                                     						<input type="hidden" id="key2" th:name="'userPreferenceList[' + ${iter.index} + '].key'" value="dashboardLayout">
+                                     						Font Size
+                                     					</td>
+                                     					<td>
+                                     						<input type="hidden" th:value="${anItem.value}"  th:name="'userPreferenceList[' + ${iter.index} + '].value'">
+
+                                     						<!-- <select id="value2" th:name="'userPreferenceList[' + ${iter.index} + '].value'">
+                                     							<option value="">Select</option>
+                                     							<option th:each="font : ${fontValues}" th:value="${font}" th:utext="${font}"
+                                     							th:selected="( ${font} == ${anItem.value})"
+                                     							></option>
+                                     							<option value="10px">10px</option>
+                                     							<option value="12px">12px</option>
+                                     							<option value="14px">14px</option>
+                                     						</select> -->
+                                     					</td>
+                                     				</tr>
+                                      			</tbody>
+                                      		</table>
+
+                                      </div>
+
+
+
+
+
+
+                                    </div>
+
+                                </div><!-- .card-block .form-row -->
+                                    <div class="card-footer _bg-white py-2 w-100">
+                                        <div class="row">
+                                            <div class="col-md-12 text-right">
+                                                <button _style="width: 130px;" type="submit" class="btn btn-primary text-uppercase" >Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            </div><!-- .card-block .bg-white .py-4-->
+						</form>
+
+                    </div><!-- .card -->
+		        </div><!-- .col-md-12 -->
+            </div><!-- /.row -->
+        </div><!-- /.animated.fadeIn -->
+    </div><!--/.main .container-fluid -->
+
+</div>
+<!-- END FRAGMENT: "content" -->
+
+
+<th:block layout:fragment="scripts">
+	<script>
+	var context = "[[@{/}]]";
+	$("#rolesMasterID" ).on('change' ,function() {
+
+		 if(this.value!=null && this.value !="" && this.value!=0){
+
+			$("#roleServiceForm").attr("action",  context + "roleService/roleServiceMapping/"+this.value+"/");
+			$("#roleServiceForm").submit();
+
+		}
+
+
+
+	});
+
+	//$('.custom-control-input').prop('indeterminate', true);
+	function checkForTheChildService(obj, index){
+		if(! $("#p_"+index).is(':checked') ){
+			//$('*[id^="p_'+id+'"]').prop('checked', false);
+			$("input[id^='p_"+index+"']" ).prop('checked', false);
+		}
+	}
+
+	function checkForTheParentService(obj, parentIndex, childIndex){
+		///ele.prop('checked', false);
+		$("#p_"+parentIndex).prop('checked', true);
+
+	}
+	function validateMe(){
+		if($("#rolesMasterID" ).val()==null || $("#rolesMasterID" ).val()=="" || $("#rolesMasterID" ).val()=="0"){
+			$("#rolesMasterID" ).focus();
+			alert("Please select role");
+			return false
+		}
+
+		return true;
+
+	}
+
+	</script>
+</th:block>
+
+</body>
+</html>

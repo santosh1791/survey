@@ -1,0 +1,67 @@
+<style>
+    @media (min-width: 768px){
+        .modal-lg {
+            max-width: 500px;
+        }
+    }
+</style>
+<div class="modal-header border-bottom-0">
+	<h5 class="modal-title">Holiday Master</h5>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="icon-close"></i></span>
+	</button>
+</div>
+<div class="modal-body">
+	<form class="custom-form" name="holidayMasterForm" id="holidayMasterForm" method="post"  onsubmit="javascript:return validate();"
+	th:action="@{/holiday}"  th:object="${holidayMasterForm}"  autocomplete="off" enctype="multipart/form-data">
+
+
+        <th:block th:if="${statusMessage != null}">
+            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+        </th:block>
+
+
+
+        <div class="form-row" _style="max-width: 300px; margin: 0 auto;">
+             <div class="form-group col-md-12">
+                <label class="col-form-label col-form-label-sm " for=holidayDate>Holiday Date<span class="text-danger">*</span></label>
+                <input readonly type="text" class="form-control form-control-sm datePickerClassissuedDate" id="holidayDate" name="holidayDate">
+                <div class="text-danger" th:if="${#fields.hasErrors('holidayDate')}" th:errors="*{holidayDate}">Holiday Date Error</div>
+              </div>
+
+              <div class="form-group col-md-12">
+                    <label class="col-form-label col-form-label-sm " for="leaveTypeShortName">Holiday Type<span class="text-danger">*</span></label>
+                    <select id="leaveTypeShortName"  name="leaveTypeShortName" class="custom-select custom-select-sm" >
+                        <option selected disabled value="0">--Select Holiday Type--</option>
+                            <!-- <th:block th:object="${leaveList}"> -->
+                                <option value="PH">Public Holiday</option>
+                                <option value="OH">Optional Holiday</option>
+                                <option value="OTH">Others</option>
+                                <!-- <p th:each="anItem : ${leaveList}">
+                                <option  th:value="${anItem.id}" th:selected="(${anItem.id} == ${leaveId})"><span th:text="${anItem.leaveName}"></span></option>
+                                </p>
+                            </th:block> -->
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('leaveTypeShortName')}" th:errors="*{leaveTypeShortName}">Holiday Type Error</div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label class="col-form-label col-form-label-sm " for="occasion">Occasion<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm " id="occasion" onchange="trimValue(this);" onkeypress="javascript:return alphabetsAndSpacesOnly(event);" name="occasion" placeholder="Enter Occasion here">
+                   <div class="text-danger" th:if="${#fields.hasErrors('occasion')}" th:errors="*{occasion}">occasion Error</div>
+              </div>
+	    </div>
+	</form>
+</div>
+<script type="text/javascript">
+$("input.datePickerClassissuedDate").daterangepicker({
+	parentEl: ".modal .modal-body",
+	singleDatePicker: true,
+	//minDate: moment(),
+// 	format: 'yyyy-mm-dd,
+	 locale: {
+	      format: 'DD/MM/YYYY'
+	    },
+	showDropdowns: false
+	});
+</script>

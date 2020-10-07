@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/main">
+<head></head>
+<th:block layout:fragment="metas">
+	<meta charset="ISO-8859-1">
+	<title>eFile close</title>
+</th:block>
+
+<th:block layout:fragment="styles">
+
+	<style>
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+}
+
+.border-top-success.active {
+	border-top: 2px solid #4dbd74 !important;
+	color: #4dbd74 !important;
+}
+
+.border-top-danger.active {
+	border-top: 2px solid red !important;
+	color: red !important;
+}
+
+.border-top-warning.active {
+	border-top: 2px solid #ffc107 !important;
+	color: #ffc107 !important;
+}
+
+.border-top-info.active {
+	border-top: 2px solid #63c2de !important;
+	color: #63c2de !important;
+}
+
+.border-top-success.active, .border-top-danger.active, .border-top-info.active,
+	.border-top-warning.active {
+	font-weight: bold;
+	position: relative;
+	z-index: 999;
+	border-top: 2px solid #3d70b2 !important;
+	color: #3d70b2 !important;
+}
+
+.tab-content .tab-pane {
+	padding: 1px;
+}
+</style>
+</th:block>
+
+<body>
+	<div layout:fragment="content">
+
+        <ol class="breadcrumb pr-0 py-0 mb-2">
+            <!--<li class="breadcrumb-item"><i class="icon-home"></i><i class="fa fa-home"></i> </li>-->
+            <li class="breadcrumb-item"><i class="mdi mdi-file-document"></i>&nbsp;eFile </li>
+            <li class="breadcrumb-item active text-primary">Close</li>
+            <li class="breadcrumb-menu">
+            </li>
+            <li class="breadcrumb-menu pr-3 ">
+                <div class="btn-group " role="group" aria-label="Basic example" th:if="${#authorization.expression('hasRole(''ROLE_EFILE_CREATE_FILE'')')}" >
+
+                    <button style="height: 35px;" type="button" class="btn bg-primary text-white" data-toggle="modal" data-target="#commonModal" _aria-haspopup="true"
+                            _aria-expanded="false"  data-placement="top" title="Create new eFile"
+                            th:attr="data-url=@{/efilesuite/createNoteFile}">
+                        <i class="mdi mdi-file-plus"></i><span class="icon-btn-text">&nbsp; Create</span></button>
+
+                    <!-- <button type="button" class="btn bg-transparent py-1 navbar-toggler aside-menu-toggler"><i class="icon-menu"></i></button>-->
+                </div>
+            </li>
+        </ol>
+		<div class="container-fluid">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="w-100">
+						
+
+						<th:block th:replace="fragments/layout :: eFileTabs">
+
+						</th:block>
+						<div class="card  bg-transparent mb-0 card-shadow ">
+							<div class="card-body py-0 bg-white"
+								style="_min-height: calc(100vh - 130px);">
+
+								<span th:text="${msg}"></span>
+								<th:block th:if="${statusMessage != null}">
+					            <div th:replace="fragments/components :: alert (type='success', message=${statusMessage})">Alert</div>
+					        </th:block>
+								<div class="table-responsive ">
+									<form name="closeFiles" id="closeFiles" method="post"
+										th:action="@{/closeeFile}">
+										<table id="closeFilesTable"
+											class="table table-bordered table-hover table-striped table-sm _mb-0"
+											width="100%" cellspacing="0">
+											<thead class="table-primary">
+												<tr>
+													<th>Action</th>
+													<th>#</th>
+													<th>File Number</th>
+													<th>Subject</th>
+													<!-- <th>File Initiator</th>
+												<th>File Owner</th> -->
+													<th>Created On</th>
+													<!-- <th>Action</th> -->
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each=" closeFileList ,sNo : ${notefileDetails}">
+													<td><input type="checkbox" name="notefilesDetails"
+														id="notefilesDetails"
+														th:value="${closeFileList.notefileNumber}" /></td>
+													<td><span th:text="${sNo.count}"></span></td>
+													<td>
+														<!-- <span th:text="${closeFileList.notefileNumber}"></span> -->
+														<a class="btn btn-outline-default" role="button"
+														aria-pressed="false" data-toggle="modal"
+														data-target="#commonModal" data-placement="top"
+														th:attr="data-url=@{'/efilesuite/filemovementReport/{currentNumber}'(currentNumber=${closeFileList.id})}">
+															<p style="color: blue;"
+																th:text="${closeFileList.notefileNumber}"></p>
+													</a>
+													</td>
+													<td><span th:text="${closeFileList.subject}"></span></td>
+													<td><span
+														th:text="${#dates.format(closeFileList.createdDate,'dd/MM/yyyy hh:mm a')}"></span></td>
+													<!-- <td><a class="btn btn-outline-default" role="button"
+														aria-pressed="false" data-toggle="modal"
+														data-target="#modalBlank" data-placement="top"
+														th:attr="data-url=@{'/efilesuite/eFileClose/{noteFileNumber}'(noteFileNumber=${closeFileList.notefileNumber})}">
+															<p style="color: blue;">Close</p>
+													</a></td> -->
+												</tr>
+
+											</tbody>
+										</table>
+										<div class="col-md-12">
+											<div class="form-row">
+												<div class="form-group col-md-4">
+													<div class="form-row" align="center">
+														<label for="closeType" class="col-form-label col-form-label-sm"> Type </label>
+														<select name="closeType" id="closeType" class="custom-select custom-select-sm">
+															<option value="0">Select</option>
+															<option value="large">Large</option>
+															<option value="decade">Decade</option>
+															<option value="other">Other</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group col-md-1"></div>
+												<div class="form-group col-md-6">
+													<div class="form-row" align="center">
+														<label for="content" class="col-form-label col-form-label-sm"> Remarks </label>
+														<textarea class="form-control form-control-sm" rows="3" cols="3" name="content" id="content"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-row">
+												<div class="form-group col-md-12">
+													<div class="form-row" align="center" >
+														<button class="btn btn-primary"
+															onclick="javascript:return validateData();">Close</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- <input type="text" name="display" th:value="${display}">
+										<span th:if="${display}==2">
+											<input type="text" name="notefilesDetails" th:value="${list}">
+											<a class="btn btn-primary d-none" role="button" id="modelBayId"
+												aria-pressed="false" data-toggle="modal"
+												data-target="#modalBlank" data-placement="top"
+												th:attr="data-url=@{'/efilesuite/eFileClose/{list}'(list=${list})}" >
+												<span class="text-white" >Close</span>
+											</a>
+										</span>
+										<span th:if="${display}!=2"> </span> -->
+									</form>
+								</div>
+								<!-- table-responsive px-3-->
+							</div>
+							<!-- .card-block-->
+
+						</div>
+						<!--  main > .w-100 >.card -->
+
+					</div>
+					<!-- main > .w-100 -->
+				</div>
+				<!-- main > .row -->
+			</div>
+			<!-- main > .animated.fadeIn -->
+		</div>
+		<!-- main > .container-fluid -->
+
+	</div>
+	<!-- FRAGMENT: "content" -->
+
+
+	<th:block layout:fragment="scripts">
+		<script>
+		/* jQuery(function(){
+		   jQuery('#modelBayId').click();
+		}); */
+
+
+
+	function validateData() {
+		//var post = $("#postMaster").val();
+		// 		var noteFileList=$("#notefilesDetails").val();
+		/* var selectedValues = "";
+		$("[id*=notefilesDetails] input:checked").each(function () {
+			alert("hi")
+		    if (selectedValues == "") {
+		        selectedValues = "Selected Values:\r\n\r\n";
+		    }
+		    selectedValues += $(this).val() + "\r\n";
+
+		});
+		alert(selectedValues) */
+		var checkBoxValues = [];
+		$.each($("input[name='notefilesDetails']:checked"), function() {
+			checkBoxValues.push($(this).val());
+		});
+		if (checkBoxValues.length == 0) {
+			bootbox.alert("Please select at least one file to transfer");
+			$("#notefilesDetails").focus();
+			return false;
+		}else if($("#closeType").val()==0){
+			bootbox.alert("Please select Type ");
+			$("#closeType").focus();
+			return false;
+		}/* else if($("#content").val()==''){
+			alert("Please enter content");
+			$("#content").focus();
+			return false;
+		} */else{
+			return true;
+		}
+	}
+</script>
+		<script>
+
+			$(document).ready(function() {
+				var table = $('#closeFilesTable').DataTable({
+				    language: {
+				        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        "lengthMenu": "_MENU_",
+                     paginate: {
+                            previous: '<i class="fa fa-chevron-left"></i>',
+                            next:     '<i class="fa fa-chevron-right"></i>'
+                        },
+                        aria: {
+                            paginate: {
+                                previous: 'Previous',
+                                next:     'Next'
+                            }
+                        }
+                     },
+				     "dom":"<'wrapper top'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'fBl>>>t<'wrapper bottom'<'row'<'col-sm-4'i><'col-sm-8 d-flex  justify-content-end 'p>>>",
+					responsive: {
+                        details: {
+                            type: 'column',
+                            target: 'tr'
+                        }
+                    },
+					paging: true,
+					"pagingType": "full_numbers",
+					lengthChange: true,
+					"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+					//"lengthMenu": [ [-1, 10, 25, 50 ], ["All", 10, 25, 50 ] ],
+					columns: [
+					   { width:'1%', targets: 0 },
+	                   { width: '1%', targets: 1 },
+	                   { _width:'18%', targets: 2 },
+	                   { _width: '30%', targets: 3, className: "px-1" },
+	                   { _width: '16%', targets: 4, className: "px-1" }
+
+
+
+					],
+					order: [ 0, 'asc' ],
+					buttons: [
+                        {
+                            extend:    'copyHtml5',
+                            text:      '<i class="fa fa-files-o"></i>',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend:    'excelHtml5',
+                            text:      '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend:    'csvHtml5',
+                            text:      '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF'
+                        }
+                    ]
+				});
+
+                $('table').on('click','.actionSwitch', function(e){
+                    var $this = $(this);
+                    var $input = $this.find('.switch-input');
+                    var message = $input.prop("checked") ? "Do you want to Disable?" : "Do you want to Enable?";
+                    e.preventDefault();
+                    e.stopPropagation();
+                    bootbox.confirm({
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-outline-primary'
+                            }
+                        },
+                        callback: function (result) {
+                            var context = "[[@{/}]]";
+                            var isChecked = $input.prop("checked")
+                            var url = isChecked ? "disableEmployee" : "enableEmployee";
+                            var id = $this.data('id');
+                            console.log('This was logged in the callback: ' + result);
+                            if(result){
+                                $.get(context + url + '/' + id + '/' , function(){
+                                    $input.prop('checked',!isChecked);
+                                });
+                            }
+                        }
+                    });
+                });
+
+                $(".dataTables_length select").removeClass("form-control form-control-sm").addClass("custom-select custom-select-sm");
+
+			});
+
+			$("#eFileCloseboxLink").addClass("active");
+		</script>
+	</th:block>
+</body>
+</html>
